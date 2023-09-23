@@ -1,3 +1,32 @@
-h1 {
-  color: red;
+.navbar .navbar-nav .nav-link {
+  color: #000;
+  font-size: 1.1em;
+}
+.navbar_ul_li {
+  margin-right: 15%;
+}
+.navbar_main_btn {
+  display: flex;
+  position: relative;
+  right: -90%;
+}
+.navbar_btn {
+  width: 100px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background-color: #88c965;
+  color: white;
+}
+@media screen and (max-width: 991px) {
+  .navbar_main_btn {
+    top: 100%;
+    left: 0;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .navbar_main_btn {
+    top: 100%;
+    left: 55%;
+  }
 }

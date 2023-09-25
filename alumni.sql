@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 23, 2023 at 09:13 AM
+-- Generation Time: Sep 25, 2023 at 02:30 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -44,7 +44,6 @@ CREATE TABLE `alumni_associate` (
 CREATE TABLE `alumni_education` (
   `id` int(11) NOT NULL,
   `user_id` int(20) NOT NULL,
-  `degree` varchar(200) NOT NULL,
   `field_study` varchar(200) NOT NULL,
   `institute_name` varchar(200) NOT NULL,
   `study_startDate` date NOT NULL,
@@ -71,7 +70,8 @@ CREATE TABLE `alumni_master` (
 --
 
 INSERT INTO `alumni_master` (`id`, `email`, `password`, `username`, `status`) VALUES
-(1, 'ahmad@gmail.com', '123456', 'Ahmad123', 1);
+(1, 'ahmad@gmail.com', '123456', 'Ahmad123', 1),
+(2, 'ahmadq@gmail.com', '123456', 'Ahmad ', 0);
 
 -- --------------------------------------------------------
 
@@ -161,6 +161,25 @@ CREATE TABLE `organization_master` (
   `password` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `uname` varchar(200) NOT NULL,
+  `password` varchar(200) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `uname`, `password`) VALUES
+(1, 'admin', 'admin');
+
 --
 -- Indexes for dumped tables
 --
@@ -227,6 +246,12 @@ ALTER TABLE `organization_master`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -246,7 +271,7 @@ ALTER TABLE `alumni_education`
 -- AUTO_INCREMENT for table `alumni_master`
 --
 ALTER TABLE `alumni_master`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `alumni_member`
@@ -283,6 +308,12 @@ ALTER TABLE `organization_info`
 --
 ALTER TABLE `organization_master`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables

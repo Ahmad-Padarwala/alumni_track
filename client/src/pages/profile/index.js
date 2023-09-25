@@ -1,16 +1,13 @@
 import React from "react";
 import Navbar from "../layout/Navbar";
-import HeroSection from "./HeroSection";
-import Form from "./Form";
+import Profile from "./Profile";
 import Footer from "../layout/Footer";
-import "../../assets/css/Profile.css";
 
 const index = () => {
   return (
     <>
       <Navbar />
-      <HeroSection />
-      <Form />
+      <Profile />
       <Footer />
     </>
   );

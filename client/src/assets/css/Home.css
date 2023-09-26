@@ -90,4 +90,15 @@
   }
 }
 
-
+/* login and sign up from */
+.login_from_main {
+  background-color: #f3f2f0;
+}
+.form_main {
+  background-color: white;
+  width: 26%;
+}
+.form_title {
+  text-align: center;
+  color: rgb(5, 60, 143);
+}

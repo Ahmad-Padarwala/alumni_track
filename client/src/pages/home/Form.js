@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PORT from "../../assets/constant/Url";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 const Form = () => {
   const [activeForm, setActiveForm] = useState("login");
@@ -92,114 +92,121 @@ const Form = () => {
 
   return (
     <>
-      {activeForm === "login" ? (
-        <form
-          className="w-25 mt-5 bg-color-white shadow p-5 mb-5 rounded mx-auto"
-          method="post"
-          onSubmit={saveLoginData}
-        >
-          <h2 className="text-center text-primary">Login</h2>
-          <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email:- </label>
-            <input
-              type="email"
-              className="form-control mt-2"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
-              name="email"
-              onChange={handleLoginDataChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1" className="mt-2">
-              Password:-
-            </label>
-            <input
-              type="password"
-              className="form-control mt-2"
-              id="exampleInputPassword1"
-              placeholder="Enter Password"
-              name="password"
-              onChange={handleLoginDataChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary mt-4">
-            Submit
-          </button>
-          <p className="text-center mt-3">
-            Are You Sure?
-            <a
-              className="text-primary"
-              onClick={() => {
-                toggleForm();
-              }}
+      <div className="container-fluid login_from_main">
+        <div className="row">
+          {activeForm === "login" ? (
+            <form
+              className="mt-5 shadow py-3 px-4 mb-5 rounded mx-auto form_main"
+              method="post"
+              onSubmit={saveLoginData}
             >
-              Sign Up
-            </a>
-          </p>
-        </form>
-      ) : (
-        <form
-          className="w-25 mt-5 bg-color-white shadow px-5 py-3 mb-5 rounded mx-auto"
-          method="post"
-          onSubmit={saveSignUpData}
-        >
-          <h2 className="text-center text-primary">Sign Up</h2>
-          <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email:- </label>
-            <input
-              type="email"
-              className="form-control mt-2"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder="Enter email"
-              name="email"
-              onChange={handleSignUpDataChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1" className="mt-2">
-              Password:-
-            </label>
-            <input
-              type="password"
-              className="form-control mt-2"
-              id="exampleInputPassword1"
-              placeholder="Enter Password"
-              name="password"
-              onChange={handleSignUpDataChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1" className="mt-2">
-              User Name:-
-            </label>
-            <input
-              type="text"
-              className="form-control mt-2"
-              id="exampleInputText1"
-              name="username"
-              placeholder="Enter Name"
-              onChange={handleSignUpDataChange}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary mt-4">
-            Submit
-          </button>
-          <p className="text-center mt-3">
-            Are You Sure?
-            <a
-              className="text-primary"
-              onClick={() => {
-                toggleForm();
-              }}
+              <h2 className="form_title">Login</h2>
+              <div className="form-group mb-3">
+                <label htmlFor="exampleInputEmail1" className="fw-semibold">
+                  Email:-
+                </label>
+                <input
+                  type="email"
+                  className="form-control mt-1"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                  name="email"
+                  onChange={handleLoginDataChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleInputPassword1" className="fw-semibold">
+                  Password:-
+                </label>
+                <input
+                  type="password"
+                  className="form-control mt-1"
+                  id="exampleInputPassword1"
+                  placeholder="Enter Password"
+                  name="password"
+                  onChange={handleLoginDataChange}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary mt-4">
+                Submit
+              </button>
+              <p className="text-center mt-3">
+                Not a member?
+                <NavLink
+                  to=""
+                  className="text-primary"
+                  onClick={() => {
+                    toggleForm();
+                  }}
+                >
+                  Sign Up
+                </NavLink>
+              </p>
+            </form>
+          ) : (
+            <form
+              className="w-25 mt-5 bg-color-white shadow px-5 py-3 mb-5 rounded mx-auto"
+              method="post"
+              onSubmit={saveSignUpData}
             >
-              Login
-            </a>
-          </p>
-        </form>
-      )}
+              <h2 className="text-center text-primary">Sign Up</h2>
+              <div className="form-group">
+                <label htmlFor="exampleInputEmail1">Email:- </label>
+                <input
+                  type="email"
+                  className="form-control mt-2"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter email"
+                  name="email"
+                  onChange={handleSignUpDataChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleInputPassword1" className="mt-2">
+                  Password:-
+                </label>
+                <input
+                  type="password"
+                  className="form-control mt-2"
+                  id="exampleInputPassword1"
+                  placeholder="Enter Password"
+                  name="password"
+                  onChange={handleSignUpDataChange}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleInputPassword1" className="mt-2">
+                  User Name:-
+                </label>
+                <input
+                  type="text"
+                  className="form-control mt-2"
+                  id="exampleInputText1"
+                  name="username"
+                  placeholder="Enter Name"
+                  onChange={handleSignUpDataChange}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary mt-4">
+                Submit
+              </button>
+              <p className="text-center mt-3">
+                Are You Sure?
+                <a
+                  className="text-primary"
+                  onClick={() => {
+                    toggleForm();
+                  }}
+                >
+                  Login
+                </a>
+              </p>
+            </form>
+          )}
+        </div>
+      </div>
     </>
   );
 };

@@ -12,13 +12,14 @@
   padding: 0;
   overflow: hidden;
   position: absolute;
-  top: 120px;
+  top: 30%;
 }
 .alumni_req_btn {
   background-color: transparent;
   border: 2px solid #6fbe44;
   padding: 4px 10px;
   border-radius: 20px;
+  margin-right: 10px;
 }
 .alumni_req_btn:hover {
   background-color: #6fbe44;
@@ -32,4 +33,47 @@
 }
 .education_opr_icon:hover {
   background-color: #cbcfc8;
+}
+.skill_name {
+  font-weight: 600;
+  cursor: pointer;
+}
+.skill_name:hover {
+  text-decoration: underline;
+}
+
+@media screen and (max-width: 900px) and (min-width: 770px) {
+  .profile_image_main {
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 34%;
+  }
+}
+
+@media screen and (max-width: 769px) and (min-width: 460px) {
+  .profile_image_main {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 26%;
+  }
+}
+
+@media screen and (max-width: 459px) {
+  .profile_image_main {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+    position: absolute;
+    top: 20%;
+  }
 }

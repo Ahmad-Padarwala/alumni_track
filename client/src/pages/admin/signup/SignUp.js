@@ -47,7 +47,7 @@ const SignUp = () => {
               <span className="fw-bold fs-3 ms-2 pt-1">Sign Up Data</span>
             </div>
 
-            <table class="table table-striped mt-3">
+            <table className="table table-striped mt-3">
               <thead>
                 <tr>
                   <th className="fw-bold">Id</th>

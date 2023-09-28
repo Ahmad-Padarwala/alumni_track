@@ -1,13 +1,13 @@
-import React from 'react';
-import Profile from '../pages/profile'
+import React from "react";
+import Profile from "../pages/alumni-profile";
 import { Routes, Route } from "react-router-dom";
 
 const ProfileRoute = () => {
   return (
     <>
-       <Routes>
+      <Routes>
         <Route
-          path="/profile"
+          path="/user-profile"
           element={
             <>
               <Profile />
@@ -16,7 +16,7 @@ const ProfileRoute = () => {
         />
       </Routes>
     </>
-  )
-}
+  );
+};
 
-export default ProfileRoute
+export default ProfileRoute;

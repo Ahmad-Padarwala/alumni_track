@@ -8,7 +8,7 @@
 .navbar_main_btn {
   display: flex;
   position: relative;
-  right: -90%;
+  right: -100%;
 }
 .navbar_btn {
   width: 100px;

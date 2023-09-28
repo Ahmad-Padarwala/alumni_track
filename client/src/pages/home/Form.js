@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import PORT from "../../assets/constant/Url";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, NavLink } from "react-router-dom";
 
 const Form = () => {
@@ -36,13 +38,10 @@ const Form = () => {
     axios
       .post(`${PORT}alumni-master`, addSignUpData)
       .then(() => {
-        const form = e.target;
-        form.reset();
-        alert("You are succesfully submitted");
+        navigate("/profile");
       })
-      .catch((error) => {
-        alert("Enter All Details");
-        console.log("Error adding Sign Up data in Form.js:", error);
+      .catch(() => {
+        toast.warning("Enter All Details");
       });
   };
 
@@ -63,14 +62,11 @@ const Form = () => {
         user.password === addLoginData.password
     );
     if (user) {
-      navigate("/admin");
-      const form = e.target;
-      form.reset();
-      alert("You are succesfully loggined");
+      navigate("/user-profile");
     } else {
       const form = e.target;
       form.reset();
-      alert("please correct information");
+      toast.warning("please correct information");
     }
   };
 
@@ -92,6 +88,18 @@ const Form = () => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="container-fluid login_from_main">
         <div className="row">
           {activeForm === "login" ? (
@@ -128,14 +136,14 @@ const Form = () => {
                   onChange={handleLoginDataChange}
                 />
               </div>
-              <button type="submit" className="btn btn-primary mt-4">
-                Submit
+              <button type="submit" className="btn btn-primary mt-3">
+                Login
               </button>
               <p className="text-center mt-3">
                 Not a member?
                 <NavLink
                   to=""
-                  className="text-primary"
+                  className="text-primary ms-1"
                   onClick={() => {
                     toggleForm();
                   }}
@@ -146,13 +154,15 @@ const Form = () => {
             </form>
           ) : (
             <form
-              className="w-25 mt-5 bg-color-white shadow px-5 py-3 mb-5 rounded mx-auto"
+              className="mt-5 shadow py-3 px-4 mb-5 rounded mx-auto form_main"
               method="post"
               onSubmit={saveSignUpData}
             >
-              <h2 className="text-center text-primary">Sign Up</h2>
-              <div className="form-group">
-                <label htmlFor="exampleInputEmail1">Email:- </label>
+              <h2 className="form_title">Sign Up</h2>
+              <div className="form-group mb-3">
+                <label htmlFor="exampleInputEmail1" className="fw-semibold">
+                  Email:-
+                </label>
                 <input
                   type="email"
                   className="form-control mt-2"
@@ -163,8 +173,8 @@ const Form = () => {
                   onChange={handleSignUpDataChange}
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="exampleInputPassword1" className="mt-2">
+              <div className="form-group mb-3">
+                <label htmlFor="exampleInputPassword1" className="fw-semibold">
                   Password:-
                 </label>
                 <input
@@ -176,8 +186,8 @@ const Form = () => {
                   onChange={handleSignUpDataChange}
                 />
               </div>
-              <div className="form-group">
-                <label htmlFor="exampleInputPassword1" className="mt-2">
+              <div className="form-group mb-3">
+                <label htmlFor="exampleInputPassword1" className="fw-semibold">
                   User Name:-
                 </label>
                 <input
@@ -189,19 +199,20 @@ const Form = () => {
                   onChange={handleSignUpDataChange}
                 />
               </div>
-              <button type="submit" className="btn btn-primary mt-4">
+              <button type="submit" className="btn btn-primary mb-3">
                 Submit
               </button>
-              <p className="text-center mt-3">
+              <p className="text-center">
                 Are You Sure?
-                <a
-                  className="text-primary"
+                <NavLink
+                  to=""
+                  className="text-primary ms-1"
                   onClick={() => {
                     toggleForm();
                   }}
                 >
                   Login
-                </a>
+                </NavLink>
               </p>
             </form>
           )}

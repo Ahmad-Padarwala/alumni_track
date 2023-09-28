@@ -34,7 +34,11 @@ const Navbar = () => {
             >
               <ul className="navbar-nav  navbar_ul_li md-ms-5 justify-content-center">
                 <li className="nav-item">
-                  <NavLink className="nav-link active" aria-current="page" to="/">
+                  <NavLink
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/"
+                  >
                     Home
                   </NavLink>
                 </li>
@@ -49,8 +53,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li className="nav-item navbar_main_btn">
-                  <button className="navbar_btn">log in</button>
-                  <button className="navbar_btn ms-2">Sign up</button>
+                  <button className="navbar_btn ms-5">Join Now</button>
                 </li>
               </ul>
             </div>

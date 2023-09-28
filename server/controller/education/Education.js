@@ -3,6 +3,7 @@ const conn = require("../../db/Connection");
 // add alumni member education profile
 const addEducation = async (req, res) => {
   const {
+    user_id,
     field_study,
     institute_name,
     study_startDate,
@@ -10,8 +11,9 @@ const addEducation = async (req, res) => {
     result,
   } = req.body;
   const sql =
-    "INSERT INTO alumni_education (user_id, field_study, institute_name,study_startDate,study_endDate,result) VALUES (1,?,?,?,?,?)";
+    "INSERT INTO alumni_education (user_id, field_study, institute_name,study_startDate,study_endDate,result) VALUES (?,?,?,?,?,?)";
   const data = [
+    user_id,
     field_study,
     institute_name,
     study_startDate,

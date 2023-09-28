@@ -3,6 +3,9 @@ import "../../assets/css/Navbar.css";
 import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
+  const handleLogOut = () => {
+    localStorage.removeItem("user");
+  };
   return (
     <>
       <header className="shadow hight-auto">
@@ -34,11 +37,7 @@ const Navbar = () => {
             >
               <ul className="navbar-nav  navbar_ul_li md-ms-5 justify-content-center">
                 <li className="nav-item">
-                  <NavLink
-                    className="nav-link active"
-                    aria-current="page"
-                    to="/"
-                  >
+                  <NavLink className="nav-link" aria-current="page" to="/">
                     Home
                   </NavLink>
                 </li>
@@ -52,8 +51,16 @@ const Navbar = () => {
                     Pricing
                   </NavLink>
                 </li>
-                <li className="nav-item navbar_main_btn">
-                  <button className="navbar_btn ms-5">Join Now</button>
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    onClick={() => {
+                      handleLogOut();
+                    }}
+                    to=""
+                  >
+                    Log Out
+                  </NavLink>
                 </li>
               </ul>
             </div>

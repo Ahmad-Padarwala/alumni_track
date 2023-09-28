@@ -12,11 +12,11 @@ const addAlumniProfile = async (req, res) => {
     cover_background = req.files.cover_background[0].filename;
   }
 
-  const { contact, address, dob, gender } = req.body;
+  const { user_id, contact, address, dob, gender } = req.body;
   conn.query(
     "INSERT INTO alumni_profile SET ? ",
     {
-      user_id: 1,
+      user_id,
       profile_picture: profile_picture,
       cover_background: cover_background,
       phone_number: contact,

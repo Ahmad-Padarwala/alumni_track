@@ -18,6 +18,8 @@ const Form = () => {
   });
   const [getSignUpdata, stGetSignUpData] = useState([]);
 
+  const navigate = useNavigate();
+
   const toggleForm = () => {
     setActiveForm((prevActiveForm) => {
       return prevActiveForm === "login" ? "signup" : "login";
@@ -35,10 +37,56 @@ const Form = () => {
 
   const saveSignUpData = (e) => {
     e.preventDefault();
+    //FOR EMAIL VALIDATION
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (addSignUpData.email === "") {
+      document.getElementById("emailErrInsignup").innerHTML =
+        "**Please fill the email";
+      return false;
+    }
+    if (!emailRegex.test(addSignUpData.email)) {
+      document.getElementById("emailErrInsignup").innerHTML =
+        "**Invalid email format";
+      return false;
+    }
+    document.getElementById("emailErrInsignup").innerHTML = "";
+    //FOR PASSWORD VALIDATION
+    if (addSignUpData.password === "") {
+      document.getElementById("passwordErrInSignup").innerHTML =
+        "**Please fill the password";
+      return false;
+    }
+    if (addSignUpData.password.length <= 6) {
+      document.getElementById("passwordErrInSignup").innerHTML =
+        "**password length is more then 5";
+      return false;
+    }
+    document.getElementById("passwordErrInSignup").innerHTML = "";
+    //FOR USERNAME VALIDATION
+    if (addSignUpData.username === "") {
+      document.getElementById("usernameErrInSignup").innerHTML =
+        "**Please fill the first name";
+      return false;
+    }
+    if (
+      addSignUpData.username.length < 3 ||
+      addSignUpData.username.length > 20
+    ) {
+      document.getElementById("usernameErrInSignup").innerHTML =
+        "**name length must be between 3 and 20";
+      return false;
+    }
+
+    if (!isNaN(addSignUpData.username)) {
+      document.getElementById("usernameErrInSignup").innerHTML =
+        "**Do not allow numbers";
+      return false;
+    }
+    document.getElementById("usernameErrInSignup").innerHTML = "";
     axios
       .post(`${PORT}alumni-master`, addSignUpData)
       .then(() => {
-        navigate("/profile");
+        navigate("/user-profile");
       })
       .catch(() => {
         toast.warning("Enter All Details");
@@ -53,27 +101,43 @@ const Form = () => {
       [name]: value,
     }));
   };
-  const navigate = useNavigate();
   const saveLoginData = (e) => {
     e.preventDefault();
+    //FOR EMAIL VALIDATION
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (addLoginData.email === "") {
+      document.getElementById("emailErr").innerHTML = "**Please fill the email";
+      return false;
+    }
+    if (!emailRegex.test(addLoginData.email)) {
+      document.getElementById("emailErr").innerHTML = "**Invalid email format";
+      return false;
+    }
+    document.getElementById("emailErr").innerHTML = "";
+
+    //FOR PASSWORD VALIDATION
+    if (addLoginData.password === "") {
+      document.getElementById("passwordErr").innerHTML =
+        "**Please fill the password";
+      return false;
+    }
+    document.getElementById("passwordErr").innerHTML = "";
+
     const user = getSignUpdata.find(
       (user) =>
         user.email === addLoginData.email &&
         user.password === addLoginData.password
     );
     if (user) {
+      localStorage.setItem("user", user.id);
       navigate("/user-profile");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
-      const form = e.target;
-      form.reset();
       toast.warning("please correct information");
     }
   };
 
   //GET SIGHNUP DATA FOR CHACKING LOGIN FORM
-  useEffect(() => {
-    getdata();
-  }, []);
 
   const getdata = () => {
     axios
@@ -85,6 +149,10 @@ const Form = () => {
         console.log(err, "error getting signup data in admin");
       });
   };
+
+  useEffect(() => {
+    getdata();
+  }, []);
 
   return (
     <>
@@ -114,7 +182,7 @@ const Form = () => {
                   Email:-
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control mt-1"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
@@ -122,6 +190,7 @@ const Form = () => {
                   name="email"
                   onChange={handleLoginDataChange}
                 />
+                <span className="text-danger font-bold" id="emailErr"></span>
               </div>
               <div className="form-group">
                 <label htmlFor="exampleInputPassword1" className="fw-semibold">
@@ -135,6 +204,7 @@ const Form = () => {
                   name="password"
                   onChange={handleLoginDataChange}
                 />
+                <span className="text-danger font-bold" id="passwordErr"></span>
               </div>
               <button type="submit" className="btn btn-primary mt-3">
                 Login
@@ -164,7 +234,7 @@ const Form = () => {
                   Email:-
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control mt-2"
                   id="exampleInputEmail1"
                   aria-describedby="emailHelp"
@@ -172,6 +242,10 @@ const Form = () => {
                   name="email"
                   onChange={handleSignUpDataChange}
                 />
+                <span
+                  className="text-danger font-bold"
+                  id="emailErrInsignup"
+                ></span>
               </div>
               <div className="form-group mb-3">
                 <label htmlFor="exampleInputPassword1" className="fw-semibold">
@@ -185,6 +259,10 @@ const Form = () => {
                   name="password"
                   onChange={handleSignUpDataChange}
                 />
+                <span
+                  className="text-danger font-bold"
+                  id="passwordErrInSignup"
+                ></span>
               </div>
               <div className="form-group mb-3">
                 <label htmlFor="exampleInputPassword1" className="fw-semibold">
@@ -198,6 +276,10 @@ const Form = () => {
                   placeholder="Enter Name"
                   onChange={handleSignUpDataChange}
                 />
+                <span
+                  className="text-danger font-bold"
+                  id="usernameErrInSignup"
+                ></span>
               </div>
               <button type="submit" className="btn btn-primary mb-3">
                 Submit

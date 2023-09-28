@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import Education from "./Education";
 import Skill from "./Skill";
 import WorkDetail from "./WorkDetail";
@@ -10,6 +10,18 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem("user");
+    if (!isAuth) {
+      navigate("/");
+    } else {
+      setUserId(isAuth);
+    }
+  }, []);
+
   const [alumniProfile, setAlumniProfile] = useState({
     cover_background: null,
     profile_picture: null,
@@ -36,6 +48,7 @@ const Profile = () => {
   const saveProfileData = async (e) => {
     e.preventDefault();
     const formData = new FormData();
+    formData.append("user_id", userId);
     formData.append("cover_background", alumniProfile.cover_background);
     formData.append("profile_picture", alumniProfile.profile_picture);
     formData.append("address", alumniProfile.address);
@@ -106,7 +119,7 @@ const Profile = () => {
                 </NavLink>
               </div>
               <div className="px-3 relative">
-                <div className="mt-5 fs-4 fw-semibold">
+                <div className="mt-5 fs-5 fw-semibold">
                   <p className="m-0">Padarwala Ahmad</p>
                 </div>
                 <div>
@@ -275,6 +288,7 @@ const Profile = () => {
                 </div>
                 <div className="d-flex float-end">
                   <button
+                    type="button"
                     className="btn btn-danger"
                     data-bs-dismiss="modal"
                     aria-label="Close"
@@ -329,7 +343,7 @@ const Profile = () => {
                   <i className="fa-solid fa-phone fs-5"></i>
                 </div>
                 <div className="ms-2">
-                  <p className="mb-0 fw-semibold fs-6">Phone</p>
+                  <p className="mb-0 fw-semibold">Phone</p>
                   <p className="mb-0">7383294925</p>
                 </div>
               </div>
@@ -338,7 +352,7 @@ const Profile = () => {
                   <i className="fa-regular fa-envelope fs-5"></i>
                 </div>
                 <div className="ms-2">
-                  <p className="mb-0 fw-semibold fs-6">Email</p>
+                  <p className="mb-0 fw-semibold">Email</p>
                   <NavLink
                     to="mailto:ahmadpadarwala4@gmail.com"
                     className="mb-0 text-primary"
@@ -375,7 +389,7 @@ const Profile = () => {
             </div>
             <div className="modal-body">
               <div>
-                <p className="fs-5">
+                <p className="fs-6">
                   Send a request to the organization you want to join
                 </p>
               </div>
@@ -428,8 +442,8 @@ const Profile = () => {
                 </p>
               </div>
               <div className="d-flex justify-content-between ps-3 mb-2 pb-1 border-bottom">
-                <p className="fw-semibold fs-5 m-0">Organization</p>
-                <p className="fw-semibold fs-5 m-0">Joined Date</p>
+                <p className="fw-semibold m-0">Organization</p>
+                <p className="fw-semibold m-0">Joined Date</p>
               </div>
               <div className="mb-1 d-flex justify-content-between">
                 <div>

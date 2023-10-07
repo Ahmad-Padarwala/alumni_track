@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const AlumniProfile = require("../../controller/alumni-profile/AlumniProfie");
+const AlumniProfile = require("../../controller/alumni/AlumniProfie");
 
 const multer = require("multer");
 

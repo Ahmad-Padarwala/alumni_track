@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const Master = require("../../controller/alumni-master/Master");
+const Master = require("../../controller/alumni/Master");
 router
   .route("/alumni-master")
   .get(Master.getAlumniMaster)

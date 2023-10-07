@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Education = require("../../controller/education/Education");
+const Education = require("../../controller/alumni/Education");
 
 router.route("/addeducation/:id").post(Education.addEducation);
 router.route("/getEducationWithId/:id").get(Education.getEducationData);

@@ -12,61 +12,186 @@ import axios from "axios";
 const Profile = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const isAuth = localStorage.getItem("user");
-    if (!isAuth) {
-      navigate("/");
-    } else {
-      setUserId(isAuth);
-    }
-  }, []);
-
-  const [alumniProfile, setAlumniProfile] = useState({
+  const [getAlumniProfile, setGetAlumniProfile] = useState([]);
+  const [addAlumniProfile, setAddAlumniProfile] = useState({
     cover_background: null,
     profile_picture: null,
     address: "",
-    contact: "",
+    phone_number: "",
     dob: "",
     gender: "",
   });
+  const [getAlumniMaster, setGetAlumniMaster] = useState([]);
+  const [editProfileData, setEditProfileData] = useState([]);
+  const [editProfileImageData, setEditProfileImageData] = useState({
+    profile_picture: null,
+    cover_background: null,
+  });
+
+  const isAuth = localStorage.getItem("user");
+
+  //get alumni profile with id
+  const getAlumniProfileData = async (userId) => {
+    try {
+      const response = await axios.get(`
+        ${PORT}getalumniprofilewithid/${userId}`);
+
+      if (response.status === 200) {
+        setGetAlumniProfile(response.data[0]);
+      } else {
+        console.error("Failed to fetch alumni profile");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // add alumni profile
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setAlumniProfile((prevProdData) => ({
+    setAddAlumniProfile((prevProdData) => ({
       ...prevProdData,
       [name]: value,
     }));
   };
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setAlumniProfile((prevProfileData) => ({
+    setAddAlumniProfile((prevProfileData) => ({
       ...prevProfileData,
       [event.target.name]: file,
     }));
   };
-
   const saveProfileData = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("user_id", userId);
-    formData.append("cover_background", alumniProfile.cover_background);
-    formData.append("profile_picture", alumniProfile.profile_picture);
-    formData.append("address", alumniProfile.address);
-    formData.append("contact", alumniProfile.contact);
-    formData.append("dob", alumniProfile.dob);
-    formData.append("gender", alumniProfile.gender);
+    formData.append("cover_background", addAlumniProfile.cover_background);
+    formData.append("profile_picture", addAlumniProfile.profile_picture);
+    formData.append("address", addAlumniProfile.address);
+    formData.append("contact", addAlumniProfile.contact);
+    formData.append("dob", addAlumniProfile.dob);
+    formData.append("gender", addAlumniProfile.gender);
 
     try {
-      axios.post(`${PORT}addalumniprofile`, formData, {
+      await axios.post(`${PORT}addalumniprofile`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+      });
+      setAddAlumniProfile({
+        cover_background: null,
+        profile_picture: null,
+        address: "",
+        phone_number: "",
+        dob: "",
+        gender: "",
       });
     } catch (error) {
       toast.warning("Enter All Details");
       console.error("Error adding Alumniprofile data in Profile.js:", error);
     }
   };
+
+  //get alumni master data
+  const getalumniMasterData = async (id) => {
+    try {
+      const response = await axios.get(`${PORT}getalumniMasterWithId/${id}`);
+      if (response.status === 200) {
+        setGetAlumniMaster(response.data[0]);
+      } else {
+        console.log("error");
+      }
+    } catch (err) {
+      console.log(err, "error in getting alumni master data");
+    }
+  };
+  const formatDate = (dateString) => {
+    const options = { day: "numeric", month: "long", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      undefined,
+      options
+    );
+    return formattedDate;
+  };
+
+  //alumni profile data for edit
+  const getAlumniProfileEditData = async (userId) => {
+    try {
+      const response = await axios.get(`
+          ${PORT}getalumniprofilewithid/${userId}`);
+      if (response.status === 200) {
+        setEditProfileData(response.data[0]);
+      } else {
+        console.error("Failed to fetch alumni profile");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditProfileData((prevProdData) => ({
+      ...prevProdData,
+      [name]: value,
+    }));
+  };
+  const handleEditFileChange = (event) => {
+    const file = event.target.files[0];
+    const tempURL = URL.createObjectURL(file);
+
+    setEditProfileData((prevProfileData) => ({
+      ...prevProfileData,
+      [event.target.name]: file,
+    }));
+
+    setEditProfileImageData((prevImageData) => ({
+      ...prevImageData,
+      [event.target.name]: tempURL,
+    }));
+  };
+  const saveEditProfile = async (id) => {
+    const formData = new FormData();
+    if (editProfileData.profile_picture) {
+      formData.append("profile_picture", editProfileData.profile_picture);
+    }
+
+    if (editProfileData.cover_background) {
+      formData.append("cover_background", editProfileData.cover_background);
+    }
+
+    formData.append("address", editProfileData.address);
+    formData.append("phone_number", editProfileData.phone_number);
+    formData.append("dob", editProfileData.dob);
+    formData.append("gender", editProfileData.gender);
+
+    await axios
+      .put(`${PORT}editalumniprofile/${id}`, formData)
+      .then((res) => {
+        getAlumniProfileData(isAuth);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const formatDateForInput = (dateString) => {
+    if (dateString) {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+    return "";
+  };
+  useEffect(() => {
+    if (!isAuth) {
+      navigate("/");
+    } else {
+      setUserId(isAuth);
+    }
+    getAlumniProfileData(isAuth);
+    getalumniMasterData(isAuth);
+  }, [isAuth, navigate, addAlumniProfile]);
 
   return (
     <>
@@ -86,20 +211,32 @@ const Profile = () => {
         <div className="row">
           <div className="col-lg-8 col-12 px-lg-0 px-md-0 px-2">
             <div className="pofile_left_side_sections pb-4">
-              <div>
-                <img
-                  src={require("../../assets/image/coverBg.png")}
-                  width="100%"
-                  alt="coverBg"
-                />
-              </div>
+              <div
+                className="background_image_main"
+                style={{
+                  backgroundImage: `url(/upload/${
+                    getAlumniProfile && getAlumniProfile.cover_background
+                      ? getAlumniProfile.cover_background
+                      : "coverBg.png"
+                  })`,
+                }}
+              ></div>
               <div className="profile_image_main">
-                <img
-                  src={require("../../assets/image/profileImage.png")}
-                  width="100%"
-                  alt="profile"
-                />
+                {getAlumniProfile && getAlumniProfile.profile_picture ? (
+                  <img
+                    src={`/upload/${getAlumniProfile.profile_picture}`}
+                    width="100%"
+                    alt="profile"
+                  />
+                ) : (
+                  <img
+                    src={require("../../assets/image/profileImage.png")}
+                    width="100%"
+                    alt="default-profile"
+                  />
+                )}
               </div>
+
               <div className="float-end pe-3 mt-3">
                 <NavLink
                   to="/user-profile"
@@ -113,17 +250,25 @@ const Profile = () => {
                   to="/user-profile"
                   className="education_opr_icon"
                   data-bs-toggle="modal"
-                  data-bs-target="#addPofileModal"
+                  data-bs-target="#editPofileModal"
+                  onClick={() => {
+                    getAlumniProfileEditData(isAuth);
+                  }}
                 >
                   <i className="fa-solid fa-pen"></i>
                 </NavLink>
               </div>
-              <div className="px-3 relative">
+              <div className="px-4 relative">
                 <div className="mt-5 fs-5 fw-semibold">
-                  <p className="m-0">Padarwala Ahmad</p>
+                  <p className="m-0">
+                    {getAlumniMaster.username}
+                    <span className="ms-2" style={{ fontSize: "14px" }}>
+                      ({getAlumniProfile.gender})
+                    </span>
+                  </p>
                 </div>
                 <div>
-                  <span>Alumni member Address</span>
+                  <span>{getAlumniProfile && getAlumniProfile.address}</span>
                   <NavLink
                     to="/user-profile"
                     className="text-primary fw-semibold ms-2"
@@ -133,6 +278,10 @@ const Profile = () => {
                     Contact Info
                   </NavLink>
                 </div>
+                <p className="m-0" style={{ fontSize: "14px" }}>
+                  <span>DOB:- </span>
+                  {formatDate(getAlumniProfile.dob)}
+                </p>
                 <div className="mt-2">
                   <button
                     className="alumni_req_btn fw-semibold"
@@ -151,8 +300,8 @@ const Profile = () => {
                 </div>
               </div>
             </div>
-            <Education />
-            <Skill />
+            <Education id={isAuth} />
+            <Skill id={isAuth} />
             <WorkDetail />
           </div>
           <div className="col-lg-4 col-12 px-lg-0 px-md-0 px-2 mt-lg-0 mt-md-0 mt-3">
@@ -180,7 +329,7 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="addPofileModalLabel">
-                Ahmad Padarwala
+                {getAlumniMaster.username}
               </h1>
               <button
                 type="button"
@@ -194,7 +343,7 @@ const Profile = () => {
                 <p className="fs-5">Your Profile Section</p>
                 <div className="mb-3">
                   <label
-                    htmlFor="exampleFormControlInput1"
+                    htmlFor="alumniBgCover"
                     className="form-label fw-semibold"
                   >
                     BackGround Image:-
@@ -203,13 +352,13 @@ const Profile = () => {
                     type="file"
                     className="form-control"
                     name="cover_background"
-                    id="exampleFormControlInput1"
+                    id="alumniBgCover"
                     onChange={handleFileChange}
                   />
                 </div>
                 <div className="mb-3">
                   <label
-                    htmlFor="exampleFormControlInput1"
+                    htmlFor="alumniProfileImage"
                     className="form-label fw-semibold"
                   >
                     Profile Image:-
@@ -218,7 +367,7 @@ const Profile = () => {
                     type="file"
                     className="form-control"
                     name="profile_picture"
-                    id="exampleFormControlInput1"
+                    id="alumniProfileImage"
                     onChange={handleFileChange}
                   />
                 </div>
@@ -266,25 +415,38 @@ const Profile = () => {
                     className="form-control"
                     name="dob"
                     id="alumniProfileDob"
-                    placeholder="Enter Your Date of Birth"
                     onChange={handleInputChange}
                   />
                 </div>
                 <div className="mb-3">
-                  <label
-                    htmlFor="alumniProfilegender"
-                    className="form-label fw-semibold"
-                  >
-                    Gender:-
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="gender"
-                    id="alumniProfilegender"
-                    placeholder="Enter Your Mobile No."
-                    onChange={handleInputChange}
-                  />
+                  <p className="form-label fw-semibold">Gender:-</p>
+                  <div>
+                    <label className="form-check-label" htmlFor="alumnimale">
+                      <input
+                        type="radio"
+                        id="alumnimale"
+                        name="gender"
+                        value="male"
+                        className="form-check-input me-2"
+                        onChange={handleInputChange}
+                      />
+                      Male
+                    </label>
+                    <label
+                      className="form-check-label ms-3"
+                      htmlFor="alumnifemale"
+                    >
+                      <input
+                        type="radio"
+                        id="alumnifemale"
+                        name="gender"
+                        value="female"
+                        className="form-check-input me-1"
+                        onChange={handleInputChange}
+                      />
+                      Female
+                    </label>
+                  </div>
                 </div>
                 <div className="d-flex float-end">
                   <button
@@ -310,6 +472,207 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* edit profile modal */}
+      <div
+        className="modal fade"
+        id="editPofileModal"
+        tabIndex="-1"
+        aria-labelledby="editPofileModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="editPofileModalLabel">
+                {getAlumniMaster.username}
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <p className="fs-5">Your Profile Section</p>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniBgCover"
+                    className="form-label fw-semibold"
+                  >
+                    BackGround Image:-
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    name="cover_background"
+                    id="alumniBgCover"
+                    onChange={handleEditFileChange}
+                  />
+                  {editProfileImageData.cover_background ? (
+                    <img
+                      src={editProfileImageData.cover_background}
+                      width="100px"
+                      className="mt-2"
+                      alt="profile"
+                    />
+                  ) : (
+                    <img
+                      src={`/upload/${
+                        editProfileData.cover_background
+                          ? editProfileData.cover_background
+                          : "coverBg.png"
+                      }`}
+                      width="100px"
+                      alt="default-profile"
+                      className="mt-2"
+                    />
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileImage"
+                    className="form-label fw-semibold"
+                  >
+                    Profile Image:-
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    name="profile_picture"
+                    id="alumniProfileImage"
+                    onChange={handleEditFileChange}
+                  />
+                  {editProfileImageData.profile_picture ? (
+                    <img
+                      src={editProfileImageData.profile_picture}
+                      width="100px"
+                      className="mt-2"
+                      alt="profile"
+                    />
+                  ) : (
+                    <img
+                      src={`/upload/${
+                        editProfileData.profile_picture
+                          ? editProfileData.profile_picture
+                          : "profileImage.png"
+                      }`}
+                      width="100px"
+                      alt="default-profile"
+                      className="mt-2"
+                    />
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileAddress"
+                    className="form-label fw-semibold"
+                  >
+                    Address:-
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="address"
+                    id="alumniProfileAddress"
+                    placeholder="Enter Your Address"
+                    onChange={handleEditChange}
+                    value={editProfileData.address}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileContact"
+                    className="form-label fw-semibold"
+                  >
+                    phone Number:-
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="phone_number"
+                    id="alumniProfileContact"
+                    placeholder="Enter Your Mobile No."
+                    onChange={handleEditChange}
+                    value={editProfileData.phone_number}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileDob"
+                    className="form-label fw-semibold"
+                  >
+                    Date of Birth:-
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="dob"
+                    id="alumniProfileDob"
+                    onChange={handleEditChange}
+                    value={formatDateForInput(editProfileData.dob)}
+                  />
+                </div>
+                <div className="mb-3">
+                  <p className="form-label fw-semibold">Gender:-</p>
+                  <div>
+                    <label className="form-check-label" htmlFor="alumnimale">
+                      <input
+                        type="radio"
+                        id="alumnimale"
+                        name="gender"
+                        value="male"
+                        onChange={handleEditChange}
+                        checked={editProfileData.gender === "male"}
+                        className="form-check-input me-2"
+                      />
+                      Male
+                    </label>
+                    <label
+                      className="form-check-label ms-3"
+                      htmlFor="alumnifemale"
+                    >
+                      <input
+                        type="radio"
+                        id="alumnifemale"
+                        name="gender"
+                        value="female"
+                        onChange={handleEditChange}
+                        checked={editProfileData.gender === "female"}
+                        className="form-check-input me-2"
+                      />
+                      Female
+                    </label>
+                  </div>
+                </div>
+                <div className="d-flex float-end">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary ms-3"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={() => {
+                      saveEditProfile(isAuth);
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Contact Modal */}
       <div
         className="modal fade"
@@ -322,7 +685,7 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="contactModalLabel">
-                Ahmad Padarwala
+                {getAlumniMaster.username}
               </h1>
               <button
                 type="button"
@@ -344,7 +707,9 @@ const Profile = () => {
                 </div>
                 <div className="ms-2">
                   <p className="mb-0 fw-semibold">Phone</p>
-                  <p className="mb-0">7383294925</p>
+                  <p className="mb-0">
+                    {getAlumniProfile && getAlumniProfile.phone_number}
+                  </p>
                 </div>
               </div>
               <div className="d-flex mb-3">
@@ -357,7 +722,7 @@ const Profile = () => {
                     to="mailto:ahmadpadarwala4@gmail.com"
                     className="mb-0 text-primary"
                   >
-                    ahmadpadarwala4@gmail.com
+                    {getAlumniMaster.email}
                   </NavLink>
                 </div>
               </div>
@@ -378,7 +743,7 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="joinalumniModal">
-                Ahmad Padarwala
+                {getAlumniMaster.username}
               </h1>
               <button
                 type="button"
@@ -425,7 +790,7 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="joinedOrgModal">
-                Ahmad Padarwala
+                {getAlumniMaster.username}
               </h1>
               <button
                 type="button"

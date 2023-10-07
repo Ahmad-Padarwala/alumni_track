@@ -6,6 +6,8 @@ router
   .route("/alumni-master")
   .get(Master.getAlumniMaster)
   .post(Master.addSignUpData);
-router.route("/loginFormData").post(Master.addLoginData);
+router
+  .route("/getalumniMasterWithId/:id")
+  .get(Master.getAlumniMasterDataWithId);
 
 module.exports = router;

@@ -24,5 +24,16 @@ router.route("/addalumniprofile").post(
   ]),
   AlumniProfile.addAlumniProfile
 );
+router
+  .route("/getalumniprofilewithid/:id")
+  .get(AlumniProfile.getAlumniProfileWithId);
+
+router.route("/editalumniprofile/:id").put(
+  upload.fields([
+    { name: "profile_picture", maxCount: 1 },
+    { name: "cover_background", maxCount: 1 },
+  ]),
+  AlumniProfile.editAlumniProfile
+);
 
 module.exports = router;

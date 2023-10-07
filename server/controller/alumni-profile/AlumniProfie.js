@@ -1,5 +1,20 @@
 const conn = require("../../db/Connection");
 
+//get alumni profile with user_id
+const getAlumniProfileWithId = async (req, res) => {
+  const user_id = req.params.id;
+  const sql = `SELECT * FROM alumni_profile WHERE user_id=?`;
+  const data = [user_id];
+  conn.query(sql, data, (err, result) => {
+    if (err) {
+      console.error("Error getting record:", err);
+      res.status(500).json({ error: "Error getting record" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
 // add alumni member profile
 const addAlumniProfile = async (req, res) => {
   let profile_picture = "";
@@ -34,4 +49,125 @@ const addAlumniProfile = async (req, res) => {
   );
 };
 
-module.exports = { addAlumniProfile };
+//edit elumni profile data
+// const editAlumniProfile = (req, res) => {
+//   const user_id = req.params.id;
+//   let profile_picture = "";
+//   let cover_background = "";
+
+//   if (req.files && req.files.profile_picture) {
+//     profile_picture = req.files.profile_picture[0].filename;
+//     const { phone_number, address, dob, gender } = req.body;
+
+//     const sql =
+//       "UPDATE alumni_profile SET profile_picture= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
+
+//     const values = [
+//       profile_picture,
+//       phone_number,
+//       address,
+//       dob,
+//       gender,
+//       user_id,
+//     ];
+//     conn.query(sql, values, (err, data) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(err);
+//       }
+//       return res.json(data);
+//     });
+//   }
+//   if (req.files && req.files.cover_background) {
+//     cover_background = req.files.cover_background[0].filename;
+//     const { phone_number, address, dob, gender } = req.body;
+
+//     const sql =
+//       "UPDATE alumni_profile SET cover_background= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
+
+//     const values = [
+//       cover_background,
+//       phone_number,
+//       address,
+//       dob,
+//       gender,
+//       user_id,
+//     ];
+//     conn.query(sql, values, (err, data) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(err);
+//       }
+//       return res.json(data);
+//     });
+//   } else {
+//     const { phone_number, address, dob, gender } = req.body;
+
+//     const sql =
+//       "UPDATE alumni_profile SET profile_picture= ?, cover_background= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
+
+//     const values = [
+//       profile_picture,
+//       cover_background,
+//       phone_number,
+//       address,
+//       dob,
+//       gender,
+//       user_id,
+//     ];
+//     conn.query(sql, values, (err, data) => {
+//       if (err) {
+//         console.log(err);
+//         return res.json(err);
+//       }
+//       return res.json(data);
+//     });
+//   }
+// };
+const editAlumniProfile = (req, res) => {
+  const user_id = req.params.id;
+  let profile_picture = "";
+  let cover_background = "";
+
+  if (req.files && req.files.profile_picture) {
+    profile_picture = req.files.profile_picture[0].filename;
+  }
+
+  if (req.files && req.files.cover_background) {
+    cover_background = req.files.cover_background[0].filename;
+  }
+
+  const { phone_number, address, dob, gender } = req.body;
+
+  let sql = "UPDATE alumni_profile SET ";
+  const values = [];
+
+  if (profile_picture) {
+    sql += "profile_picture = ?, ";
+    values.push(profile_picture);
+  }
+
+  if (cover_background) {
+    sql += "cover_background = ?, ";
+    values.push(cover_background);
+  }
+
+  sql += "phone_number = ?, address = ?, dob = ?, gender = ? WHERE user_id = ?";
+  values.push(phone_number, address, dob, gender, user_id);
+
+  conn.query(sql, values, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Error updating profile" });
+    }
+
+    return res.status(200).json({ success: true });
+  });
+};
+
+module.exports = {
+  addAlumniProfile,
+  getAlumniProfileWithId,
+
+  editAlumniProfile,
+};

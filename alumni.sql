@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 25, 2023 at 02:30 PM
+-- Generation Time: Oct 07, 2023 at 07:43 AM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -48,8 +48,15 @@ CREATE TABLE `alumni_education` (
   `institute_name` varchar(200) NOT NULL,
   `study_startDate` date NOT NULL,
   `study_endDate` date NOT NULL,
-  `result` int(10) NOT NULL
+  `result` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `alumni_education`
+--
+
+INSERT INTO `alumni_education` (`id`, `user_id`, `field_study`, `institute_name`, `study_startDate`, `study_endDate`, `result`) VALUES
+(14, 3, 'BCA', 'Gokul Global University', '2023-08-29', '2023-09-25', '9.98 cgpa');
 
 -- --------------------------------------------------------
 
@@ -70,8 +77,7 @@ CREATE TABLE `alumni_master` (
 --
 
 INSERT INTO `alumni_master` (`id`, `email`, `password`, `username`, `status`) VALUES
-(1, 'ahmad@gmail.com', '123456', 'Ahmad123', 1),
-(2, 'ahmadq@gmail.com', '123456', 'Ahmad ', 0);
+(3, 'ahmadpadarwala@gmai.com', 'Ahmad', 'Ahmad Padarwala', 1);
 
 -- --------------------------------------------------------
 
@@ -98,11 +104,18 @@ CREATE TABLE `alumni_profile` (
   `user_id` int(11) NOT NULL,
   `profile_picture` varchar(500) NOT NULL,
   `cover_background` varchar(500) NOT NULL,
-  `phone_number` int(20) NOT NULL,
+  `phone_number` bigint(20) NOT NULL,
   `address` varchar(400) NOT NULL,
   `dob` date NOT NULL,
   `gender` tinytext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `alumni_profile`
+--
+
+INSERT INTO `alumni_profile` (`id`, `user_id`, `profile_picture`, `cover_background`, `phone_number`, `address`, `dob`, `gender`) VALUES
+(24, 3, 'profile_picture-1696418482145.platform3.webp', 'cover_background-1696418474504.calculate-bg.webp', 7383294925, 'Majadar, Vadgam, BK', '2005-01-02', 'male');
 
 -- --------------------------------------------------------
 
@@ -265,13 +278,13 @@ ALTER TABLE `alumni_associate`
 -- AUTO_INCREMENT for table `alumni_education`
 --
 ALTER TABLE `alumni_education`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `alumni_master`
 --
 ALTER TABLE `alumni_master`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `alumni_member`
@@ -283,13 +296,13 @@ ALTER TABLE `alumni_member`
 -- AUTO_INCREMENT for table `alumni_profile`
 --
 ALTER TABLE `alumni_profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `alumni_skill`
 --
 ALTER TABLE `alumni_skill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `alumni_work_detail`

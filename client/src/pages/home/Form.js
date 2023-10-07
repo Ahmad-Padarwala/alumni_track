@@ -62,7 +62,6 @@ const Form = () => {
       return false;
     }
     document.getElementById("passwordErrInSignup").innerHTML = "";
-    //FOR USERNAME VALIDATION
     if (addSignUpData.username === "") {
       document.getElementById("usernameErrInSignup").innerHTML =
         "**Please fill the first name";

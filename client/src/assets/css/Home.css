@@ -102,3 +102,9 @@
   text-align: center;
   color: rgb(5, 60, 143);
 }
+.password_icon{
+  padding: 0;
+  position: relative;
+  top: -30px;
+  left: 250px;
+}

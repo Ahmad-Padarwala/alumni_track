@@ -4,6 +4,7 @@ import ProfileRoute from "./routes/ProfileRoute";
 import LoginRoute from "./routes/admin/LoginRoute";
 import DashRoute from "./routes/admin/DashRoute";
 import SignUpRoute from "./routes/admin/SignUpRoute";
+import CreateOrgRoute from "./routes/CreateOrgRoute";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <LoginRoute />
       <DashRoute />
       <SignUpRoute />
+      <CreateOrgRoute />
     </>
   );
 };

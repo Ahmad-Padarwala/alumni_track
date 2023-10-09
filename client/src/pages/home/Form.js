@@ -17,13 +17,16 @@ const Form = () => {
     password: "",
   });
   const [getSignUpdata, stGetSignUpData] = useState([]);
-
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const toggleForm = () => {
     setActiveForm((prevActiveForm) => {
       return prevActiveForm === "login" ? "signup" : "login";
     });
+  };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   // SIGNUP USER  DATA SECTION
@@ -34,7 +37,6 @@ const Form = () => {
       [name]: value,
     }));
   };
-
   const saveSignUpData = (e) => {
     e.preventDefault();
     //FOR EMAIL VALIDATION
@@ -137,7 +139,6 @@ const Form = () => {
   };
 
   //GET SIGHNUP DATA FOR CHACKING LOGIN FORM
-
   const getdata = () => {
     axios
       .get(`${PORT}alumni-master`)
@@ -196,16 +197,27 @@ const Form = () => {
                   Password:-
                 </label>
                 <input
-                  type="password"
-                  className="form-control mt-1"
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
                   id="exampleInputPassword1"
                   placeholder="Enter Password"
                   name="password"
                   onChange={handleLoginDataChange}
                 />
+                <span
+                  className="password_icon"
+                  style={{ cursor: "pointer" }}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <i className="fa-solid fa-eye-slash"></i>
+                  ) : (
+                    <i className="fa-solid fa-eye"></i>
+                  )}
+                </span>
                 <span className="text-danger font-bold" id="passwordErr"></span>
               </div>
-              <button type="submit" className="btn btn-primary mt-3">
+              <button type="submit" className="btn btn-primary mb-1">
                 Login
               </button>
               <p className="text-center mt-3">
@@ -246,18 +258,29 @@ const Form = () => {
                   id="emailErrInsignup"
                 ></span>
               </div>
-              <div className="form-group mb-3">
+              <div className="form-group">
                 <label htmlFor="exampleInputPassword1" className="fw-semibold">
                   Password:-
                 </label>
                 <input
-                  type="password"
-                  className="form-control mt-2"
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
                   id="exampleInputPassword1"
                   placeholder="Enter Password"
                   name="password"
                   onChange={handleSignUpDataChange}
                 />
+                <span
+                  className="password_icon"
+                  style={{ cursor: "pointer" }}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <i className="fa-solid fa-eye-slash"></i>
+                  ) : (
+                    <i className="fa-solid fa-eye"></i>
+                  )}
+                </span>
                 <span
                   className="text-danger font-bold"
                   id="passwordErrInSignup"

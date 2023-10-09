@@ -7,7 +7,9 @@ const HeroSection = () => {
       <div className="container-fluid Hero_Main">
         <div className="container Hero_Main ">
           <div className=" hero_text">
-            <p className="hero_Header ">track your alumni member here</p>
+            <p className="hero_Header">
+              join alumni member with organizations here
+            </p>
             <p className="hero_detail">
               bus repellendus totam in, repellat officia voluptas soluta laborum
               ab ipsa odio est labore? Esse facerLorem ipsum dolor sit amet

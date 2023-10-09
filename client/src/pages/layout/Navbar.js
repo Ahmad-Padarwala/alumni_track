@@ -8,7 +8,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <header className="shadow hight-auto">
+      <header className="hight-auto">
         <nav className="navbar navbar-expand-lg  ">
           <div className="container-fluid">
             <NavLink to="/" className="navbar-brand">
@@ -60,6 +60,11 @@ const Navbar = () => {
                     to=""
                   >
                     Log Out
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink className="nav-link" to="/organization">
+                    Organization Page
                   </NavLink>
                 </li>
               </ul>

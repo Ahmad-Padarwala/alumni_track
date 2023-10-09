@@ -1,0 +1,29 @@
+.org_main_form_section {
+  background-color: #f4f2ee;
+}
+.create_org_top {
+  border-top: 1px solid #1c1c1b;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 4px 4px;
+}
+.create_org_text {
+  letter-spacing: 0.8px;
+}
+.create_org_form_section {
+  background-color: #f4f2ee;
+  padding: 10px 0px;
+}
+.create_page_btn {
+  padding: 9px 15px;
+  margin-top: 20px;
+  background-color: rgb(84, 84, 240);
+  border: none;
+  border-radius: 20px;
+  color: white;
+  font-weight: 500;
+}
+.create_page_btn:hover{
+  background-color: rgb(28, 28, 237);
+}
+.create_pass_icon{
+  left: 470px;
+}

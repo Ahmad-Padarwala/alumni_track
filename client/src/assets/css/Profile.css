@@ -1,4 +1,4 @@
-.pofile_left_side_sections {
+/* .pofile_left_side_sections {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   padding: 0;
   border-radius: 10px;
@@ -92,4 +92,99 @@
   background-size: cover;
   width: 100%;
   height: 200px;
+} */
+
+.pofile_left_side_sections {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  padding: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.profile_image_main img {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  padding: 0;
+  object-fit: cover;
+  overflow: hidden;
+}
+.alumni_req_btn {
+  background-color: transparent;
+  border: 2px solid #6fbe44;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+.alumni_req_btn:hover {
+  background-color: #6fbe44;
+  color: white;
+}
+.education_opr_icon {
+  color: black;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 50%;
+}
+.education_opr_icon:hover {
+  background-color: #cbcfc8;
+}
+.skill_name {
+  font-weight: 600;
+  cursor: pointer;
+}
+.skill_name:hover {
+  text-decoration: underline;
+}
+.background_image_main {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 200px;
+  z-index: -999;
+}
+
+/* FOR SKILL LEVELE CSS SECTION */
+
+.skill_level {
+  background-color: #ee5720;
+  color: white;
+  border-radius: 5px;
+  padding: 1px 8px;
+}
+
+@media screen and (max-width: 900px) and (min-width: 770px) {
+  .profile_image_main img {
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 769px) and (min-width: 460px) {
+  .profile_image_main img {
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 459px) {
+  .profile_image_main img {
+    height: 110px;
+    width: 110px;
+    border-radius: 50%;
+    padding: 0;
+    overflow: hidden;
+  }
 }

@@ -8,6 +8,7 @@ const Master_Route = require("./route/alumni/MasterRoute");
 const AlumniProRoute = require("./route/alumni/AlumniProRoute");
 const EducaRoute = require("./route/alumni/EducaRourte");
 const SkillRuote = require("./route/alumni/SkillRoute");
+const WorkDetailRoute = require("./route/alumni/WorkDetailRoute");
 const OrgMaster = require("./route/organization/MasterRoute");
 
 app.use(express.json());
@@ -19,6 +20,7 @@ app.use("/", Master_Route);
 app.use("/", AlumniProRoute);
 app.use("/", EducaRoute);
 app.use("/", SkillRuote);
+app.use("/", WorkDetailRoute);
 app.use("/", OrgMaster);
 
 app.listen(1010, () => {

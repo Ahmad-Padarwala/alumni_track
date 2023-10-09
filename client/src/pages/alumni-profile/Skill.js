@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import PORT from "../../assets/constant/Url";
 import axios from "axios";
@@ -6,6 +6,14 @@ import axios from "axios";
 const Skill = (props) => {
   const [getSkillData, setGetSkillData] = useState([]);
   const user_id = props.id;
+  const [addSkillData, setAddSkillData] = useState({
+    skill_name: "",
+    skill_level: "",
+  });
+  const [editSkillData, setEditSkillData] = useState({
+    skill_name: "",
+    skill_level: "",
+  });
 
   useEffect(() => {
     getAlumniSkillData(user_id);
@@ -24,6 +32,91 @@ const Skill = (props) => {
       console.log(err, "error in getting education data");
     }
   };
+  // console.log(getSkillData)
+
+  //add skill data section
+
+  const hendleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAddSkillData((prevSkillData) => ({
+      ...prevSkillData,
+      [name]: value,
+    }));
+  };
+
+  // console.log(id)
+  const saveAddSkillData = () => {
+    if (!addSkillData.skill_name || !addSkillData.skill_level) {
+      console.error("Skill Name and Skill Level are required.");
+      return;
+    }
+    const skillData = {
+      skill_name: addSkillData.skill_name,
+      skill_level: addSkillData.skill_level,
+    };
+    axios
+      .post(`${PORT}addSkillsData/${user_id}`, skillData)
+      .then(() => {
+        getAlumniSkillData(user_id);
+      })
+      .catch((error) => {
+        console.error("Error adding data:", error);
+      });
+  };
+
+  //edit data section start
+  const handleEditSkillData = (id) => {
+    axios
+      .get(`${PORT}getSkillDataForEdit/${id}`)
+      .then((res) => {
+        setEditSkillData(res.data[0]);
+      })
+      .catch((err) => {
+        console.log(err, "Error in gettin data for edit skill data");
+      });
+  };
+  const hendleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditSkillData((prevSkillData) => ({
+      ...prevSkillData,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveEditData = (id) => {
+    const formData = new FormData();
+    formData.append("id", editSkillData.id);
+    formData.append("skill_name", editSkillData.skill_name);
+    formData.append("skill_level", editSkillData.skill_level);
+    axios
+      .put(`${PORT}editSkillsData/${id}`, formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        getAlumniSkillData(user_id);
+        if (response.status === 200) {
+        } else {
+          console.log("Error updating skill data in skill.js: ", response);
+        }
+      })
+      .catch((error) => {
+        console.log("Error updating skill data in skill.js: ", error);
+      });
+  };
+  //delete skill data section start
+  const handleDeleteSkillData = (id) => {
+    axios
+      .delete(`${PORT}deleteSkillData/${id}`)
+      .then(() => {
+        getAlumniSkillData(user_id);
+      })
+      .catch((err) => {
+        console.log(err, "error in deleting skill data");
+      });
+  };
+
   return (
     <>
       <div className="pofile_left_side_sections p-3 mt-3">
@@ -36,34 +129,45 @@ const Skill = (props) => {
               to="/user-profile"
               className="education_opr_icon"
               data-bs-toggle="modal"
-              data-bs-target="#addSkillModal"
+              data-bs-target="#addskillModal"
             >
               <i className="fa-solid fa-plus"></i>
             </NavLink>
+            <NavLink
+              to="/user-profile"
+              className="education_opr_icon"
+              data-bs-toggle="modal"
+              data-bs-target="#editskillModal"
+            >
+              <i className="fa-solid fa-pen"></i>
+            </NavLink>
           </div>
         </div>
-        {getSkillData.map((skill) => {
-          return (
-            <div className="border-bottom mb-3 pb-2" key={skill.id}>
-              <span className="skill_name">{skill.skill_name}</span>
-            </div>
-          );
-        })}
+        <div className="d-flex flex-wrap justify-content-between px-3">
+          {getSkillData.map((skillData) => {
+            return (
+              <div className="d-flex flex-wrap" key={skillData.id}>
+                <div>{skillData.skill_name}</div>
+                <div>{skillData.skill_level}%</div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* add education modal */}
+      {/* add model */}
       <div
         className="modal fade"
-        id="addSkillModal"
+        id="addskillModal"
         tabIndex="-1"
-        aria-labelledby="addSkillModalLabel"
+        aria-labelledby="addPofileModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="addSkillModalLabel">
-                Ahmad Padarwala
+              <h1 className="modal-title fs-5" id="addPofileModalLabel">
+                Your Skill Section
               </h1>
               <button
                 type="button"
@@ -72,12 +176,11 @@ const Skill = (props) => {
                 aria-label="Close"
               ></button>
             </div>
-            <form method="post" className="mb-3">
-              <div className="modal-body">
-                <p className="fs-5">Your Profile Section</p>
+            <div className="modal-body">
+              <form encType="multipart/form-data" method="post">
                 <div className="mb-3">
                   <label
-                    htmlFor="alumnieduinsti"
+                    htmlFor="alumniProfileAddress"
                     className="form-label fw-semibold"
                   >
                     Skill Name:-
@@ -85,24 +188,26 @@ const Skill = (props) => {
                   <input
                     type="text"
                     className="form-control"
-                    name="institute_name"
-                    id="alumnieduinsti"
+                    name="skill_name"
+                    id="alumniProfileAddress"
                     placeholder="Enter Your Skill Name"
+                    onChange={hendleInputChange}
                   />
                 </div>
                 <div className="mb-3">
                   <label
-                    htmlFor="alumniedufield"
+                    htmlFor="alumniProfileContact"
                     className="form-label fw-semibold"
                   >
-                    Skill Level:-
+                    Skill level:-
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    name="field_study"
-                    id="alumniedufield"
-                    placeholder="Enter Your Skill Level"
+                    name="skill_level"
+                    id="alumniProfileContact"
+                    placeholder="Enter Your Skill level in Number."
+                    onChange={hendleInputChange}
                   />
                 </div>
                 <div className="d-flex float-end">
@@ -115,16 +220,179 @@ const Skill = (props) => {
                     Cancel
                   </button>
                   <button
-                    type="submit"
+                    type="button"
                     className="btn btn-primary ms-3"
                     data-bs-dismiss="modal"
                     aria-label="Close"
+                    onClick={saveAddSkillData}
                   >
                     Save
                   </button>
                 </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* edit view skill model */}
+      <div
+        className="modal fade"
+        id="editskillModal"
+        tabIndex="-1"
+        aria-labelledby="addPofileModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-body">
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="addEducationModalLabel">
+                  Your Skill Section
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
               </div>
-            </form>
+              <form encType="multipart/form-data" method="post">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>id</th>
+                      <th>Skill_name</th>
+                      <th>Skill_level</th>
+                      <th>Handle</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getSkillData.map((skillsData) => {
+                      return (
+                        <tr key={skillsData.id} className="text-align-center">
+                          <td>{skillsData.id}</td>
+                          <td>{skillsData.skill_name}</td>
+                          <td>{skillsData.skill_level}</td>
+                          <td>
+                            <NavLink
+                              to="/user-profile"
+                              onClick={() => {
+                                handleEditSkillData(skillsData.id);
+                              }}
+                              className="education_opr_icon"
+                              data-bs-toggle="modal"
+                              data-bs-target="#editskillsModal"
+                            >
+                              <i className="fa-solid fa-pen"></i>
+                            </NavLink>
+                            <NavLink
+                              to="/user-profile"
+                              onClick={() => {
+                                handleDeleteSkillData(skillsData.id);
+                              }}
+                              className="education_opr_icon"
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </NavLink>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+                <div className="d-flex float-end">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* edit skill section */}
+      <div
+        className="modal fade"
+        id="editskillsModal"
+        tabIndex="-1"
+        aria-labelledby="addPofileModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form encType="multipart/form-data" method="post">
+                <p className="fs-5">Your Skill Section</p>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileAddress"
+                    className="form-label fw-semibold"
+                  >
+                    Skill Name:-
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="skill_name"
+                    id="alumniProfileAddress"
+                    value={editSkillData && editSkillData.skill_name}
+                    onChange={hendleEditInputChange}
+                  />
+                </div>
+                <div className="mb-3">
+                  <label
+                    htmlFor="alumniProfileContact"
+                    className="form-label fw-semibold"
+                  >
+                    Skill level:-
+                  </label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name="skill_level"
+                    id="alumniProfileContact"
+                    value={editSkillData && editSkillData.skill_level}
+                    onChange={hendleEditInputChange}
+                  />
+                </div>
+                <div className="d-flex float-end">
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary ms-3"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                    onClick={() => {
+                      handleSaveEditData(editSkillData && editSkillData.id);
+                    }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

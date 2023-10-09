@@ -295,7 +295,7 @@ const Education = (props) => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="addEducationModalLabel">
-                Ahmad Padarwala
+                Your Education Section
               </h1>
               <button
                 type="button"
@@ -306,7 +306,6 @@ const Education = (props) => {
             </div>
             <form method="post" className="mb-3" onSubmit={addAlumniEducation}>
               <div className="modal-body">
-                <p className="fs-5">Your Profile Section</p>
                 <div className="mb-3">
                   <label
                     htmlFor="alumnieduinsti"

@@ -3,7 +3,7 @@ import React from "react";
 const OrgName = () => {
   return (
     <>
-      <div className="pofile_left_side_sections p-3 ms-lg-3 mt-3">
+      <div className="pofile_left_side_sections p-3 mt-3">
         <p className="fs-5 fw-semibold">Oraganization</p>
         <div className="d-flex mb-3">
           <div>

@@ -207,7 +207,7 @@ const Profile = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="container mt-3">
+      {/* <div className="container mt-3">
         <div className="row">
           <div className="col-lg-8 col-12 px-lg-0 px-md-0 px-2">
             <div className="pofile_left_side_sections pb-4">
@@ -315,8 +315,128 @@ const Profile = () => {
             <OrgName />
           </div>
         </div>
+      </div> */}
+      <div className="container mt-lg-3">
+        <div className="row">
+          <div className="col-lg-4 col-12 px-2">
+            <div className="pofile_left_side_sections">
+              <div className="d-flex justify-content-between">
+                <div className="profile_image_main">
+                  {getAlumniProfile && getAlumniProfile.profile_picture ? (
+                    <img
+                      src={`/upload/${getAlumniProfile.profile_picture}`}
+                      width="100%"
+                      alt="profile"
+                    />
+                  ) : (
+                    <img
+                      src={require("../../assets/image/profileImage.png")}
+                      width="100%"
+                      alt="default-profile"
+                    />
+                  )}
+                </div>
+                <div className="mt-2">
+                  <NavLink
+                    to="/user-profile"
+                    className="education_opr_icon"
+                    data-bs-toggle="modal"
+                    data-bs-target="#addPofileModal"
+                  >
+                    <i className="fa-solid fa-plus"></i>
+                  </NavLink>
+                  <NavLink
+                    to="/user-profile"
+                    className="education_opr_icon"
+                    data-bs-toggle="modal"
+                    data-bs-target="#editPofileModal"
+                    onClick={() => {
+                      getAlumniProfileEditData(isAuth);
+                    }}
+                  >
+                    <i className="fa-solid fa-pen"></i>
+                  </NavLink>
+                </div>
+              </div>
+              <div className="mt-2 relative">
+                <div className="fs-5 fw-semibold">
+                  <p className="m-0">
+                    {getAlumniMaster.username}
+                    <span className="ms-2" style={{ fontSize: "14px" }}>
+                      ({getAlumniProfile.gender})
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <span>{getAlumniProfile && getAlumniProfile.address}</span>
+                </div>
+                <p className="m-0" style={{ fontSize: "14px" }}>
+                  <span>DOB:- </span>
+                  {formatDate(getAlumniProfile.dob)}
+                </p>
+                <div className="mt-2">
+                  <button
+                    className="alumni_req_btn fw-semibold"
+                    data-bs-toggle="modal"
+                    data-bs-target="#joinalumniModal"
+                  >
+                    Join Alumni
+                  </button>
+                  <button
+                    className="alumni_req_btn fw-semibold mt-lg-0 mt-md-0 mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#joinedOrgModal"
+                  >
+                    Joined Organization
+                  </button>
+                </div>
+              </div>
+              <div className="mt-4">
+                <p className="fs-5 fw-bold m-0">Contact Info</p>
+                <div className="d-flex mb-3">
+                  <div className="mt-2">
+                    <i className="fa-solid fa-phone fs-5"></i>
+                  </div>
+                  <div className="ms-2">
+                    <p className="mb-0 fw-semibold">Phone</p>
+                    <p className="mb-0">7698316261</p>
+                  </div>
+                </div>
+                <div className="d-flex mb-3">
+                  <div className="mt-2">
+                    <i className="fa-regular fa-envelope fs-5"></i>
+                  </div>
+                  <div className="ms-2">
+                    <p className="mb-0 fw-semibold">Email</p>
+                    <NavLink
+                      to="mailto:ahmadpadarwala4@gmail.com"
+                      className="mb-0 text-primary"
+                    >
+                      patelaamil509@gmail.com
+                    </NavLink>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <OrgName />
+          </div>
+          <div className="col-lg-8 col-12">
+            <div
+              className="background_image_main"
+              style={{
+                backgroundImage: `url(/upload/${
+                  getAlumniProfile && getAlumniProfile.cover_background
+                    ? getAlumniProfile.cover_background
+                    : "coverBg.png"
+                })`,
+              }}
+            ></div>
+            <Education id={isAuth} />
+            <Skill id={isAuth} />
+            <WorkDetail id={isAuth} />
+          </div>
+        </div>
       </div>
-
       {/* add profile modal */}
       <div
         className="modal fade"
@@ -668,64 +788,6 @@ const Profile = () => {
                   </button>
                 </div>
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Contact Modal */}
-      <div
-        className="modal fade"
-        id="contactModal"
-        tabIndex="-1"
-        aria-labelledby="contactModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h1 className="modal-title fs-5" id="contactModalLabel">
-                {getAlumniMaster.username}
-              </h1>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <div className="d-flex justify-content-between">
-                <p className="fs-5">Contact Info</p>
-                <NavLink to="/user-profile">
-                  <i className="fa-solid fa-pen text-dark"></i>
-                </NavLink>
-              </div>
-              <div className="d-flex mb-3">
-                <div className="mt-2">
-                  <i className="fa-solid fa-phone fs-5"></i>
-                </div>
-                <div className="ms-2">
-                  <p className="mb-0 fw-semibold">Phone</p>
-                  <p className="mb-0">
-                    {getAlumniProfile && getAlumniProfile.phone_number}
-                  </p>
-                </div>
-              </div>
-              <div className="d-flex mb-3">
-                <div className="mt-2">
-                  <i className="fa-regular fa-envelope fs-5"></i>
-                </div>
-                <div className="ms-2">
-                  <p className="mb-0 fw-semibold">Email</p>
-                  <NavLink
-                    to="mailto:ahmadpadarwala4@gmail.com"
-                    className="mb-0 text-primary"
-                  >
-                    {getAlumniMaster.email}
-                  </NavLink>
-                </div>
-              </div>
             </div>
           </div>
         </div>

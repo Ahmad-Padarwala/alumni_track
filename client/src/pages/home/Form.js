@@ -60,13 +60,13 @@ const Form = () => {
     }
     if (addSignUpData.password.length <= 6) {
       document.getElementById("passwordErrInSignup").innerHTML =
-        "**password length is more then 5";
+        "**password length is more then 6";
       return false;
     }
     document.getElementById("passwordErrInSignup").innerHTML = "";
     if (addSignUpData.username === "") {
       document.getElementById("usernameErrInSignup").innerHTML =
-        "**Please fill the first name";
+        "**Please fill the user name";
       return false;
     }
     if (
@@ -74,7 +74,7 @@ const Form = () => {
       addSignUpData.username.length > 20
     ) {
       document.getElementById("usernameErrInSignup").innerHTML =
-        "**name length must be between 3 and 20";
+        "**user name length must be between 3 and 20";
       return false;
     }
 
@@ -84,9 +84,18 @@ const Form = () => {
       return false;
     }
     document.getElementById("usernameErrInSignup").innerHTML = "";
+    const userExists = getSignUpdata.some(
+      (user) => user.email === addSignUpData.email
+    );
+
+    if (userExists) {
+      toast.warning("User with this email already exists.");
+      return;
+    }
     axios
       .post(`${PORT}alumni-master`, addSignUpData)
       .then(() => {
+        localStorage.setItem("user", addSignUpData.id);
         navigate("/user-profile");
       })
       .catch(() => {
@@ -168,158 +177,124 @@ const Form = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="container-fluid login_from_main">
-        <div className="row">
-          {activeForm === "login" ? (
-            <form
-              className="mt-5 shadow py-3 px-4 mb-5 rounded mx-auto form_main"
-              method="post"
-              onSubmit={saveLoginData}
-            >
-              <h2 className="form_title">Login</h2>
-              <div className="form-group mb-3">
-                <label htmlFor="exampleInputEmail1" className="fw-semibold">
-                  Email:-
-                </label>
-                <input
-                  type="text"
-                  className="form-control mt-1"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                  name="email"
-                  onChange={handleLoginDataChange}
-                />
-                <span className="text-danger font-bold" id="emailErr"></span>
-              </div>
-              <div className="form-group">
-                <label htmlFor="exampleInputPassword1" className="fw-semibold">
-                  Password:-
-                </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  placeholder="Enter Password"
-                  name="password"
-                  onChange={handleLoginDataChange}
-                />
-                <span
-                  className="password_icon"
-                  style={{ cursor: "pointer" }}
-                  onClick={togglePasswordVisibility}
+      <div className="container mt-4">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <div className="card">
+              <div className="card-body">
+                <h2 className="card-title text-center">
+                  {activeForm === "login" ? "Login" : "Sign Up"}
+                </h2>
+                <form
+                  onSubmit={
+                    activeForm === "login" ? saveLoginData : saveSignUpData
+                  }
                 >
-                  {showPassword ? (
-                    <i className="fa-solid fa-eye-slash"></i>
-                  ) : (
-                    <i className="fa-solid fa-eye"></i>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      value={
+                        activeForm === "login"
+                          ? addLoginData.email
+                          : addSignUpData.email
+                      }
+                      onChange={
+                        activeForm === "login"
+                          ? handleLoginDataChange
+                          : handleSignUpDataChange
+                      }
+                    />
+                    <span
+                      className="text-danger font-bold"
+                      id={
+                        activeForm === "login" ? "emailErr" : "emailErrInsignup"
+                      }
+                    ></span>
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Password
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control"
+                      id="password"
+                      name="password"
+                      value={
+                        activeForm === "login"
+                          ? addLoginData.password
+                          : addSignUpData.password
+                      }
+                      onChange={
+                        activeForm === "login"
+                          ? handleLoginDataChange
+                          : handleSignUpDataChange
+                      }
+                    />
+                    <span
+                      className="password_icon"
+                      onClick={togglePasswordVisibility}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {showPassword ? (
+                        <i className="fa-solid fa-eye-slash"></i>
+                      ) : (
+                        <i className="fa-solid fa-eye"></i>
+                      )}
+                    </span>
+                    <span
+                      className="text-danger font-bold"
+                      id={
+                        activeForm === "login"
+                          ? "passwordErr"
+                          : "passwordErrInSignup"
+                      }
+                    ></span>
+                  </div>
+                  {activeForm === "signup" && (
+                    <div className="mb-3">
+                      <label htmlFor="username" className="form-label">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="username"
+                        name="username"
+                        value={addSignUpData.username}
+                        onChange={handleSignUpDataChange}
+                      />
+                      <span
+                        className="text-danger font-bold"
+                        id="usernameErrInSignup"
+                      ></span>
+                    </div>
                   )}
-                </span>
-                <span className="text-danger font-bold" id="passwordErr"></span>
+                  <button type="submit" className="btn btn-primary mb-3">
+                    {activeForm === "login" ? "Login" : "Sign Up"}
+                  </button>
+                  <p className="text-center">
+                    {activeForm === "login"
+                      ? "Not a member?"
+                      : "Already a member?"}
+                    <NavLink
+                      to=""
+                      className="text-primary ms-1"
+                      onClick={toggleForm}
+                    >
+                      {activeForm === "login" ? "Sign Up" : "Login"}
+                    </NavLink>
+                  </p>
+                </form>
               </div>
-              <button type="submit" className="btn btn-primary mb-1">
-                Login
-              </button>
-              <p className="text-center mt-3">
-                Not a member?
-                <NavLink
-                  to=""
-                  className="text-primary ms-1"
-                  onClick={() => {
-                    toggleForm();
-                  }}
-                >
-                  Sign Up
-                </NavLink>
-              </p>
-            </form>
-          ) : (
-            <form
-              className="mt-5 shadow py-3 px-4 mb-5 rounded mx-auto form_main"
-              method="post"
-              onSubmit={saveSignUpData}
-            >
-              <h2 className="form_title">Sign Up</h2>
-              <div className="form-group mb-3">
-                <label htmlFor="exampleInputEmail1" className="fw-semibold">
-                  Email:-
-                </label>
-                <input
-                  type="text"
-                  className="form-control mt-2"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                  name="email"
-                  onChange={handleSignUpDataChange}
-                />
-                <span
-                  className="text-danger font-bold"
-                  id="emailErrInsignup"
-                ></span>
-              </div>
-              <div className="form-group">
-                <label htmlFor="exampleInputPassword1" className="fw-semibold">
-                  Password:-
-                </label>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  className="form-control"
-                  id="exampleInputPassword1"
-                  placeholder="Enter Password"
-                  name="password"
-                  onChange={handleSignUpDataChange}
-                />
-                <span
-                  className="password_icon"
-                  style={{ cursor: "pointer" }}
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? (
-                    <i className="fa-solid fa-eye-slash"></i>
-                  ) : (
-                    <i className="fa-solid fa-eye"></i>
-                  )}
-                </span>
-                <span
-                  className="text-danger font-bold"
-                  id="passwordErrInSignup"
-                ></span>
-              </div>
-              <div className="form-group mb-3">
-                <label htmlFor="exampleInputPassword1" className="fw-semibold">
-                  User Name:-
-                </label>
-                <input
-                  type="text"
-                  className="form-control mt-2"
-                  id="exampleInputText1"
-                  name="username"
-                  placeholder="Enter Name"
-                  onChange={handleSignUpDataChange}
-                />
-                <span
-                  className="text-danger font-bold"
-                  id="usernameErrInSignup"
-                ></span>
-              </div>
-              <button type="submit" className="btn btn-primary mb-3">
-                Submit
-              </button>
-              <p className="text-center">
-                Are You Sure?
-                <NavLink
-                  to=""
-                  className="text-primary ms-1"
-                  onClick={() => {
-                    toggleForm();
-                  }}
-                >
-                  Login
-                </NavLink>
-              </p>
-            </form>
-          )}
+            </div>
+          </div>
         </div>
       </div>
     </>

@@ -50,80 +50,6 @@ const addAlumniProfile = async (req, res) => {
 };
 
 //edit elumni profile data
-// const editAlumniProfile = (req, res) => {
-//   const user_id = req.params.id;
-//   let profile_picture = "";
-//   let cover_background = "";
-
-//   if (req.files && req.files.profile_picture) {
-//     profile_picture = req.files.profile_picture[0].filename;
-//     const { phone_number, address, dob, gender } = req.body;
-
-//     const sql =
-//       "UPDATE alumni_profile SET profile_picture= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
-
-//     const values = [
-//       profile_picture,
-//       phone_number,
-//       address,
-//       dob,
-//       gender,
-//       user_id,
-//     ];
-//     conn.query(sql, values, (err, data) => {
-//       if (err) {
-//         console.log(err);
-//         return res.json(err);
-//       }
-//       return res.json(data);
-//     });
-//   }
-//   if (req.files && req.files.cover_background) {
-//     cover_background = req.files.cover_background[0].filename;
-//     const { phone_number, address, dob, gender } = req.body;
-
-//     const sql =
-//       "UPDATE alumni_profile SET cover_background= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
-
-//     const values = [
-//       cover_background,
-//       phone_number,
-//       address,
-//       dob,
-//       gender,
-//       user_id,
-//     ];
-//     conn.query(sql, values, (err, data) => {
-//       if (err) {
-//         console.log(err);
-//         return res.json(err);
-//       }
-//       return res.json(data);
-//     });
-//   } else {
-//     const { phone_number, address, dob, gender } = req.body;
-
-//     const sql =
-//       "UPDATE alumni_profile SET profile_picture= ?, cover_background= ?, phone_number= ?, address= ?, dob= ?, gender= ?  WHERE user_id = ?";
-
-//     const values = [
-//       profile_picture,
-//       cover_background,
-//       phone_number,
-//       address,
-//       dob,
-//       gender,
-//       user_id,
-//     ];
-//     conn.query(sql, values, (err, data) => {
-//       if (err) {
-//         console.log(err);
-//         return res.json(err);
-//       }
-//       return res.json(data);
-//     });
-//   }
-// };
 const editAlumniProfile = (req, res) => {
   const user_id = req.params.id;
   let profile_picture = "";
@@ -168,6 +94,5 @@ const editAlumniProfile = (req, res) => {
 module.exports = {
   addAlumniProfile,
   getAlumniProfileWithId,
-
   editAlumniProfile,
 };

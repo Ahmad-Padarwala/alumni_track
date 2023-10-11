@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import PORT from "../../assets/constant/Url";
 import axios from "axios";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Button } from "@mui/material";
 
 const Skill = (props) => {
   const [getSkillData, setGetSkillData] = useState([]);
@@ -14,6 +18,15 @@ const Skill = (props) => {
     skill_name: "",
     skill_level: "",
   });
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const handleClickOpen = (education) => {
+    setOpen(true);
+    setSelectedCategory(education);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     getAlumniSkillData(user_id);
@@ -32,10 +45,8 @@ const Skill = (props) => {
       console.log(err, "error in getting education data");
     }
   };
-  // console.log(getSkillData)
 
   //add skill data section
-
   const hendleInputChange = (e) => {
     const { name, value } = e.target;
     setAddSkillData((prevSkillData) => ({
@@ -43,9 +54,8 @@ const Skill = (props) => {
       [name]: value,
     }));
   };
-
-  // console.log(id)
-  const saveAddSkillData = () => {
+  const saveAddSkillData = (e) => {
+    e.preventDefault();
     if (!addSkillData.skill_name || !addSkillData.skill_level) {
       console.error("Skill Name and Skill Level are required.");
       return;
@@ -58,6 +68,8 @@ const Skill = (props) => {
       .post(`${PORT}addSkillsData/${user_id}`, skillData)
       .then(() => {
         getAlumniSkillData(user_id);
+        const form = e.target;
+        form.reset();
       })
       .catch((error) => {
         console.error("Error adding data:", error);
@@ -82,7 +94,6 @@ const Skill = (props) => {
       [name]: value,
     }));
   };
-
   const handleSaveEditData = (id) => {
     const formData = new FormData();
     formData.append("id", editSkillData.id);
@@ -105,12 +116,14 @@ const Skill = (props) => {
         console.log("Error updating skill data in skill.js: ", error);
       });
   };
+
   //delete skill data section start
   const handleDeleteSkillData = (id) => {
     axios
       .delete(`${PORT}deleteSkillData/${id}`)
       .then(() => {
         getAlumniSkillData(user_id);
+        setOpen(false);
       })
       .catch((err) => {
         console.log(err, "error in deleting skill data");
@@ -177,7 +190,11 @@ const Skill = (props) => {
               ></button>
             </div>
             <div className="modal-body">
-              <form encType="multipart/form-data" method="post">
+              <form
+                encType="multipart/form-data"
+                method="post"
+                onSubmit={saveAddSkillData}
+              >
                 <div className="mb-3">
                   <label
                     htmlFor="alumniProfileAddress"
@@ -220,11 +237,10 @@ const Skill = (props) => {
                     Cancel
                   </button>
                   <button
-                    type="button"
+                    type="submit"
                     className="btn btn-primary ms-3"
                     data-bs-dismiss="modal"
                     aria-label="Close"
-                    onClick={saveAddSkillData}
                   >
                     Save
                   </button>
@@ -286,15 +302,38 @@ const Skill = (props) => {
                             >
                               <i className="fa-solid fa-pen"></i>
                             </NavLink>
-                            <NavLink
-                              to="/user-profile"
-                              onClick={() => {
-                                handleDeleteSkillData(skillsData.id);
-                              }}
-                              className="education_opr_icon"
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </NavLink>
+                            <span>
+                              <NavLink
+                                to="/user-profile"
+                                onClick={() => handleClickOpen(skillsData)}
+                                className="education_opr_icon"
+                              >
+                                <i className="fa-solid fa-trash"></i>
+                              </NavLink>
+                              <Dialog
+                                open={open}
+                                onClose={handleClose}
+                                aria-labelledby="alert-dialog-title"
+                                aria-describedby="alert-dialog-description"
+                              >
+                                <DialogTitle id="alert-dialog-title">
+                                  {"Do You Want To Delete this data?"}
+                                </DialogTitle>
+                                <DialogActions>
+                                  <Button onClick={handleClose}>Cancel</Button>
+                                  <Button
+                                    onClick={() => {
+                                      handleDeleteSkillData(
+                                        selectedCategory.id
+                                      );
+                                    }}
+                                    autoFocus
+                                  >
+                                    Delete
+                                  </Button>
+                                </DialogActions>
+                              </Dialog>
+                            </span>
                           </td>
                         </tr>
                       );

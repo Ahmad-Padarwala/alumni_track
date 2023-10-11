@@ -10,6 +10,7 @@ const EducaRoute = require("./route/alumni/EducaRourte");
 const SkillRuote = require("./route/alumni/SkillRoute");
 const WorkDetailRoute = require("./route/alumni/WorkDetailRoute");
 const OrgMaster = require("./route/organization/MasterRoute");
+const OrgInfo = require("./route/organization/OrgInfoRoute");
 
 app.use(express.json());
 app.use(cors());
@@ -22,6 +23,7 @@ app.use("/", EducaRoute);
 app.use("/", SkillRuote);
 app.use("/", WorkDetailRoute);
 app.use("/", OrgMaster);
+app.use("/", OrgInfo);
 
 app.listen(1010, () => {
   console.log("SERVER CREATED IN 1010");

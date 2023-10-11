@@ -35,7 +35,6 @@ const getEditworkData = (req, res) => {
 
 const addWorkData = (req, res) => {
   const user_id = req.params.id;
-  console.log(user_id + "userIDDDDDDD");
   const {
     job_title,
     compeny_name,

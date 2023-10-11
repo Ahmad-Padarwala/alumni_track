@@ -1,13 +1,72 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import PORT from "../../assets/constant/Url";
+import axios from "axios";
 
 const CreateOrg = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const location = useLocation();
+  const user_id = location.state;
+  const [addOrgData, serAddOrgData] = useState({
+    org_name: "",
+    org_logo: null,
+    org_description: "",
+    address: "",
+    website: "",
+  });
+
+  //add organization data
+  const handleinputchange = (e) => {
+    const { name, value } = e.target;
+    serAddOrgData((prevProdData) => ({
+      ...prevProdData,
+      [name]: value,
+    }));
   };
+  const handlefilechange = (e) => {
+    const file = e.target.files[0];
+    serAddOrgData((prevProfileData) => ({
+      ...prevProfileData,
+      [e.target.name]: file,
+    }));
+    console.log(addOrgData);
+  };
+  const addOrganizationData = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("org_name", addOrgData.org_name);
+    formData.append("org_logo", addOrgData.org_logo);
+    formData.append("org_description", addOrgData.org_description);
+    formData.append("address", addOrgData.address);
+    formData.append("website", addOrgData.website);
+
+    try {
+      await axios.post(`${PORT}addorganization-info/${user_id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      toast.warning("Enter All Details");
+      console.error("Error adding Alumniprofile data in Profile.js:", error);
+    }
+  };
+
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="container-fluid create_org_top">
         <div className="container py-2">
           <div className="row">
@@ -37,40 +96,8 @@ const CreateOrg = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-6">
-              <form method="post">
+              <form method="post" onSubmit={addOrganizationData}>
                 <div className="bg-white p-3 rounded">
-                  <div className="form-group mb-2">
-                    <label htmlFor="orgEmail">Email*</label>
-                    <input
-                      type="email"
-                      className="form-control mt-1"
-                      id="orgEmail"
-                      placeholder="Add your Email Addres"
-                      name="email"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="orgpassword">Password*</label>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      className="form-control mt-1"
-                      id="orgpassword"
-                      placeholder="Add your Password"
-                      name="password"
-                    />
-                    <span
-                      className="password_icon create_pass_icon"
-                      style={{ cursor: "pointer" }}
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? (
-                        <i className="fa-solid fa-eye-slash"></i>
-                      ) : (
-                        <i className="fa-solid fa-eye"></i>
-                      )}
-                    </span>
-                  </div>
-
                   <div className="form-group mb-2">
                     <label htmlFor="orgname">Name*</label>
                     <input
@@ -78,7 +105,8 @@ const CreateOrg = () => {
                       className="form-control mt-1"
                       id="orgname"
                       placeholder="Add your organization`s name"
-                      name="name"
+                      name="org_name"
+                      onChange={handleinputchange}
                     />
                   </div>
                   <div className="form-group mb-2">
@@ -89,7 +117,8 @@ const CreateOrg = () => {
                       id="orgwebsite"
                       aria-describedby="emailHelp"
                       placeholder="Begin with http://, https:// or www."
-                      name="email"
+                      name="website"
+                      onChange={handleinputchange}
                     />
                   </div>
                   <div className="form-group mb-2">
@@ -99,7 +128,8 @@ const CreateOrg = () => {
                       className="form-control mt-1"
                       id="orgaddress"
                       placeholder="Add your organization`s address"
-                      name="email"
+                      name="address"
+                      onChange={handleinputchange}
                     />
                   </div>
                   <div className="form-group mb-2">
@@ -108,7 +138,8 @@ const CreateOrg = () => {
                       type="file"
                       className="form-control mt-1"
                       id="orglogo"
-                      name="email"
+                      name="org_logo"
+                      onChange={handlefilechange}
                     />
                   </div>
                   <div className="form-group mb-2">
@@ -119,12 +150,13 @@ const CreateOrg = () => {
                       id="orgdescription"
                       cols="55"
                       rows="3"
-                      name="description"
+                      name="org_description"
                       placeholder="ex: An information services firm helping small businesses succeed."
+                      onChange={handleinputchange}
                     ></textarea>
                   </div>
                 </div>
-                <button className="float-end create_page_btn">
+                <button className="float-end create_page_btn" type="submit">
                   Create Page
                 </button>
               </form>
@@ -137,16 +169,30 @@ const CreateOrg = () => {
                 <div className="org_main_form_section p-4">
                   <div className="bg-white p-3 rounded">
                     <div className="mb-2">
-                      <img
-                        src={require("../../assets/image/institute.png")}
-                        alt="institue"
-                        width="100px"
-                      />
+                      {addOrgData.org_logo ? (
+                        <img
+                          src={`/upload/${addOrgData.org_logo}`}
+                          alt="institue"
+                          width="100px"
+                        />
+                      ) : (
+                        <img
+                          src={require("../../assets/image/institute.png")}
+                          alt="institue"
+                          width="100px"
+                        />
+                      )}
                     </div>
-                    <p className="fw-semibold fs-5">Organization Name</p>
-                    <p className="m-0">About</p>
-                    <p>Your Description</p>
-                    <p style={{ cursor: "pointer" }}>www.yourwebsite.com</p>
+                    <p className="fw-semibold fs-5 m-0">
+                      {addOrgData.org_name
+                        ? addOrgData.org_name
+                        : "Your Organization"}
+                    </p>
+                    <p style={{ cursor: "pointer" }}>
+                      {addOrgData.website
+                        ? addOrgData.website
+                        : "www.yourwebsite.com"}
+                    </p>
                     <button className="btn btn-primary" disabled>
                       Follow
                     </button>

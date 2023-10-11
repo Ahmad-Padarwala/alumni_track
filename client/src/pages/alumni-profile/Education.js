@@ -254,7 +254,7 @@ const Education = (props) => {
                   onClick={() => handleClickOpen(education)}
                   className="education_opr_icon"
                 >
-                  <i className="fa-solid fa-trash text-danger"></i>
+                  <i className="fa-solid fa-trash"></i>
                 </NavLink>
                 <Dialog
                   open={open}

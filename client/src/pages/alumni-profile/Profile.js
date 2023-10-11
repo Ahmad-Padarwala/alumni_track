@@ -106,7 +106,7 @@ const Profile = () => {
     }
   };
   const formatDate = (dateString) => {
-    const options = { day: "numeric", month: "long", year: "numeric" };
+    const options = { month: "long", day: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
       undefined,
       options
@@ -193,6 +193,11 @@ const Profile = () => {
     getalumniMasterData(isAuth);
   }, [isAuth, navigate, addAlumniProfile]);
 
+  const handleNaviagtOrg = () => {
+    navigate("/create-organization", { state: isAuth });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <>
       <ToastContainer
@@ -207,115 +212,6 @@ const Profile = () => {
         pauseOnHover
         theme="dark"
       />
-      {/* <div className="container mt-3">
-        <div className="row">
-          <div className="col-lg-8 col-12 px-lg-0 px-md-0 px-2">
-            <div className="pofile_left_side_sections pb-4">
-              <div
-                className="background_image_main"
-                style={{
-                  backgroundImage: `url(/upload/${
-                    getAlumniProfile && getAlumniProfile.cover_background
-                      ? getAlumniProfile.cover_background
-                      : "coverBg.png"
-                  })`,
-                }}
-              ></div>
-              <div className="profile_image_main">
-                {getAlumniProfile && getAlumniProfile.profile_picture ? (
-                  <img
-                    src={`/upload/${getAlumniProfile.profile_picture}`}
-                    width="100%"
-                    alt="profile"
-                  />
-                ) : (
-                  <img
-                    src={require("../../assets/image/profileImage.png")}
-                    width="100%"
-                    alt="default-profile"
-                  />
-                )}
-              </div>
-
-              <div className="float-end pe-3 mt-3">
-                <NavLink
-                  to="/user-profile"
-                  className="education_opr_icon"
-                  data-bs-toggle="modal"
-                  data-bs-target="#addPofileModal"
-                >
-                  <i className="fa-solid fa-plus"></i>
-                </NavLink>
-                <NavLink
-                  to="/user-profile"
-                  className="education_opr_icon"
-                  data-bs-toggle="modal"
-                  data-bs-target="#editPofileModal"
-                  onClick={() => {
-                    getAlumniProfileEditData(isAuth);
-                  }}
-                >
-                  <i className="fa-solid fa-pen"></i>
-                </NavLink>
-              </div>
-              <div className="px-4 relative">
-                <div className="mt-5 fs-5 fw-semibold">
-                  <p className="m-0">
-                    {getAlumniMaster.username}
-                    <span className="ms-2" style={{ fontSize: "14px" }}>
-                      ({getAlumniProfile.gender})
-                    </span>
-                  </p>
-                </div>
-                <div>
-                  <span>{getAlumniProfile && getAlumniProfile.address}</span>
-                  <NavLink
-                    to="/user-profile"
-                    className="text-primary fw-semibold ms-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#contactModal"
-                  >
-                    Contact Info
-                  </NavLink>
-                </div>
-                <p className="m-0" style={{ fontSize: "14px" }}>
-                  <span>DOB:- </span>
-                  {formatDate(getAlumniProfile.dob)}
-                </p>
-                <div className="mt-2">
-                  <button
-                    className="alumni_req_btn fw-semibold"
-                    data-bs-toggle="modal"
-                    data-bs-target="#joinalumniModal"
-                  >
-                    Join Alumni
-                  </button>
-                  <button
-                    className="alumni_req_btn fw-semibold mt-lg-0 mt-md-0 mt-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#joinedOrgModal"
-                  >
-                    Joined Organization
-                  </button>
-                </div>
-              </div>
-            </div>
-            <Education id={isAuth} />
-            <Skill id={isAuth} />
-            <WorkDetail />
-          </div>
-          <div className="col-lg-4 col-12 px-lg-0 px-md-0 px-2 mt-lg-0 mt-md-0 mt-3">
-            <div className="pofile_left_side_sections ms-lg-3">
-              <img
-                src="https://media.licdn.com/media/AAYQAgTPAAgAAQAAAAAAADVuOvKzTF-3RD6j-qFPqhubBQ.png"
-                alt="adertisenment"
-                width="100%"
-              />
-            </div>
-            <OrgName />
-          </div>
-        </div>
-      </div> */}
       <div className="container mt-lg-3">
         <div className="row">
           <div className="col-lg-4 col-12 px-2">
@@ -361,9 +257,13 @@ const Profile = () => {
               <div className="mt-2 relative">
                 <div className="fs-5 fw-semibold">
                   <p className="m-0">
-                    {getAlumniMaster.username}
+                    {getAlumniMaster && getAlumniMaster.username
+                      ? getAlumniMaster.username
+                      : ""}
                     <span className="ms-2" style={{ fontSize: "14px" }}>
-                      ({getAlumniProfile.gender})
+                      {getAlumniProfile && getAlumniProfile.gender
+                        ? "(" + getAlumniProfile.gender + ")"
+                        : ""}
                     </span>
                   </p>
                 </div>
@@ -371,8 +271,10 @@ const Profile = () => {
                   <span>{getAlumniProfile && getAlumniProfile.address}</span>
                 </div>
                 <p className="m-0" style={{ fontSize: "14px" }}>
-                  <span>DOB:- </span>
-                  {formatDate(getAlumniProfile.dob)}
+                  <span>Birth Date:- </span>
+                  {getAlumniProfile && getAlumniProfile.dob
+                    ? formatDate(getAlumniProfile.dob)
+                    : ""}
                 </p>
                 <div className="mt-2">
                   <button
@@ -389,19 +291,35 @@ const Profile = () => {
                   >
                     Joined Organization
                   </button>
+                  <br />
+                  <button
+                    className="alumni_req_btn fw-semibold mt-2"
+                    onClick={handleNaviagtOrg}
+                  >
+                    Create Organization
+                  </button>
                 </div>
               </div>
               <div className="mt-4">
                 <p className="fs-5 fw-bold m-0">Contact Info</p>
-                <div className="d-flex mb-3">
-                  <div className="mt-2">
-                    <i className="fa-solid fa-phone fs-5"></i>
+                {getAlumniProfile && getAlumniProfile.phone_number ? (
+                  <div className="d-flex mb-3">
+                    <div className="mt-2">
+                      <i className="fa-solid fa-phone fs-5"></i>
+                    </div>
+                    <div className="ms-2">
+                      <p className="mb-0 fw-semibold">Phone</p>
+                      <NavLink
+                        to={`tel:${getAlumniProfile.phone_number}`}
+                        className="mb-0 text-black text-decoration-none"
+                      >
+                        {getAlumniProfile.phone_number}
+                      </NavLink>
+                    </div>
                   </div>
-                  <div className="ms-2">
-                    <p className="mb-0 fw-semibold">Phone</p>
-                    <p className="mb-0">7698316261</p>
-                  </div>
-                </div>
+                ) : (
+                  ""
+                )}
                 <div className="d-flex mb-3">
                   <div className="mt-2">
                     <i className="fa-regular fa-envelope fs-5"></i>
@@ -412,7 +330,9 @@ const Profile = () => {
                       to="mailto:ahmadpadarwala4@gmail.com"
                       className="mb-0 text-primary"
                     >
-                      patelaamil509@gmail.com
+                      {getAlumniMaster && getAlumniMaster.email
+                        ? getAlumniMaster.email
+                        : ""}
                     </NavLink>
                   </div>
                 </div>
@@ -449,7 +369,9 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="addPofileModalLabel">
-                {getAlumniMaster.username}
+                {getAlumniMaster && getAlumniMaster.username
+                  ? getAlumniMaster.username
+                  : ""}
               </h1>
               <button
                 type="button"
@@ -604,7 +526,9 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="editPofileModalLabel">
-                {getAlumniMaster.username}
+                {getAlumniMaster && getAlumniMaster.username
+                  ? getAlumniMaster.username
+                  : ""}
               </h1>
               <button
                 type="button"
@@ -805,7 +729,9 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="joinalumniModal">
-                {getAlumniMaster.username}
+                {getAlumniMaster && getAlumniMaster.username
+                  ? getAlumniMaster.username
+                  : ""}
               </h1>
               <button
                 type="button"
@@ -852,7 +778,9 @@ const Profile = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="joinedOrgModal">
-                {getAlumniMaster.username}
+                {getAlumniMaster && getAlumniMaster.username
+                  ? getAlumniMaster.username
+                  : ""}
               </h1>
               <button
                 type="button"

@@ -8,64 +8,52 @@ const Navbar = () => {
   };
   return (
     <>
-      <header className="hight-auto">
-        <nav className="navbar navbar-expand-lg  ">
-          <div className="container-fluid">
+      <header className="">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+          <div className="container">
             <NavLink to="/" className="navbar-brand">
               <img
                 className="navbar_logo"
                 src={require("../../assets/image/full_logo.png")}
                 width="200px"
-                alt="logo"
+                alt="Logo"
               />
             </NavLink>
             <button
               className="navbar-toggler"
               type="button"
               data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
               <span className="navbar-toggler-icon"></span>
             </button>
-
-            <div
-              className="collapse navbar-collapse justify-content-center"
-              id="navbarSupportedContent"
-            >
-              <ul className="navbar-nav  navbar_ul_li md-ms-5 justify-content-center">
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                  <NavLink className="nav-link" aria-current="page" to="/">
+                  <NavLink className="nav-link" to="/" exact="true">
                     Home
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/">
+                  <NavLink className="nav-link" to="/features">
                     Features
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/">
+                  <NavLink className="nav-link" to="/pricing">
                     Pricing
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    onClick={() => {
-                      handleLogOut();
-                    }}
-                    to=""
+                  <button
+                    className="nav-link btn btn-link"
+                    onClick={handleLogOut}
                   >
                     Log Out
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/organization">
-                    Organization Page
-                  </NavLink>
+                  </button>
                 </li>
               </ul>
             </div>

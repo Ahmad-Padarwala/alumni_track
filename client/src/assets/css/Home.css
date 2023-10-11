@@ -33,9 +33,6 @@
 .hero_detail::first-line {
   text-align: center;
 }
-/* 
-
-} */
 
 /* large screen */
 @media only screen and (max-width: 1024px) {
@@ -75,7 +72,6 @@
     width: 430px;
   }
 }
-
 /* for mobile */
 @media only screen and (max-width: 600px) {
   .Hero_Main {
@@ -102,9 +98,9 @@
   text-align: center;
   color: rgb(5, 60, 143);
 }
-.password_icon{
+.password_icon {
   padding: 0;
-  position: relative;
-  top: -30px;
-  left: 250px;
+  position: absolute;
+  right: 6%;
+  top: 187px;
 }

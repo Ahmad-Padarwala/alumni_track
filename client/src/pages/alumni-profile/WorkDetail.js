@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import PORT from "../../assets/constant/Url";
 import axios from "axios";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const WorkDetail = (props) => {
   const user_id = props.id;
@@ -20,6 +24,15 @@ const WorkDetail = (props) => {
     job_startDate: "",
     job_endDate: "",
   });
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const handleClickOpen = (education) => {
+    setOpen(true);
+    setSelectedCategory(education);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     getWorkDetailData(user_id);
@@ -45,7 +58,8 @@ const WorkDetail = (props) => {
     }));
   };
 
-  const handleAddWorkData = () => {
+  const handleAddWorkData = (e) => {
+    e.preventDefault();
     const workData = {
       job_title: addWorkData.job_title,
       compeny_name: addWorkData.compeny_name,
@@ -57,6 +71,8 @@ const WorkDetail = (props) => {
       .post(`${PORT}addWorksData/${user_id}`, workData)
       .then(() => {
         getWorkDetailData(user_id);
+        const form = e.target;
+        form.reset();
       })
       .catch((error) => {
         console.error("Error adding data:", error);
@@ -114,6 +130,7 @@ const WorkDetail = (props) => {
       .delete(`${PORT}deleteWorksData/${id}`)
       .then(() => {
         getWorkDetailData(user_id);
+        setOpen(false);
       })
       .catch((err) => {
         console.log(err, "error in deleting skill data");
@@ -179,13 +196,32 @@ const WorkDetail = (props) => {
                 </NavLink>
                 <NavLink
                   to="/user-profile"
-                  onClick={() => {
-                    handleDeleteWorksData(worksData.id);
-                  }}
+                  onClick={() => handleClickOpen(worksData)}
                   className="education_opr_icon"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </NavLink>
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    {"Do You Want To Delete this data?"}
+                  </DialogTitle>
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button
+                      onClick={() => {
+                        handleDeleteWorksData(selectedCategory.id);
+                      }}
+                      autoFocus
+                    >
+                      Delete
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </span>
             </div>
           );
@@ -202,6 +238,9 @@ const WorkDetail = (props) => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
+                <h1 className="modal-title fs-5" id="addPofileModalLabel">
+                  Your Work Detail Section
+                </h1>
                 <button
                   type="button"
                   className="btn-close"
@@ -210,104 +249,106 @@ const WorkDetail = (props) => {
                 ></button>
               </div>
               <div className="modal-body">
-                <p className="fs-5">Your Work Detail Section</p>
-                <div className="mb-3">
-                  <label
-                    htmlFor="workDetailJobTitle"
-                    className="form-label fw-semibold"
-                  >
-                    Job Title:-
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="job_title"
-                    id="workDetailJobTitle"
-                    placeholder="Enter Your Job Title"
-                    onChange={handleAddInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="workDetailCompenyName"
-                    className="form-label fw-semibold"
-                  >
-                    Compeny Name:-
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="compeny_name"
-                    id="workDetailCompenyName"
-                    placeholder="Enter Your Compeny Name"
-                    onChange={handleAddInputChange}
-                  />
-                </div>
-                <div className="mb-3">
-                  <label
-                    htmlFor="workDetailLocation"
-                    className="form-label fw-semibold"
-                  >
-                    Compeny Location:-
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="compeny_location"
-                    id="workDetailLocation"
-                    onChange={handleAddInputChange}
-                    placeholder="Enter Your Compeny Location"
-                  />
-                </div>
-                <div className="mb-3 d-flex justify-content-between">
-                  <div className="w-100">
+                <form method="post" onSubmit={handleAddWorkData}>
+                  <div className="mb-3">
                     <label
-                      htmlFor="workDtailstart"
+                      htmlFor="workDetailJobTitle"
                       className="form-label fw-semibold"
                     >
-                      Start Date:-
+                      Job Title:-
                     </label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-control"
-                      name="job_startDate"
-                      id="workDtailstart"
+                      name="job_title"
+                      id="workDetailJobTitle"
+                      placeholder="Enter Your Job Title"
                       onChange={handleAddInputChange}
                     />
                   </div>
-                  <div className="w-100 ms-3">
+                  <div className="mb-3">
                     <label
-                      htmlFor="workDtailend"
+                      htmlFor="workDetailCompenyName"
                       className="form-label fw-semibold"
                     >
-                      End Date:-
+                      Compeny Name:-
                     </label>
                     <input
-                      type="date"
+                      type="text"
                       className="form-control"
-                      name="job_endDate"
-                      id="workDtailend"
+                      name="compeny_name"
+                      id="workDetailCompenyName"
+                      placeholder="Enter Your Compeny Name"
                       onChange={handleAddInputChange}
                     />
                   </div>
-                </div>
-                <div className="d-flex float-end">
-                  <button
-                    className="btn btn-danger"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleAddWorkData}
-                    className="btn btn-primary ms-3"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    Save
-                  </button>
-                </div>
+                  <div className="mb-3">
+                    <label
+                      htmlFor="workDetailLocation"
+                      className="form-label fw-semibold"
+                    >
+                      Compeny Location:-
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="compeny_location"
+                      id="workDetailLocation"
+                      onChange={handleAddInputChange}
+                      placeholder="Enter Your Compeny Location"
+                    />
+                  </div>
+                  <div className="mb-3 d-flex justify-content-between">
+                    <div className="w-100">
+                      <label
+                        htmlFor="workDtailstart"
+                        className="form-label fw-semibold"
+                      >
+                        Start Date:-
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        name="job_startDate"
+                        id="workDtailstart"
+                        onChange={handleAddInputChange}
+                      />
+                    </div>
+                    <div className="w-100 ms-3">
+                      <label
+                        htmlFor="workDtailend"
+                        className="form-label fw-semibold"
+                      >
+                        End Date:-
+                      </label>
+                      <input
+                        type="date"
+                        className="form-control"
+                        name="job_endDate"
+                        id="workDtailend"
+                        onChange={handleAddInputChange}
+                      />
+                    </div>
+                  </div>
+                  <div className="d-flex float-end">
+                    <button
+                      type="button"
+                      className="btn btn-danger"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="btn btn-primary ms-3"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>

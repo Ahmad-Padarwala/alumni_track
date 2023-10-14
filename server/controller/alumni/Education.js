@@ -51,7 +51,6 @@ const editEducationData = async (req, res) => {
     result,
     id,
   ];
-  console.log(sql + "hii");
   conn.query(sql, data, (error, result) => {
     if (error) {
       console.log(

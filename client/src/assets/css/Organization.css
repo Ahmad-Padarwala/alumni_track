@@ -21,9 +21,9 @@
   color: white;
   font-weight: 500;
 }
-.create_page_btn:hover{
+.create_page_btn:hover {
   background-color: rgb(28, 28, 237);
 }
-.create_pass_icon{
+.create_pass_icon {
   left: 470px;
 }

@@ -16,7 +16,7 @@ const Form = () => {
     email: "",
     password: "",
   });
-  const [getSignUpdata, stGetSignUpData] = useState([]);
+  const [getSignUpdata, setGetSignUpData] = useState([]);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -95,7 +95,7 @@ const Form = () => {
     axios
       .post(`${PORT}alumni-master`, addSignUpData)
       .then(() => {
-        localStorage.setItem("user", addSignUpData.id);
+        localStorage.setItem("user", addSignUpData.email);
         navigate("/user-profile");
       })
       .catch(() => {
@@ -152,7 +152,7 @@ const Form = () => {
     axios
       .get(`${PORT}alumni-master`)
       .then((response) => {
-        stGetSignUpData(response.data);
+        setGetSignUpData(response.data);
       })
       .catch((err) => {
         console.log(err, "error getting signup data in admin");

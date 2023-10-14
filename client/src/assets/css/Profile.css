@@ -92,3 +92,7 @@
     overflow: hidden;
   }
 }
+
+.MuiFormControl-root {
+  width: 100%;
+}

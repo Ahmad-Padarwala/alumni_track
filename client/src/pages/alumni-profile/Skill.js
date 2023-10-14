@@ -6,6 +6,8 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Skill = (props) => {
   const [getSkillData, setGetSkillData] = useState([]);
@@ -20,6 +22,7 @@ const Skill = (props) => {
   });
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+
   const handleClickOpen = (education) => {
     setOpen(true);
     setSelectedCategory(education);
@@ -56,8 +59,12 @@ const Skill = (props) => {
   };
   const saveAddSkillData = (e) => {
     e.preventDefault();
-    if (!addSkillData.skill_name || !addSkillData.skill_level) {
-      console.error("Skill Name and Skill Level are required.");
+    if (!addSkillData.skill_name) {
+      toast.error("Skill Name is required.");
+      return;
+    }
+    if (!addSkillData.skill_level) {
+      toast.error("Skill Level is required.");
       return;
     }
     const skillData = {
@@ -70,6 +77,7 @@ const Skill = (props) => {
         getAlumniSkillData(user_id);
         const form = e.target;
         form.reset();
+        toast.success("Skill Add Successfully !");
       })
       .catch((error) => {
         console.error("Error adding data:", error);
@@ -108,6 +116,7 @@ const Skill = (props) => {
       .then((response) => {
         getAlumniSkillData(user_id);
         if (response.status === 200) {
+          toast.success("Skill Edit Successfully !");
         } else {
           console.log("Error updating skill data in skill.js: ", response);
         }
@@ -124,6 +133,7 @@ const Skill = (props) => {
       .then(() => {
         getAlumniSkillData(user_id);
         setOpen(false);
+        toast.success("Skill Delete Successfully !");
       })
       .catch((err) => {
         console.log(err, "error in deleting skill data");
@@ -132,6 +142,18 @@ const Skill = (props) => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="pofile_left_side_sections p-3 mt-3">
         <div className="d-flex justify-content-between">
           <div>
@@ -156,18 +178,30 @@ const Skill = (props) => {
             </NavLink>
           </div>
         </div>
-        <div className="d-flex flex-wrap justify-content-between px-3">
+
+        <div className="d-flex flex-wrap px-3">
           {getSkillData.map((skillData) => {
             return (
-              <div className="d-flex flex-wrap" key={skillData.id}>
-                <div>{skillData.skill_name}</div>
-                <div>{skillData.skill_level}%</div>
+              <div style={{ width: "100px" }} key={skillData.id}>
+                <div>
+                  <p className="text-center m-0">{skillData.skill_name}</p>
+                </div>
+                <div className="progress mx-2" style={{ width: "80%" }}>
+                  <div
+                    className="progress-bar"
+                    role="progressbar"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style={{ width: `${skillData.skill_level}%` }}
+                  >
+                    {skillData.skill_level}%
+                  </div>
+                </div>
               </div>
             );
           })}
         </div>
       </div>
-
       {/* add model */}
       <div
         className="modal fade"
@@ -211,19 +245,19 @@ const Skill = (props) => {
                     onChange={hendleInputChange}
                   />
                 </div>
-                <div className="mb-3">
+                <div className="mb-2">
                   <label
-                    htmlFor="alumniProfileContact"
+                    htmlFor="alumniProfilelevel"
                     className="form-label fw-semibold"
                   >
-                    Skill level:-
+                    Skill Level:-
                   </label>
                   <input
                     type="number"
                     className="form-control"
                     name="skill_level"
-                    id="alumniProfileContact"
-                    placeholder="Enter Your Skill level in Number."
+                    id="alumniProfilelevel"
+                    placeholder="Enter Your Skill Level"
                     onChange={hendleInputChange}
                   />
                 </div>

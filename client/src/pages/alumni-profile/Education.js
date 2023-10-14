@@ -137,6 +137,7 @@ const Education = (props) => {
       .then(() => {
         getEducationData(user_id);
         setOpen(false);
+        toast.success("Education Delete Successfully !");
       })
       .catch((error) => {
         console.log(error + "in delete");

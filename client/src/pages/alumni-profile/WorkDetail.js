@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const WorkDetail = (props) => {
   const user_id = props.id;
@@ -73,6 +75,7 @@ const WorkDetail = (props) => {
         getWorkDetailData(user_id);
         const form = e.target;
         form.reset();
+        toast.success("Work Detail Succesfullly Added !");
       })
       .catch((error) => {
         console.error("Error adding data:", error);
@@ -115,6 +118,7 @@ const WorkDetail = (props) => {
       .then((response) => {
         getWorkDetailData(user_id);
         if (response.status === 200) {
+          toast.success("Work Detail Succesfullly Edit !");
         } else {
           console.log("Error updating skill data in skill.js: ", response);
         }
@@ -131,6 +135,7 @@ const WorkDetail = (props) => {
       .then(() => {
         getWorkDetailData(user_id);
         setOpen(false);
+        toast.success("Work Detail Succesfullly Deleted !");
       })
       .catch((err) => {
         console.log(err, "error in deleting skill data");
@@ -139,6 +144,18 @@ const WorkDetail = (props) => {
 
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="pofile_left_side_sections px-3 pt-3 mt-3">
         <div className="d-flex justify-content-between">
           <div>

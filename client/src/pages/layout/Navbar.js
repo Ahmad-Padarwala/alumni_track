@@ -8,7 +8,7 @@ const Navbar = () => {
   };
   return (
     <>
-      <header className="">
+      <header>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container">
             <NavLink to="/" className="navbar-brand">

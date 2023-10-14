@@ -44,10 +44,8 @@ const addSkillData = (req, res) => {
       console.error("Error checking user:", checkUserErr);
       res.status(500).json({ error: "Error checking user" });
     } else if (checkUserResults.length === 0) {
-      // User does not exist, return an error
       res.status(404).json({ error: "User not found" });
     } else {
-      // User exists, proceed with inserting skill data
       const sql =
         "INSERT INTO alumni_skill (user_id, skill_name, skill_level) VALUES (?, ?, ?)";
       const data = [user_id, skill_name, skill_level];
@@ -57,7 +55,6 @@ const addSkillData = (req, res) => {
           console.error("Error adding record:", err);
           res.status(500).json({ error: "Error adding record" });
         } else {
-          console.log("Record added successfully");
           res.sendStatus(200);
         }
       });
@@ -76,7 +73,6 @@ const editSkillData = (req, res) => {
       console.error("Error updating record:", err);
       res.status(500).json({ error: "Error updating record" });
     } else {
-      console.log("Number of records updated: " + result.affectedRows);
       res.sendStatus(200);
     }
   });

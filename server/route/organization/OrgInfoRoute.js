@@ -18,8 +18,23 @@ var upload = multer({
   storage: imgconfig,
 });
 
-router
-  .route("/addorganization-info/:id")
-  .post(upload.fields([{ name: "org_logo", maxCount: 1 }]), OrgInfo.addOrgInfo);
+router.route("/addorganization-info/:id").post(
+  upload.fields([
+    { name: "org_logo", maxCount: 1 },
+    { name: "org_bg", maxCount: 1 },
+  ]),
+  OrgInfo.addOrgInfo
+);
+router.route("/getOrganizationWithId/:id").get(OrgInfo.getOrganizationWithId);
+router.route("/getOrganizationforedit/:id").get(OrgInfo.getOrganizationEdit);
+router.route("/getorganizations").get(OrgInfo.getOrganizationsData);
+router.route("/addorgdescription/:id").put(OrgInfo.addOrgDescription);
+router.route("/editorganization/:id").put(
+  upload.fields([
+    { name: "org_logo", maxCount: 1 },
+    { name: "org_bg", maxCount: 1 },
+  ]),
+  OrgInfo.EditOrganization
+);
 
 module.exports = router;

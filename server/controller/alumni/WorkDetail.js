@@ -58,7 +58,6 @@ const addWorkData = (req, res) => {
       console.error("Error adding record:", err);
       res.status(500).json({ error: "Error adding record" });
     } else {
-      console.log("Record added successfully");
       res.sendStatus(200);
     }
   });
@@ -90,7 +89,6 @@ const editWorkData = (req, res) => {
       console.error("Error updating record:", err);
       res.status(500).json({ error: "Error updating record" });
     } else {
-      console.log("Number of records updated: " + result.affectedRows);
       res.sendStatus(200);
     }
   });

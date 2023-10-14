@@ -11,7 +11,6 @@ const getAlumniMaster = (req, res) => {
     return res.json(result);
   });
 };
-
 //GET alumni master with id
 const getAlumniMasterDataWithId = (req, res) => {
   const user_id = req.params.id;

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PORT from "../../assets/constant/Url";
@@ -7,15 +7,29 @@ import axios from "axios";
 
 const CreateOrg = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const user_id = location.state;
   const [addOrgData, serAddOrgData] = useState({
     org_name: "",
     org_logo: null,
-    org_description: "",
+    org_bg: null,
     address: "",
     website: "",
   });
-
+  const [getAllOrg, setGetAllOrg] = useState([]);
+  useEffect(() => {
+    getOrganizationData();
+  }, []);
+  const getOrganizationData = () => {
+    axios
+      .get(`${PORT}getorganizations`)
+      .then((res) => {
+        setGetAllOrg(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   //add organization data
   const handleinputchange = (e) => {
     const { name, value } = e.target;
@@ -25,34 +39,52 @@ const CreateOrg = () => {
     }));
   };
   const handlefilechange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]; // Define 'file' here
     serAddOrgData((prevProfileData) => ({
       ...prevProfileData,
       [e.target.name]: file,
     }));
-    console.log(addOrgData);
   };
   const addOrganizationData = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("org_name", addOrgData.org_name);
     formData.append("org_logo", addOrgData.org_logo);
-    formData.append("org_description", addOrgData.org_description);
+    formData.append("org_bg", addOrgData.org_bg);
     formData.append("address", addOrgData.address);
     formData.append("website", addOrgData.website);
 
     try {
+      //org_name validation
+      if (addOrgData.org_name === "") {
+        document.getElementById("nameError").innerHTML =
+          "**Please fill the user name";
+        return false;
+      }
+      if (addOrgData.org_name.length < 5) {
+        document.getElementById("nameError").innerHTML =
+          "**user name length must be greater then 5";
+        return false;
+      }
+      if (!isNaN(addOrgData.org_name)) {
+        document.getElementById("nameError").innerHTML =
+          "**Do not allow numbers";
+        return false;
+      }
+      document.getElementById("nameError").innerHTML = "";
       await axios.post(`${PORT}addorganization-info/${user_id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
+      localStorage.setItem("organization", user_id);
+      navigate("/organization");
+      window.scrollTo({ top: "0", behavior: "smooth" });
     } catch (error) {
       toast.warning("Enter All Details");
       console.error("Error adding Alumniprofile data in Profile.js:", error);
     }
   };
-
   return (
     <>
       <ToastContainer
@@ -70,7 +102,7 @@ const CreateOrg = () => {
       <div className="container-fluid create_org_top">
         <div className="container py-2">
           <div className="row">
-            <NavLink className="text-primary" to="/organization">
+            <NavLink className="text-primary" to="/user-profile">
               <i className="fa-solid fa-arrow-left me-2"></i>Back
             </NavLink>
             <div className="d-flex mt-2">
@@ -108,6 +140,10 @@ const CreateOrg = () => {
                       name="org_name"
                       onChange={handleinputchange}
                     />
+                    <span
+                      className="text-danger font-bold"
+                      id="nameError"
+                    ></span>
                   </div>
                   <div className="form-group mb-2">
                     <label htmlFor="orgwebsite">website</label>
@@ -143,17 +179,14 @@ const CreateOrg = () => {
                     />
                   </div>
                   <div className="form-group mb-2">
-                    <label htmlFor="orgdescription">Description</label>
-                    <br />
-                    <textarea
-                      className="p-2 rounded"
-                      id="orgdescription"
-                      cols="55"
-                      rows="3"
-                      name="org_description"
-                      placeholder="ex: An information services firm helping small businesses succeed."
-                      onChange={handleinputchange}
-                    ></textarea>
+                    <label htmlFor="orgbg">Backgroung Image</label>
+                    <input
+                      type="file"
+                      className="form-control mt-1"
+                      id="orgbg"
+                      name="org_bg"
+                      onChange={handlefilechange}
+                    />
                   </div>
                 </div>
                 <button className="float-end create_page_btn" type="submit">
@@ -171,14 +204,14 @@ const CreateOrg = () => {
                     <div className="mb-2">
                       {addOrgData.org_logo ? (
                         <img
-                          src={`/upload/${addOrgData.org_logo}`}
-                          alt="institue"
+                          src={URL.createObjectURL(addOrgData.org_logo)}
+                          alt="institute"
                           width="100px"
                         />
                       ) : (
                         <img
                           src={require("../../assets/image/institute.png")}
-                          alt="institue"
+                          alt="institute"
                           width="100px"
                         />
                       )}

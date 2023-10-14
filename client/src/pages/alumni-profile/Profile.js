@@ -27,6 +27,8 @@ const Profile = () => {
     profile_picture: null,
     cover_background: null,
   });
+  const [getAllOrg, setGetAllOrg] = useState([]);
+  const [selectedOrg, setSelectedOrg] = useState(0);
 
   const isAuth = localStorage.getItem("user");
 
@@ -183,6 +185,19 @@ const Profile = () => {
     }
     return "";
   };
+
+  //get org all data
+  const getOrganizationData = () => {
+    axios
+      .get(`${PORT}getorganizations`)
+      .then((res) => {
+        setGetAllOrg(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (!isAuth) {
       navigate("/");
@@ -191,11 +206,33 @@ const Profile = () => {
     }
     getAlumniProfileData(isAuth);
     getalumniMasterData(isAuth);
+    getOrganizationData();
   }, [isAuth, navigate, addAlumniProfile]);
 
   const handleNaviagtOrg = () => {
     navigate("/create-organization", { state: isAuth });
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const handleViewOrg = () => {
+    localStorage.setItem("organization", isAuth);
+    navigate("/organization");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  //send alumni req
+  const handleOrgChange = (e) => {
+    const selectedValue = e.target.value;
+    setSelectedOrg(selectedValue);
+  };
+  const sendAlumniReq = () => {
+    axios
+      .post(`${PORT}sendrequestforalumni/${userId}/${selectedOrg}`)
+      .then((res) => {
+        toast.success("Request Succesfully Sent !");
+      })
+      .catch((err) => {
+        toast.warning("Request Failed !");
+      });
   };
 
   return (
@@ -233,14 +270,18 @@ const Profile = () => {
                   )}
                 </div>
                 <div className="mt-2">
-                  <NavLink
-                    to="/user-profile"
-                    className="education_opr_icon"
-                    data-bs-toggle="modal"
-                    data-bs-target="#addPofileModal"
-                  >
-                    <i className="fa-solid fa-plus"></i>
-                  </NavLink>
+                  {getAlumniProfile && getAlumniProfile.phone_number ? (
+                    ""
+                  ) : (
+                    <NavLink
+                      to="/user-profile"
+                      className="education_opr_icon"
+                      data-bs-toggle="modal"
+                      data-bs-target="#addPofileModal"
+                    >
+                      <i className="fa-solid fa-plus"></i>
+                    </NavLink>
+                  )}
                   <NavLink
                     to="/user-profile"
                     className="education_opr_icon"
@@ -292,12 +333,21 @@ const Profile = () => {
                     Joined Organization
                   </button>
                   <br />
-                  <button
-                    className="alumni_req_btn fw-semibold mt-2"
-                    onClick={handleNaviagtOrg}
-                  >
-                    Create Organization
-                  </button>
+                  {getAllOrg.some((org) => org.user_id == userId) ? (
+                    <button
+                      className="alumni_req_btn fw-semibold mt-2"
+                      onClick={handleViewOrg}
+                    >
+                      View Organization
+                    </button>
+                  ) : (
+                    <button
+                      className="alumni_req_btn fw-semibold mt-2"
+                      onClick={handleNaviagtOrg}
+                    >
+                      Create Organization
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="mt-4">
@@ -347,7 +397,7 @@ const Profile = () => {
                 backgroundImage: `url(/upload/${
                   getAlumniProfile && getAlumniProfile.cover_background
                     ? getAlumniProfile.cover_background
-                    : "coverBg.png"
+                    : "bgCover.jpeg"
                 })`,
               }}
             ></div>
@@ -357,6 +407,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
       {/* add profile modal */}
       <div
         className="modal fade"
@@ -751,15 +802,18 @@ const Profile = () => {
                   className="form-select form-select"
                   aria-label="select example"
                   defaultValue="0"
+                  onChange={handleOrgChange}
                 >
                   <option value="0">Select Organization</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
+                  {getAllOrg.map((org) => {
+                    return <option value={org.id}>{org.org_name}</option>;
+                  })}
                 </select>
               </div>
               <div className="mt-3 float-end">
-                <button className="alumni_req_btn">Send Request</button>
+                <button className="alumni_req_btn" onClick={sendAlumniReq}>
+                  Send Request
+                </button>
               </div>
             </div>
           </div>

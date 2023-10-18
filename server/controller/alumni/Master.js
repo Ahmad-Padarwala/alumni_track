@@ -1,7 +1,7 @@
 const connection = require("../../db/Connection");
 //GET DATA
 const getAlumniMaster = (req, res) => {
-  const sql = "SELECT * FROM alumni_master";
+  const sql = "SELECT * FROM alumni_master WHERE status=1";
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(

@@ -37,10 +37,10 @@ const AddOrganization = () => {
   };
   return (
     <>
-      <div className="container mt-3">
+      <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
         <div className="row">
-          <h2>Add Your Organization Info</h2>
-          <div className="p-3 shadow-sm">
+          <h3>Add Your Organization Info</h3>
+          <div className="pofile_left_side_sections">
             <form>
               <div className="mb-3">
                 <label className="mb-1">Enter Short Description</label>

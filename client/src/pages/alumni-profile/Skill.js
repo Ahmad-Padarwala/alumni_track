@@ -8,6 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Slider from "@mui/material/Slider";
 
 const Skill = (props) => {
   const [getSkillData, setGetSkillData] = useState([]);
@@ -157,12 +158,12 @@ const Skill = (props) => {
       <div className="pofile_left_side_sections p-3 mt-3">
         <div className="d-flex justify-content-between">
           <div>
-            <p className="fs-5 fw-semibold">Skills</p>
+            <p className="alumni_heading fw-semibold">Skills</p>
           </div>
           <div>
             <NavLink
               to="/user-profile"
-              className="education_opr_icon"
+              className="education_opr_icon text-primary"
               data-bs-toggle="modal"
               data-bs-target="#addskillModal"
             >
@@ -170,7 +171,7 @@ const Skill = (props) => {
             </NavLink>
             <NavLink
               to="/user-profile"
-              className="education_opr_icon"
+              className="education_opr_icon text-success"
               data-bs-toggle="modal"
               data-bs-target="#editskillModal"
             >
@@ -182,21 +183,14 @@ const Skill = (props) => {
         <div className="d-flex flex-wrap px-3">
           {getSkillData.map((skillData) => {
             return (
-              <div style={{ width: "100px" }} key={skillData.id}>
-                <div>
-                  <p className="text-center m-0">{skillData.skill_name}</p>
-                </div>
-                <div className="progress mx-2" style={{ width: "80%" }}>
-                  <div
-                    className="progress-bar"
-                    role="progressbar"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                    style={{ width: `${skillData.skill_level}%` }}
-                  >
-                    {skillData.skill_level}%
-                  </div>
-                </div>
+              <div className="main_skill_progress" key={skillData.id}>
+                <div
+                  role="progressbarr"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  style={{ "--value": skillData.skill_level }}
+                ></div>
+                <p className="alumni_small_title">{skillData.skill_name}</p>
               </div>
             );
           })}
@@ -213,7 +207,10 @@ const Skill = (props) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="addPofileModalLabel">
+              <h1
+                className="modal-title alumni_heading"
+                id="addPofileModalLabel"
+              >
                 Your Skill Section
               </h1>
               <button
@@ -238,7 +235,7 @@ const Skill = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="skill_name"
                     id="alumniProfileAddress"
                     placeholder="Enter Your Skill Name"
@@ -252,13 +249,14 @@ const Skill = (props) => {
                   >
                     Skill Level:-
                   </label>
-                  <input
-                    type="number"
-                    className="form-control"
+                  <Slider
                     name="skill_level"
-                    id="alumniProfilelevel"
-                    placeholder="Enter Your Skill Level"
+                    value={addSkillData.skill_level}
                     onChange={hendleInputChange}
+                    valueLabelDisplay="auto"
+                    aria-label="Skill Level"
+                    min={0}
+                    max={100}
                   />
                 </div>
                 <div className="d-flex float-end">
@@ -295,18 +293,21 @@ const Skill = (props) => {
       >
         <div className="modal-dialog">
           <div className="modal-content">
+            <div className="modal-header">
+              <h1
+                className="modal-title alumni_heading"
+                id="addEducationModalLabel"
+              >
+                Your Skill Section
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
             <div className="modal-body">
-              <div className="modal-header">
-                <h1 className="modal-title fs-5" id="addEducationModalLabel">
-                  Your Skill Section
-                </h1>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                  aria-label="Close"
-                ></button>
-              </div>
               <form encType="multipart/form-data" method="post">
                 <table className="table">
                   <thead>
@@ -320,7 +321,10 @@ const Skill = (props) => {
                   <tbody>
                     {getSkillData.map((skillsData) => {
                       return (
-                        <tr key={skillsData.id} className="text-align-center">
+                        <tr
+                          key={skillsData.id}
+                          className="text-align-center alumni_small_title"
+                        >
                           <td>{skillsData.id}</td>
                           <td>{skillsData.skill_name}</td>
                           <td>{skillsData.skill_level}</td>
@@ -330,7 +334,7 @@ const Skill = (props) => {
                               onClick={() => {
                                 handleEditSkillData(skillsData.id);
                               }}
-                              className="education_opr_icon"
+                              className="education_opr_icon text-success"
                               data-bs-toggle="modal"
                               data-bs-target="#editskillsModal"
                             >
@@ -340,33 +344,10 @@ const Skill = (props) => {
                               <NavLink
                                 to="/user-profile"
                                 onClick={() => handleClickOpen(skillsData)}
-                                className="education_opr_icon"
+                                className="education_opr_icon text-danger"
                               >
                                 <i className="fa-solid fa-trash"></i>
                               </NavLink>
-                              <Dialog
-                                open={open}
-                                onClose={handleClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                              >
-                                <DialogTitle id="alert-dialog-title">
-                                  {"Do You Want To Delete this data?"}
-                                </DialogTitle>
-                                <DialogActions>
-                                  <Button onClick={handleClose}>Cancel</Button>
-                                  <Button
-                                    onClick={() => {
-                                      handleDeleteSkillData(
-                                        selectedCategory.id
-                                      );
-                                    }}
-                                    autoFocus
-                                  >
-                                    Delete
-                                  </Button>
-                                </DialogActions>
-                              </Dialog>
                             </span>
                           </td>
                         </tr>
@@ -401,6 +382,12 @@ const Skill = (props) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
+              <h1
+                className="modal-title alumni_heading"
+                id="addEducationModalLabel"
+              >
+                Your Skill Section
+              </h1>
               <button
                 type="button"
                 className="btn-close"
@@ -410,7 +397,6 @@ const Skill = (props) => {
             </div>
             <div className="modal-body">
               <form encType="multipart/form-data" method="post">
-                <p className="fs-5">Your Skill Section</p>
                 <div className="mb-3">
                   <label
                     htmlFor="alumniProfileAddress"
@@ -420,7 +406,7 @@ const Skill = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="skill_name"
                     id="alumniProfileAddress"
                     value={editSkillData && editSkillData.skill_name}
@@ -434,13 +420,14 @@ const Skill = (props) => {
                   >
                     Skill level:-
                   </label>
-                  <input
-                    type="number"
-                    className="form-control"
+                  <Slider
                     name="skill_level"
-                    id="alumniProfileContact"
                     value={editSkillData && editSkillData.skill_level}
                     onChange={hendleEditInputChange}
+                    valueLabelDisplay="auto"
+                    aria-label="Skill Level"
+                    min={0}
+                    max={100}
                   />
                 </div>
                 <div className="d-flex float-end">
@@ -469,6 +456,28 @@ const Skill = (props) => {
           </div>
         </div>
       </div>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do You Want To Delete this data?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              handleDeleteSkillData(selectedCategory.id);
+            }}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

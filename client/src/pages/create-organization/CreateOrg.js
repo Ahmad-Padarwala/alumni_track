@@ -134,7 +134,7 @@ const CreateOrg = () => {
                     <label htmlFor="orgname">Name*</label>
                     <input
                       type="text"
-                      className="form-control mt-1"
+                      className="form-control form-control-sm mt-1"
                       id="orgname"
                       placeholder="Add your organization`s name"
                       name="org_name"
@@ -149,7 +149,7 @@ const CreateOrg = () => {
                     <label htmlFor="orgwebsite">website</label>
                     <input
                       type="text"
-                      className="form-control mt-1"
+                      className="form-control mt-1 form-control-sm"
                       id="orgwebsite"
                       aria-describedby="emailHelp"
                       placeholder="Begin with http://, https:// or www."
@@ -161,7 +161,7 @@ const CreateOrg = () => {
                     <label htmlFor="orgaddress">Address*</label>
                     <input
                       type="text"
-                      className="form-control mt-1"
+                      className="form-control mt-1 form-control-sm"
                       id="orgaddress"
                       placeholder="Add your organization`s address"
                       name="address"
@@ -172,7 +172,7 @@ const CreateOrg = () => {
                     <label htmlFor="orglogo">Logo</label>
                     <input
                       type="file"
-                      className="form-control mt-1"
+                      className="form-control mt-1 form-control-sm"
                       id="orglogo"
                       name="org_logo"
                       onChange={handlefilechange}
@@ -182,7 +182,7 @@ const CreateOrg = () => {
                     <label htmlFor="orgbg">Backgroung Image</label>
                     <input
                       type="file"
-                      className="form-control mt-1"
+                      className="form-control mt-1 form-control-sm"
                       id="orgbg"
                       name="org_bg"
                       onChange={handlefilechange}

@@ -180,12 +180,12 @@ const Education = (props) => {
       <div className="pofile_left_side_sections p-3 mt-3">
         <div className="d-flex justify-content-between">
           <div>
-            <p className="fs-5 fw-semibold m-0">Education</p>
+            <p className="alumni_heading fw-semibold m-0">Education</p>
           </div>
           <div>
             <NavLink
               to="/user-profile"
-              className="education_opr_icon"
+              className="education_opr_icon text-primary"
               data-bs-toggle="modal"
               data-bs-target="#addEducationModal"
             >
@@ -203,7 +203,7 @@ const Education = (props) => {
                   width="50px"
                 />
               </div>
-              <div className="ms-2">
+              <div className="ms-2 alumni_small_title">
                 <p className="fs-6 fw-semibold mb-0">
                   {education.institute_name}
                 </p>
@@ -242,7 +242,7 @@ const Education = (props) => {
             <div>
               <NavLink
                 to="/user-profile"
-                className="education_opr_icon"
+                className="education_opr_icon text-success"
                 onClick={() => openEditModal(education.id)}
                 data-bs-toggle="modal"
                 data-bs-target="#editEducationModal"
@@ -253,7 +253,7 @@ const Education = (props) => {
                 <NavLink
                   to="/user-profile"
                   onClick={() => handleClickOpen(education)}
-                  className="education_opr_icon"
+                  className="education_opr_icon text-danger"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </NavLink>
@@ -295,7 +295,10 @@ const Education = (props) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="addEducationModalLabel">
+              <h1
+                className="modal-title alumni_heading"
+                id="addEducationModalLabel"
+              >
                 Your Education Section
               </h1>
               <button
@@ -316,7 +319,7 @@ const Education = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="institute_name"
                     id="alumnieduinsti"
                     placeholder="Enter Your Institute Name"
@@ -332,7 +335,7 @@ const Education = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="field_study"
                     id="alumniedufield"
                     placeholder="Enter Your Field of Study"
@@ -349,7 +352,7 @@ const Education = (props) => {
                     </label>
                     <input
                       type="date"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="study_startDate"
                       id="educationstart"
                       onChange={handleInputChange}
@@ -364,7 +367,7 @@ const Education = (props) => {
                     </label>
                     <input
                       type="date"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="study_endDate"
                       id="educationend"
                       onChange={handleInputChange}
@@ -380,7 +383,7 @@ const Education = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="result"
                     id="educationresult"
                     onChange={handleInputChange}
@@ -422,7 +425,10 @@ const Education = (props) => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="editEducationModalLabel">
+              <h1
+                className="modal-title alumni_heading"
+                id="editEducationModalLabel"
+              >
                 Ahmad Padarwala
               </h1>
               <button
@@ -433,7 +439,6 @@ const Education = (props) => {
               ></button>
             </div>
             <div className="modal-body">
-              <p className="fs-5">Your Profile Section</p>
               <div className="mb-3">
                 <label
                   htmlFor="alumnieduinsti"
@@ -443,7 +448,7 @@ const Education = (props) => {
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="institute_name"
                   id="alumnieduinsti"
                   value={getEducationEdit.institute_name}
@@ -460,7 +465,7 @@ const Education = (props) => {
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="field_study"
                   id="alumniedufield"
                   value={getEducationEdit.field_study}
@@ -478,7 +483,7 @@ const Education = (props) => {
                   </label>
                   <input
                     type="date"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="study_startDate"
                     id="educationstart"
                     onChange={handleEditInput}
@@ -494,7 +499,7 @@ const Education = (props) => {
                   </label>
                   <input
                     type="date"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="study_endDate"
                     id="educationend"
                     onChange={handleEditInput}
@@ -511,7 +516,7 @@ const Education = (props) => {
                 </label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="result"
                   id="educationresult"
                   placeholder="Enter Your Result"

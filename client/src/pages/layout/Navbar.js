@@ -1,65 +1,161 @@
-import React from "react";
-import "../../assets/css/Navbar.css";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import PORT from "../../assets/constant/Url";
+import axios from "axios";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
 
 const Navbar = () => {
+  const isAuth = localStorage.getItem("user");
+  const [getAlumniProfile, setGetAlumniProfile] = useState([]);
+  const [getAlumniMaster, setGetAlumniMaster] = useState([]);
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  //log out modal
+  const handleClickOpen = (education) => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  //get alumni profile with id
+  const getAlumniProfileData = async (userId) => {
+    try {
+      const response = await axios.get(`
+          ${PORT}getalumniprofilewithid/${userId}`);
+
+      if (response.status === 200) {
+        setGetAlumniProfile(response.data[0]);
+      } else {
+        console.error("Failed to fetch alumni profile");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  //get alumni master data
+  const getalumniMasterData = async (id) => {
+    try {
+      const response = await axios.get(`${PORT}getalumniMasterWithId/${id}`);
+      if (response.status === 200) {
+        setGetAlumniMaster(response.data[0]);
+      } else {
+        console.log("error");
+      }
+    } catch (err) {
+      console.log(err, "error in getting alumni master data");
+    }
+  };
+  useEffect(() => {
+    getAlumniProfileData(isAuth);
+    getalumniMasterData(isAuth);
+  }, [isAuth]);
+
+  //log out member
   const handleLogOut = () => {
     localStorage.removeItem("user");
+    navigate("/");
   };
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="container">
-            <NavLink to="/" className="navbar-brand">
-              <img
-                className="navbar_logo"
-                src={require("../../assets/image/full_logo.png")}
-                width="200px"
-                alt="Logo"
-              />
-            </NavLink>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
+      <header
+        id="header"
+        className="header fixed-top d-flex align-items-center"
+      >
+        <div className="d-flex align-items-center justify-content-between">
+          <NavLink to="" className="logo d-flex align-items-center">
+            <span className="d-none d-lg-block">Alumni</span>
+          </NavLink>
+        </div>
+
+        <div className="search-bar">
+          <form className="search-form d-flex align-items-center" action="">
+            <input
+              type="text"
+              name="query"
+              placeholder="Search"
+              title="Enter search keyword"
+            />
+            <button type="button" title="Search">
+              <i className="fa-solid fa-magnifying-glass"></i>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav ml-auto">
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/" exact="true">
-                    Home
-                  </NavLink>
+          </form>
+        </div>
+        {/* <!-- End Search Bar --> */}
+
+        <nav className="header-nav ms-auto">
+          <ul className="d-flex align-items-center">
+            <li className="nav-item dropdown pe-3">
+              <NavLink
+                className="nav-link nav-profile d-flex align-items-center pe-0"
+                to="/admin"
+                data-bs-toggle="dropdown"
+              >
+                {getAlumniProfile && getAlumniProfile.profile_picture ? (
+                  <img
+                    src={`/upload/${getAlumniProfile.profile_picture}`}
+                    alt="Profile"
+                    className="rounded-circle"
+                    width="37px"
+                    height="37px"
+                  />
+                ) : (
+                  <img
+                    src={require("../../assets/image/profile-img.jpg")}
+                    alt="Profile"
+                    className="rounded-circle"
+                  />
+                )}
+                <span className="d-none d-md-block dropdown-toggle ps-2"></span>
+              </NavLink>
+              {/* <!-- End Profile Iamge Icon --> */}
+
+              <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                <li className="dropdown-header">
+                  <h6>
+                    {getAlumniMaster && getAlumniMaster.username
+                      ? getAlumniMaster.username
+                      : ""}
+                  </h6>
                 </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/features">
-                    Features
-                  </NavLink>
+                <li>
+                  <hr className="dropdown-divider" />
                 </li>
-                <li className="nav-item">
-                  <NavLink className="nav-link" to="/pricing">
-                    Pricing
-                  </NavLink>
-                </li>
-                <li className="nav-item">
-                  <button
-                    className="nav-link btn btn-link"
-                    onClick={handleLogOut}
+                <li>
+                  <span
+                    className="dropdown-item d-flex align-items-center"
+                    onClick={handleClickOpen}
+                    style={{ cursor: "pointer" }}
                   >
-                    Log Out
-                  </button>
+                    <i className="bi bi-box-arrow-right"></i>
+                    <span>Sign Out</span>
+                  </span>
                 </li>
               </ul>
-            </div>
-          </div>
+            </li>
+          </ul>
         </nav>
       </header>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want to log out your account?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleLogOut} autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

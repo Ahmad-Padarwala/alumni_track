@@ -1,109 +1,43 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { NavLink, useNavigate } from "react-router-dom";
+import TextField from "@mui/material/TextField";
 import PORT from "../../assets/constant/Url";
+import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate, NavLink } from "react-router-dom";
 
 const Form = () => {
-  const [activeForm, setActiveForm] = useState("login");
+  const [addLoginData, setAddLoginData] = useState({
+    email: "",
+    password: "",
+  });
   const [addSignUpData, setAddSignUpData] = useState({
     email: "",
     password: "",
     username: "",
   });
-  const [addLoginData, setAddLoginData] = useState({
-    email: "",
-    password: "",
-  });
-  const [getSignUpdata, setGetSignUpData] = useState([]);
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [getSignUpdata, setGetSignUpData] = useState([]);
+  const [formType, setFormType] = useState("login");
+  const [formErrors, setFormErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const isAuth = localStorage.getItem("user");
 
-  const toggleForm = () => {
-    setActiveForm((prevActiveForm) => {
-      return prevActiveForm === "login" ? "signup" : "login";
-    });
+  const toggleFormType = () => {
+    console.log("hii");
+    if (formType == "login") {
+      console.log("object");
+      setFormType("sign-up");
+    } else {
+      console.log("object22");
+      setFormType("login");
+    }
   };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // SIGNUP USER  DATA SECTION
-  const handleSignUpDataChange = (event) => {
-    const { name, value } = event.target;
-    setAddSignUpData((prevContData) => ({
-      ...prevContData,
-      [name]: value,
-    }));
-  };
-  const saveSignUpData = (e) => {
-    e.preventDefault();
-    //FOR EMAIL VALIDATION
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (addSignUpData.email === "") {
-      document.getElementById("emailErrInsignup").innerHTML =
-        "**Please fill the email";
-      return false;
-    }
-    if (!emailRegex.test(addSignUpData.email)) {
-      document.getElementById("emailErrInsignup").innerHTML =
-        "**Invalid email format";
-      return false;
-    }
-    document.getElementById("emailErrInsignup").innerHTML = "";
-    //FOR PASSWORD VALIDATION
-    if (addSignUpData.password === "") {
-      document.getElementById("passwordErrInSignup").innerHTML =
-        "**Please fill the password";
-      return false;
-    }
-    if (addSignUpData.password.length <= 6) {
-      document.getElementById("passwordErrInSignup").innerHTML =
-        "**password length is more then 6";
-      return false;
-    }
-    document.getElementById("passwordErrInSignup").innerHTML = "";
-    if (addSignUpData.username === "") {
-      document.getElementById("usernameErrInSignup").innerHTML =
-        "**Please fill the user name";
-      return false;
-    }
-    if (
-      addSignUpData.username.length < 3 ||
-      addSignUpData.username.length > 20
-    ) {
-      document.getElementById("usernameErrInSignup").innerHTML =
-        "**user name length must be between 3 and 20";
-      return false;
-    }
-
-    if (!isNaN(addSignUpData.username)) {
-      document.getElementById("usernameErrInSignup").innerHTML =
-        "**Do not allow numbers";
-      return false;
-    }
-    document.getElementById("usernameErrInSignup").innerHTML = "";
-    const userExists = getSignUpdata.some(
-      (user) => user.email === addSignUpData.email
-    );
-
-    if (userExists) {
-      toast.warning("User with this email already exists.");
-      return;
-    }
-    axios
-      .post(`${PORT}alumni-master`, addSignUpData)
-      .then(() => {
-        localStorage.setItem("user", addSignUpData.email);
-        navigate("/user-profile");
-      })
-      .catch(() => {
-        toast.warning("Enter All Details");
-      });
-  };
-
-  // LOGIN USER  DATA SECTION
+  //login user
   const handleLoginDataChange = (event) => {
     const { name, value } = event.target;
     setAddLoginData((prevContData) => ({
@@ -113,26 +47,6 @@ const Form = () => {
   };
   const saveLoginData = (e) => {
     e.preventDefault();
-    //FOR EMAIL VALIDATION
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (addLoginData.email === "") {
-      document.getElementById("emailErr").innerHTML = "**Please fill the email";
-      return false;
-    }
-    if (!emailRegex.test(addLoginData.email)) {
-      document.getElementById("emailErr").innerHTML = "**Invalid email format";
-      return false;
-    }
-    document.getElementById("emailErr").innerHTML = "";
-
-    //FOR PASSWORD VALIDATION
-    if (addLoginData.password === "") {
-      document.getElementById("passwordErr").innerHTML =
-        "**Please fill the password";
-      return false;
-    }
-    document.getElementById("passwordErr").innerHTML = "";
-
     const user = getSignUpdata.find(
       (user) =>
         user.email === addLoginData.email &&
@@ -147,7 +61,73 @@ const Form = () => {
     }
   };
 
-  //GET SIGHNUP DATA FOR CHACKING LOGIN FORM
+  // SIGNUP USER  DATA SECTION
+  const handleSignUpDataChange = (event) => {
+    const { name, value } = event.target;
+    setAddSignUpData((prevContData) => ({
+      ...prevContData,
+      [name]: value,
+    }));
+  };
+  const validateForm = () => {
+    const errors = {};
+
+    if (!addSignUpData.email) {
+      errors.email = "Please fill in your email.";
+    } else if (!isValidEmail(addSignUpData.email)) {
+      errors.email = "Invalid email format.";
+    }
+
+    if (!addSignUpData.password) {
+      errors.password = "Please fill in your password.";
+    } else if (addSignUpData.password.length < 7) {
+      errors.password = "Password must be at least 7 characters long.";
+    }
+
+    if (!addSignUpData.username) {
+      errors.username = "Please fill in your username.";
+    } else if (
+      addSignUpData.username.length < 3 ||
+      addSignUpData.username.length > 20
+    ) {
+      errors.username = "Username must be between 3 and 20 characters.";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+  const isValidEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+  const saveSignUpData = (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please correct the form errors.");
+      return;
+    }
+
+    const userExists = getSignUpdata.some(
+      (user) => user.email === addSignUpData.email
+    );
+
+    if (userExists) {
+      toast.warning("User with this email already exists.");
+      return;
+    }
+
+    axios
+      .post(`${PORT}alumni-master`, addSignUpData)
+      .then(() => {
+        toast.success("Your Account is Created!");
+        setFormType("login");
+      })
+      .catch(() => {
+        toast.warning("Enter All Details");
+      });
+  };
+
+  //sign up user
   const getdata = () => {
     axios
       .get(`${PORT}alumni-master`)
@@ -160,6 +140,11 @@ const Form = () => {
   };
 
   useEffect(() => {
+    if (!isAuth) {
+      navigate("/");
+    } else {
+      navigate("/user-profile");
+    }
     getdata();
   }, []);
 
@@ -177,121 +162,147 @@ const Form = () => {
         pauseOnHover
         theme="dark"
       />
-      <div className="container mt-4">
-        <div className="row justify-content-center">
-          <div className="col-md-6">
-            <div className="card">
-              <div className="card-body">
-                <h2 className="card-title text-center">
-                  {activeForm === "login" ? "Login" : "Sign Up"}
-                </h2>
-                <form
-                  onSubmit={
-                    activeForm === "login" ? saveLoginData : saveSignUpData
-                  }
-                >
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="email"
-                      name="email"
-                      value={
-                        activeForm === "login"
-                          ? addLoginData.email
-                          : addSignUpData.email
-                      }
-                      onChange={
-                        activeForm === "login"
-                          ? handleLoginDataChange
-                          : handleSignUpDataChange
-                      }
-                    />
-                    <span
-                      className="text-danger font-bold"
-                      id={
-                        activeForm === "login" ? "emailErr" : "emailErrInsignup"
-                      }
-                    ></span>
+      <div className="container-fluid home_form_main">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6 home_form_right">
+              <NavLink to="/">
+                <img
+                  src={require("../../assets/image/logo.png")}
+                  alt=""
+                  width="100px"
+                />
+              </NavLink>
+              <div className="text-white form_right_side">
+                <h2>Manage your professional identity</h2>
+                <p>
+                  Photoshpo delivers a comprehensive environment for
+                  professional designers and graphics producers to create
+                  sophisticated images for print, the web, wireless devices and
+                  other media.
+                </p>
+              </div>
+            </div>
+            <div className="col-lg-6 bg-white">
+              <div className="login_form">
+                {formType === "sign-up" && (
+                  <div className="form_left_side mx-auto">
+                    <h2>Sign Up</h2>
+                    <p>Be greate at what you do, get started it`s free.</p>
+                    <form>
+                      <div className="mb-3">
+                        <TextField
+                          id="signEmail"
+                          label="Email"
+                          variant="standard"
+                          name="email"
+                          onChange={handleSignUpDataChange}
+                          error={formErrors.email ? true : false}
+                          helperText={formErrors.email}
+                        />
+                      </div>
+                      <div className="mb-3 position-relative">
+                        <TextField
+                          id="signPass"
+                          label="Password"
+                          variant="standard"
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          onChange={handleSignUpDataChange}
+                          error={formErrors.password ? true : false}
+                          helperText={formErrors.password}
+                        />
+                        <span
+                          onClick={togglePasswordVisibility}
+                          className="view-password-button"
+                        >
+                          {showPassword ? (
+                            <i className="fa-solid fa-eye-slash"></i>
+                          ) : (
+                            <i className="fa-solid fa-eye"></i>
+                          )}
+                        </span>
+                      </div>
+                      <div className="mb-3">
+                        <TextField
+                          id="signUser"
+                          label="User Name"
+                          variant="standard"
+                          name="username"
+                          onChange={handleSignUpDataChange}
+                          error={formErrors.username ? true : false}
+                          helperText={formErrors.username}
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <button
+                          onClick={saveSignUpData}
+                          className="btn btn-primary"
+                        >
+                          SIGN UP
+                        </button>
+                      </div>
+                      <div className="mt-3">
+                        <p>
+                          Already a member ?{" "}
+                          <NavLink to="/" onClick={toggleFormType}>
+                            Login
+                          </NavLink>
+                        </p>
+                      </div>
+                    </form>
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      className="form-control"
-                      id="password"
-                      name="password"
-                      value={
-                        activeForm === "login"
-                          ? addLoginData.password
-                          : addSignUpData.password
-                      }
-                      onChange={
-                        activeForm === "login"
-                          ? handleLoginDataChange
-                          : handleSignUpDataChange
-                      }
-                    />
-                    <span
-                      className="password_icon"
-                      onClick={togglePasswordVisibility}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {showPassword ? (
-                        <i className="fa-solid fa-eye-slash"></i>
-                      ) : (
-                        <i className="fa-solid fa-eye"></i>
-                      )}
-                    </span>
-                    <span
-                      className="text-danger font-bold"
-                      id={
-                        activeForm === "login"
-                          ? "passwordErr"
-                          : "passwordErrInSignup"
-                      }
-                    ></span>
+                )}
+                {formType === "login" && (
+                  <div className="form_left_side mx-auto">
+                    <h2>Login</h2>
+                    <p>Be greate at what you do, get started it`s free.</p>
+                    <form method="post" onSubmit={saveLoginData}>
+                      <div className="mb-3">
+                        <TextField
+                          id="loginEmail"
+                          label="Email"
+                          variant="standard"
+                          name="email"
+                          onChange={handleLoginDataChange}
+                        />
+                      </div>
+                      <div className="mb-3 position-relative">
+                        <TextField
+                          id="loginPass"
+                          label="Password"
+                          variant="standard"
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          onChange={handleLoginDataChange}
+                        />
+                        <span
+                          onClick={togglePasswordVisibility}
+                          className="view-password-button"
+                        >
+                          {showPassword ? (
+                            <i className="fa-solid fa-eye-slash"></i>
+                          ) : (
+                            <i className="fa-solid fa-eye"></i>
+                          )}
+                        </span>
+                      </div>
+                      <div className="mt-2">
+                        <button type="submit" className="btn btn-primary">
+                          LOGIN
+                        </button>
+                      </div>
+                      <div className="mt-3">
+                        <p>
+                          Not a member ?{" "}
+                          <NavLink to="/" onClick={toggleFormType}>
+                            Sign Up
+                          </NavLink>
+                        </p>
+                      </div>
+                    </form>
                   </div>
-                  {activeForm === "signup" && (
-                    <div className="mb-3">
-                      <label htmlFor="username" className="form-label">
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        id="username"
-                        name="username"
-                        value={addSignUpData.username}
-                        onChange={handleSignUpDataChange}
-                      />
-                      <span
-                        className="text-danger font-bold"
-                        id="usernameErrInSignup"
-                      ></span>
-                    </div>
-                  )}
-                  <button type="submit" className="btn btn-primary mb-3">
-                    {activeForm === "login" ? "Login" : "Sign Up"}
-                  </button>
-                  <p className="text-center">
-                    {activeForm === "login"
-                      ? "Not a member?"
-                      : "Already a member?"}
-                    <NavLink
-                      to=""
-                      className="text-primary ms-1"
-                      onClick={toggleForm}
-                    >
-                      {activeForm === "login" ? "Sign Up" : "Login"}
-                    </NavLink>
-                  </p>
-                </form>
+                )}
               </div>
             </div>
           </div>

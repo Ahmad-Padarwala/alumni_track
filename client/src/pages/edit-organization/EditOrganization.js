@@ -88,16 +88,16 @@ const EditOrganization = () => {
 
   return (
     <>
-      <div className="container mt-3">
+      <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
         <div className="row">
-          <h2>Edit Your Organization Info</h2>
-          <div className="p-3 shadow-sm">
+          <h3>Edit Your Organization Info</h3>
+          <div className="p-3 pofile_left_side_sections">
             <form>
               <div className="mb-3">
                 <label className="mb-1">Name</label>
                 <input
                   type="text"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="org_name"
                   onChange={handleEditChange}
                   value={getOrgData.org_name}
@@ -108,14 +108,14 @@ const EditOrganization = () => {
                 <label className="mb-1">Logo</label>
                 <input
                   type="file"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="org_logo"
                   onChange={handleEditFileChange}
                 />
                 {editProfileImageData.org_logo ? (
                   <img
                     src={editProfileImageData.org_logo}
-                    width="100px"
+                    width="60px"
                     className="mt-2"
                     alt="profile"
                   />
@@ -124,7 +124,7 @@ const EditOrganization = () => {
                     src={`/upload/${
                       getOrgData.org_logo ? getOrgData.org_logo : "coverBg.png"
                     }`}
-                    width="100px"
+                    width="60px"
                     alt="default-profile"
                     className="mt-2"
                   />
@@ -134,14 +134,14 @@ const EditOrganization = () => {
                 <label className="mb-1">Background Image</label>
                 <input
                   type="file"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   name="org_bg"
                   onChange={handleEditFileChange}
                 />
                 {editProfileImageData.org_bg ? (
                   <img
                     src={editProfileImageData.org_bg}
-                    width="100px"
+                    width="70px"
                     className="mt-2"
                     alt="profile"
                   />
@@ -150,7 +150,7 @@ const EditOrganization = () => {
                     src={`/upload/${
                       getOrgData.org_bg ? getOrgData.org_bg : "coverBg.png"
                     }`}
-                    width="100px"
+                    width="70px"
                     alt="default-profile"
                     className="mt-2"
                   />
@@ -185,7 +185,7 @@ const EditOrganization = () => {
                   name="address"
                   onChange={handleEditChange}
                   value={getOrgData.address}
-                  className="form-control"
+                  className="form-control form-control-sm"
                   placeholder="Enter Your Organization Address"
                 />
               </div>
@@ -196,7 +196,7 @@ const EditOrganization = () => {
                   name="website"
                   onChange={handleEditChange}
                   value={getOrgData.website}
-                  className="form-control"
+                  className="form-control form-control-sm"
                   placeholder="Enter Your Organization Website"
                 />
               </div>

@@ -1,9 +1,19 @@
 .pofile_left_side_sections {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  background-color: #fafafc;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 7px;
   overflow: hidden;
   position: relative;
+}
+.alumni_heading {
+  font-size: 18px;
+}
+.alumni_small_title {
+  font-size: 14px;
+}
+.form-label {
+  font-size: 14px;
+  margin: 0px;
 }
 .profile_image_main img {
   height: 110px;
@@ -15,24 +25,24 @@
 }
 .alumni_req_btn {
   background-color: transparent;
-  border: 2px solid #6fbe44;
+  border: 1px solid #6855e0;
   padding: 4px 10px;
   border-radius: 20px;
-  margin-right: 10px;
-  font-size: 14px;
+  margin-right: 7px;
+  font-size: 13px;
 }
 .alumni_req_btn:hover {
-  background-color: #6fbe44;
+  background-color: #6855e0;
   color: white;
 }
 .education_opr_icon {
   color: black;
   font-size: 13px;
-  padding: 8px 11px;
+  padding: 9px 11px;
   border-radius: 50%;
 }
 .education_opr_icon:hover {
-  background-color: #cbcfc8;
+  background-color: white;
 }
 .skill_name {
   font-weight: 600;
@@ -42,8 +52,7 @@
   text-decoration: underline;
 }
 .background_image_main {
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  border-radius: 10px;
+  border-radius: 7px;
   overflow: hidden;
   position: relative;
   background-position: center;
@@ -52,15 +61,6 @@
   width: 100%;
   height: 200px;
   z-index: -999;
-}
-
-/* FOR SKILL LEVELE CSS SECTION */
-
-.skill_level {
-  background-color: #ee5720;
-  color: white;
-  border-radius: 5px;
-  padding: 1px 8px;
 }
 
 @media screen and (max-width: 900px) and (min-width: 770px) {
@@ -93,6 +93,85 @@
   }
 }
 
+.form-control:hover {
+  outline: none;
+  box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
+  border: 1px solid rgba(1, 41, 112, 0.3);
+}
+.form-control:focus {
+  outline: none;
+  box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
+  border: 1px solid rgba(1, 41, 112, 0.3);
+}
 .MuiFormControl-root {
   width: 100%;
+}
+.modal-header {
+  padding: 10px 15px;
+}
+
+/* FOR SKILL LEVELE CSS SECTION */
+.main_skill_progress {
+  text-align: center;
+  margin-right: 12px;
+}
+@keyframes progress {
+  0% {
+    --percentage: 0;
+  }
+  100% {
+    --percentage: var(--value);
+  }
+}
+
+@property --percentage {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+[role="progressbarr"] {
+  --percentage: var(--value);
+  --primary: #3f4194;
+  --secondary: #adf;
+  --size: 60px;
+  animation: progress 2s 0.5s forwards;
+  width: var(--size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+[role="progressbarr"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(
+    var(--primary) calc(var(--percentage) * 1%),
+    var(--secondary) 0
+  );
+  mask: radial-gradient(white 55%, transparent 0);
+  mask-mode: alpha;
+  -webkit-mask: radial-gradient(#0000 55%, #000 0);
+  -webkit-mask-mode: alpha;
+}
+
+[role="progressbarr"]::after {
+  counter-reset: percentage var(--value);
+  content: counter(percentage) "%";
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: calc(var(--size) / 5);
+  color: var(--primary);
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

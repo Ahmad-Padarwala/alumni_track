@@ -1,106 +1,56 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* home page form */
+.home_form_main {
+  background: linear-gradient(45deg, rgb(67, 69, 140), rgb(49, 49, 184));
+  padding: 50px 0px;
 }
-.Hero_Main {
-  width: 100%;
-  background-image: url("../image/heroBg.jpg");
-  display: flex;
+.home_form_right {
+  background-image: url("../image/formImage.jpeg");
+  background-position: center;
+  background-size: cover;
+  height: 500px;
 }
-.hero_text {
-  padding: 80px 0;
+.form_right_side {
+  width: 61%;
+  margin: auto;
+  padding: 100px 0px;
 }
-.hero_Header {
-  color: rgb(5, 60, 143);
-  font-size: 45px;
-  font-weight: 600;
-  text-transform: capitalize;
-  letter-spacing: 2px;
+.form_right_side p {
+  font-size: 13px;
+  line-height: 1.5rem;
 }
-.hero_detail {
-  font-size: 20px;
-  line-height: 37px;
-  padding-right: 15%;
-  text-align: justify;
+.form_left_side {
+  width: 55%;
+  padding: 70px 0px;
 }
-.hero_detail::first-letter {
-  font-size: 20px;
-  text-transform: capitalize;
-  font-weight: 500;
-  color: rgb(5, 60, 143);
+.form_left_side h2 {
+  color: rgb(14, 221, 240);
 }
-.hero_detail::first-line {
-  text-align: center;
+.form_left_side p {
+  font-size: 13px;
 }
 
-/* large screen */
-@media only screen and (max-width: 1024px) {
-  .hero_text {
-    padding: 10px;
-  }
-  .hero_Header {
-    font-size: 35px;
-    letter-spacing: 2px;
-  }
-  .hero_img > img {
-    width: 430px;
-  }
-  .hero_detail {
-    font-size: 20px;
-    line-height: 30px;
-  }
+/* new login form design */
+.login-container {
+  background-color: #f9f7f3;
+  border-top: 2px solid white;
+  border-bottom: 2px solid white;
 }
-/* for tablat */
-@media only screen and (max-width: 768px) {
-  .Hero_Main {
-    display: block;
-  }
-  .hero_text {
-    padding: 10px;
-    width: 100%;
-  }
-  .hero_Header {
-    font-size: 37px;
-    letter-spacing: 2px;
-  }
-  .hero_detail {
-    line-height: 33px;
-    padding-right: 0;
-  }
-  .hero_img > img {
-    width: 430px;
-  }
+.login_form_image {
+  border-radius: 10px;
+  overflow: hidden;
+  background-image: url("../image/sideForm.jpg");
 }
-/* for mobile */
-@media only screen and (max-width: 600px) {
-  .Hero_Main {
-    width: 100%;
-  }
-  .hero_Header {
-    font-size: 25px;
-    letter-spacing: 2px;
-  }
-  .hero_img > img {
-    width: 330px;
-  }
-}
-
-/* login and sign up from */
-.login_from_main {
-  background-color: #f3f2f0;
-}
-.form_main {
+.login_form_main {
+  width: 70%;
   background-color: white;
-  width: 26%;
-}
-.form_title {
   text-align: center;
-  color: rgb(5, 60, 143);
+  border-radius: 10px;
+  padding: 20px 20px;
 }
-.password_icon {
-  padding: 0;
+.view-password-button {
+  background-color: transparent;
+  cursor: pointer;
   position: absolute;
-  right: 6%;
-  top: 187px;
+  top: 17px;
+  right: 20px;
 }

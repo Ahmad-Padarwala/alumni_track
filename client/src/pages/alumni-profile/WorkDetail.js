@@ -159,12 +159,12 @@ const WorkDetail = (props) => {
       <div className="pofile_left_side_sections px-3 pt-3 mt-3">
         <div className="d-flex justify-content-between">
           <div>
-            <p className="fs-5 fw-semibold">Work Detail</p>
+            <p className="alumni_heading fw-semibold">Work Detail</p>
           </div>
           <div>
             <NavLink
               to="/user-profile"
-              className="education_opr_icon"
+              className="education_opr_icon text-primary"
               data-bs-toggle="modal"
               data-bs-target="#addWorkDteailModal"
             >
@@ -184,9 +184,11 @@ const WorkDetail = (props) => {
               </div>
               <div className="ms-2">
                 <p className="fs-6 fw-semibold mb-0">{worksData.job_title}</p>
-                <p className="mb-0 text-sm">{worksData.compeny_name}</p>
+                <p className="mb-0 alumni_small_title">
+                  {worksData.compeny_name}
+                </p>
                 {worksData.job_startDate && worksData.job_endDate && (
-                  <p>
+                  <p className="alumni_small_title">
                     {new Date(worksData.job_startDate).toLocaleString(
                       "default",
                       { month: "long" }
@@ -202,7 +204,7 @@ const WorkDetail = (props) => {
               <span className="ms-auto">
                 <NavLink
                   to="/user-profile"
-                  className="education_opr_icon"
+                  className="education_opr_icon text-success"
                   data-bs-toggle="modal"
                   data-bs-target="#editWorkDteailModal"
                   onClick={() => {
@@ -214,7 +216,7 @@ const WorkDetail = (props) => {
                 <NavLink
                   to="/user-profile"
                   onClick={() => handleClickOpen(worksData)}
-                  className="education_opr_icon"
+                  className="education_opr_icon text-danger"
                 >
                   <i className="fa-solid fa-trash"></i>
                 </NavLink>
@@ -255,7 +257,10 @@ const WorkDetail = (props) => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h1 className="modal-title fs-5" id="addPofileModalLabel">
+                <h1
+                  className="modal-title alumni_heading"
+                  id="addPofileModalLabel"
+                >
                   Your Work Detail Section
                 </h1>
                 <button
@@ -276,7 +281,7 @@ const WorkDetail = (props) => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="job_title"
                       id="workDetailJobTitle"
                       placeholder="Enter Your Job Title"
@@ -292,7 +297,7 @@ const WorkDetail = (props) => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="compeny_name"
                       id="workDetailCompenyName"
                       placeholder="Enter Your Compeny Name"
@@ -308,7 +313,7 @@ const WorkDetail = (props) => {
                     </label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="compeny_location"
                       id="workDetailLocation"
                       onChange={handleAddInputChange}
@@ -325,7 +330,7 @@ const WorkDetail = (props) => {
                       </label>
                       <input
                         type="date"
-                        className="form-control"
+                        className="form-control form-control-sm"
                         name="job_startDate"
                         id="workDtailstart"
                         onChange={handleAddInputChange}
@@ -340,7 +345,7 @@ const WorkDetail = (props) => {
                       </label>
                       <input
                         type="date"
-                        className="form-control"
+                        className="form-control form-control-sm"
                         name="job_endDate"
                         id="workDtailend"
                         onChange={handleAddInputChange}
@@ -382,6 +387,12 @@ const WorkDetail = (props) => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
+                <h1
+                  className="modal-title alumni_heading"
+                  id="addPofileModalLabel"
+                >
+                  Your Work Detail Section
+                </h1>
                 <button
                   type="button"
                   className="btn-close"
@@ -390,7 +401,6 @@ const WorkDetail = (props) => {
                 ></button>
               </div>
               <div className="modal-body">
-                <p className="fs-5">Your Edit Work Detail Section</p>
                 <div className="mb-3">
                   <label
                     htmlFor="workDetailJobTitle"
@@ -400,7 +410,7 @@ const WorkDetail = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="job_title"
                     id="workDetailJobTitle"
                     onChange={handleEditInputChange}
@@ -416,7 +426,7 @@ const WorkDetail = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="compeny_name"
                     id="workDetailCompenyName"
                     onChange={handleEditInputChange}
@@ -432,7 +442,7 @@ const WorkDetail = (props) => {
                   </label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     name="compeny_location"
                     id="workDetailLocation"
                     onChange={handleEditInputChange}
@@ -449,7 +459,7 @@ const WorkDetail = (props) => {
                     </label>
                     <input
                       type="date"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="job_startDate"
                       id="workDtailstart"
                       format="dd-MM-yyyy"
@@ -472,7 +482,7 @@ const WorkDetail = (props) => {
                     </label>
                     <input
                       type="date"
-                      className="form-control"
+                      className="form-control form-control-sm"
                       name="job_endDate"
                       id="workDtailend"
                       format="dd-MM-yyyy"

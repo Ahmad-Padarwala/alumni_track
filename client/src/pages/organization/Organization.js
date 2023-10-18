@@ -3,12 +3,20 @@ import { useNavigate } from "react-router-dom";
 import "../../assets/css/Organization.css";
 import axios from "axios";
 import PORT from "../../assets/constant/Url";
+import Box from "@mui/material/Box";
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 
 const Orgnaization = () => {
   const [userId, setUserId] = useState("");
   const [getOrgData, setGetOrgData] = useState([]);
   const [alumniRequests, setAlumniRequests] = useState([]);
   const navigate = useNavigate();
+  const [alumniProfile, setAlumniProfile] = useState([]);
+  const [alumniUserName, setAlumniUserName] = useState([]);
+  const [value, setValue] = useState("1");
   const isAuth = localStorage.getItem("organization");
   useEffect(() => {
     if (!isAuth) {
@@ -23,6 +31,7 @@ const Orgnaization = () => {
       getAlumniReq(getOrgData.id);
     }
   }, [getOrgData.id]);
+
   const getOrgDataWithId = (userId) => {
     axios
       .get(`${PORT}getOrganizationWithId/${userId}`)
@@ -53,15 +62,53 @@ const Orgnaization = () => {
         console.log(err);
       });
   };
-  
+
+  //mui tabs
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  //watch alumni profile
+  const handleWatchAlumniProfile = (username, userid) => {
+    navigate(`/view-profile/${username}`, {
+      state: userid,
+    });
+  };
+
+  useEffect(() => {
+    if (getOrgData.id && alumniRequests.length > 0) {
+      const userIds = alumniRequests.map((request) => request.user_id);
+      const profilePromises = userIds.map((userId) => {
+        return axios.get(`${PORT}getalumniprofilewithid/${userId}`);
+      });
+      Promise.all(profilePromises)
+        .then((profileDataArray) => {
+          setAlumniProfile(profileDataArray[0].data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      const userId = alumniRequests.map((request) => request.user_id);
+      const profilePromise = userId.map((userId) => {
+        return axios.get(`${PORT}getalumniMasterWithId/${userId}`);
+      });
+      Promise.all(profilePromise)
+        .then((profileDataArray) => {
+          setAlumniUserName(profileDataArray[0].data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [getOrgData.id, alumniRequests]);
   return (
     <>
-      <div className="container mt-lg-3">
+      <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
         <div className="row">
           <div className="col-lg-4 col-12 px-2">
             <div className="pofile_left_side_sections">
               <div className="d-flex justify-content-between">
-                <div className="profile_image_main">
+                <div className="profile_image_main my-3">
                   {getOrgData && getOrgData.org_logo ? (
                     <img
                       src={`/upload/${getOrgData.org_logo}`}
@@ -80,17 +127,17 @@ const Orgnaization = () => {
                   <span
                     style={{ cursor: "pointer" }}
                     onClick={navigateEditOrg}
-                    className="education_opr_icon"
+                    className="education_opr_icon text-success"
                   >
                     <i className="fa-solid fa-pen"></i>
                   </span>
                 </div>
               </div>
               <div className="fs-5 fw-semibold">
-                <p className="m-0">{getOrgData.org_name}</p>
+                <p className="m-0 alumni_heading">{getOrgData.org_name}</p>
               </div>
               <div>
-                <p>{getOrgData.address}</p>
+                <p className="alumni_small_title">{getOrgData.address}</p>
                 {getOrgData && getOrgData.website && (
                   <a
                     href={
@@ -107,6 +154,7 @@ const Orgnaization = () => {
                 )}
               </div>
             </div>
+            <div className="pofile_left_side_sections mt-3">dcjdsnjc</div>
           </div>
 
           <div className="col-lg-8 col-12">
@@ -121,125 +169,120 @@ const Orgnaization = () => {
               }}
             ></div>
             <div className="pofile_left_side_sections p-3 mt-3">
-              <ul className="nav nav-tabs" id="myTab" role="tablist">
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link active"
-                    id="home-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#home"
-                    type="button"
-                    role="tab"
-                    aria-controls="home"
-                    aria-selected="true"
-                  >
-                    Home
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="profile-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#profile"
-                    type="button"
-                    role="tab"
-                    aria-controls="profile"
-                    aria-selected="false"
-                  >
-                    About
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="contact-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#contact"
-                    type="button"
-                    role="tab"
-                    aria-controls="contact"
-                    aria-selected="false"
-                  >
-                    Member
-                  </button>
-                </li>
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="nav-link"
-                    id="request-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#request"
-                    type="button"
-                    role="tab"
-                    aria-controls="request"
-                    aria-selected="true"
-                  >
-                    Requests
-                  </button>
-                </li>
-                <li className="mt-2 me-2 position-absolute end-0">
-                  {getOrgData && getOrgData.org_shortdesc ? (
-                    ""
-                  ) : (
-                    <span
-                      onClick={navigatAddOrg}
-                      className="education_opr_icon"
-                      style={{ cursor: "pointer" }}
+              <Box sx={{ width: "100%", typography: "body1" }}>
+                <TabContext value={value}>
+                  <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                    <TabList
+                      onChange={handleChange}
+                      aria-label="lab API tabs example"
                     >
-                      <i className="fa-solid fa-plus"></i>
-                    </span>
-                  )}
-                </li>
-              </ul>
-              <div className="tab-content mt-2" id="myTabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="home"
-                  role="tabpanel"
-                  aria-labelledby="home-tab"
-                >
-                  <h4 className="mb-3">About</h4>
-                  <p
-                    className=""
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        getOrgData.org_shortdesc || "<p>Data not available</p>",
-                    }}
-                  ></p>
-                </div>
-                <div
-                  className="tab-pane fade"
-                  id="profile"
-                  role="tabpanel"
-                  aria-labelledby="profile-tab"
-                >
-                  <h4 className="mb-3">Overview</h4>
-                  <p
-                    className=""
-                    dangerouslySetInnerHTML={{
-                      __html:
-                        getOrgData.org_longdesc || "<p>Data not available</p>",
-                    }}
-                  ></p>
-                </div>
-                <div
-                  className="tab-pane fade"
-                  id="contact"
-                  role="tabpanel"
-                  aria-labelledby="contact-tab"
-                >
-                  <h4 className="mb-3">Member</h4>
-                </div>
-                <div
-                  className="tab-pane fade"
-                  id="request"
-                  role="tabpanel"
-                  aria-labelledby="request-tab"
-                >
-                  <h4 className="mb-3">Resuest</h4>
-                </div>
-              </div>
+                      <Tab label="Home" value="1" />
+                      <Tab label="About" value="2" />
+                      <Tab label="Members" value="3" />
+                      <Tab label="Requests" value="4" />
+                    </TabList>
+                  </Box>
+                  <span className="add_org_desc_btn">
+                    {getOrgData && getOrgData.org_shortdesc ? (
+                      ""
+                    ) : (
+                      <span
+                        onClick={navigatAddOrg}
+                        className="education_opr_icon text-primary"
+                        style={{ cursor: "pointer" }}
+                      >
+                        <i className="fa-solid fa-plus"></i>
+                      </span>
+                    )}
+                  </span>
+                  <TabPanel value="1">
+                    <h4 className="mb-2 alumni_heading">About</h4>
+                    <p
+                      className="alumni_small_title"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          getOrgData.org_shortdesc ||
+                          "<p>Data not available</p>",
+                      }}
+                    ></p>
+                  </TabPanel>
+                  <TabPanel value="2">
+                    <h4 className="mb-2 alumni_heading">Overview</h4>
+                    <p
+                      className="alumni_small_title"
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          getOrgData.org_longdesc ||
+                          "<p>Data not available</p>",
+                      }}
+                    ></p>
+                  </TabPanel>
+                  <TabPanel value="3">
+                    <h4 className="mb-2 alumni_heading">Members</h4>
+                  </TabPanel>
+                  <TabPanel value="4">
+                    <h4 className="mb-2 alumni_heading">Requests</h4>
+                    {alumniProfile.length > 0
+                      ? alumniProfile.map((alumni, index) => (
+                          <div
+                            className="d-flex justify-content-between mb-3"
+                            key={alumni.id}
+                          >
+                            <div
+                              className="d-flex"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                handleWatchAlumniProfile(
+                                  alumniUserName[index].username,
+                                  alumniUserName[index].id
+                                );
+                              }}
+                            >
+                              <div className="org-display-image">
+                                {alumni && alumni.profile_picture ? (
+                                  <img
+                                    src={`./upload/${alumni.profile_picture}`}
+                                    alt="orgimage"
+                                    width="50px"
+                                  />
+                                ) : (
+                                  <img
+                                    src={require("../../assets/image/educationImages.png")}
+                                    width="60px"
+                                    alt="default-profile"
+                                  />
+                                )}
+                              </div>
+                              <div className="ms-2">
+                                <p className="m-0 alumni_heading">
+                                  {alumniUserName[index] &&
+                                    alumniUserName[index].username}
+                                </p>
+                                <p className="mb-0 alumni_small_title">
+                                  {alumni.address}
+                                </p>
+                              </div>
+                            </div>
+                            <div>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                className="education_opr_icon text-success"
+                              >
+                                <i className="fa-solid fa-check"></i>
+                              </span>
+                              <span
+                                style={{ cursor: "pointer" }}
+                                className="education_opr_icon text-danger"
+                              >
+                                <i className="fa-solid fa-xmark"></i>
+                              </span>
+                            </div>
+                          </div>
+                        ))
+                      : ""}
+                  </TabPanel>
+                </TabContext>
+              </Box>
             </div>
           </div>
         </div>

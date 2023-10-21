@@ -9,6 +9,10 @@
   background-size: cover;
   height: 500px;
 }
+.home_form_right a {
+  position: relative;
+  top: 30px;
+}
 .form_right_side {
   width: 61%;
   margin: auto;

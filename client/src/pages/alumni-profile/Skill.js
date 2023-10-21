@@ -9,6 +9,8 @@ import { Button } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Slider from "@mui/material/Slider";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 
 const Skill = (props) => {
   const [getSkillData, setGetSkillData] = useState([]);
@@ -23,6 +25,8 @@ const Skill = (props) => {
   });
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
   const handleClickOpen = (education) => {
     setOpen(true);
@@ -141,6 +145,13 @@ const Skill = (props) => {
       });
   };
 
+  //view edit skill data
+  const getPaginatedSkillData = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return getSkillData.slice(startIndex, endIndex);
+  };
+
   return (
     <>
       <ToastContainer
@@ -247,7 +258,7 @@ const Skill = (props) => {
                     htmlFor="alumniProfilelevel"
                     className="form-label fw-semibold"
                   >
-                    Skill Level:-
+                    Skill Level:-{addSkillData.skill_level}
                   </label>
                   <Slider
                     name="skill_level"
@@ -319,7 +330,7 @@ const Skill = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {getSkillData.map((skillsData) => {
+                    {getPaginatedSkillData().map((skillsData) => {
                       return (
                         <tr
                           key={skillsData.id}
@@ -355,6 +366,14 @@ const Skill = (props) => {
                     })}
                   </tbody>
                 </table>
+                <Stack spacing={2}>
+                  <Pagination
+                    count={Math.ceil(getSkillData.length / itemsPerPage)}
+                    color="primary"
+                    page={currentPage}
+                    onChange={(event, page) => setCurrentPage(page)}
+                  />
+                </Stack>
                 <div className="d-flex float-end">
                   <button
                     type="button"

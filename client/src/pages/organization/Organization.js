@@ -14,25 +14,14 @@ const Orgnaization = () => {
   const [getOrgData, setGetOrgData] = useState([]);
   const [alumniRequests, setAlumniRequests] = useState([]);
   const navigate = useNavigate();
-  const [alumniProfile, setAlumniProfile] = useState([]);
-  const [alumniUserName, setAlumniUserName] = useState([]);
+  const [alumniProfiles, setAlumniProfiles] = useState([]);
+  // const [alumniUserName, setAlumniUserName] = useState([]);
   const [value, setValue] = useState("1");
   const isAuth = localStorage.getItem("organization");
-  useEffect(() => {
-    if (!isAuth) {
-      navigate("/user-profile");
-    } else {
-      setUserId(isAuth);
-      getOrgDataWithId(isAuth);
-    }
-  }, [isAuth, navigate, userId]);
-  useEffect(() => {
-    if (getOrgData.id) {
-      getAlumniReq(getOrgData.id);
-    }
-  }, [getOrgData.id]);
 
+  //get org data with id
   const getOrgDataWithId = (userId) => {
+    console.log("getOrgDataWithId");
     axios
       .get(`${PORT}getOrganizationWithId/${userId}`)
       .then((response) => {
@@ -42,17 +31,22 @@ const Orgnaization = () => {
         console.log(error);
       });
   };
+
+  //add org data
   const navigatAddOrg = () => {
     navigate("/add-organization", { state: getOrgData.id });
     window.scrollTo({ top: "0", behavior: "smooth" });
   };
+
+  //edit org data
   const navigateEditOrg = () => {
     navigate("/edit-organization", { state: getOrgData.id });
     window.scrollTo({ top: "0", behavior: "smooth" });
   };
 
-  //get req alumni
+  // get req alumni
   const getAlumniReq = (org_id) => {
+    console.log("getAlumniReq");
     axios
       .get(`${PORT}getrequestedalumni/${org_id}`)
       .then((res) => {
@@ -63,44 +57,82 @@ const Orgnaization = () => {
       });
   };
 
+  // get alumni profile data
+  const getAlumniProfileData = async (userId) => {
+    console.log("getAlumniProfileData");
+    await axios
+      .get(`${PORT}getalumniprofilewithid/${userId}`)
+      .then((res) => {
+        setAlumniProfiles((prevProfiles) => [...prevProfiles, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // get alumni master data
+  // const getalumniMasterData = async (id) => {
+  //   try {
+  //     const response = await axios.get(`${PORT}getalumniMasterWithId/${id}`);
+  //     if (response.status === 200) {
+  //       setAlumniUserName(response.data);
+  //       return response.data;
+  //     } else {
+  //       console.log("Failed to fetch alumni master data");
+  //       return null;
+  //     }
+  //   } catch (err) {
+  //     console.log(err, "error in getting alumni master data");
+  //     return null;
+  //   }
+  // };
+
   //mui tabs
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   //watch alumni profile
-  const handleWatchAlumniProfile = (username, userid) => {
-    navigate(`/view-profile/${username}`, {
-      state: userid,
-    });
+  // const handleWatchAlumniProfile = (username, userid) => {
+  //   navigate(`/view-profile/${username}`, {
+  //     state: userid,
+  //   });
+  // };
+
+  useEffect(() => {
+    console.log("1");
+    if (!isAuth) {
+      navigate("/user-profile");
+    } else {
+      handleSetUserId(isAuth);
+      getOrgDataWithId(isAuth);
+    }
+  }, []);
+
+  const handleSetUserId = (isAuth) => {
+    setUserId(isAuth);
   };
 
   useEffect(() => {
-    if (getOrgData.id && alumniRequests.length > 0) {
-      const userIds = alumniRequests.map((request) => request.user_id);
-      const profilePromises = userIds.map((userId) => {
-        return axios.get(`${PORT}getalumniprofilewithid/${userId}`);
-      });
-      Promise.all(profilePromises)
-        .then((profileDataArray) => {
-          setAlumniProfile(profileDataArray[0].data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      const userId = alumniRequests.map((request) => request.user_id);
-      const profilePromise = userId.map((userId) => {
-        return axios.get(`${PORT}getalumniMasterWithId/${userId}`);
-      });
-      Promise.all(profilePromise)
-        .then((profileDataArray) => {
-          setAlumniUserName(profileDataArray[0].data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    if (getOrgData.id) {
+      getAlumniReq(getOrgData.id);
     }
-  }, [getOrgData.id, alumniRequests]);
+  }, [getOrgData]);
+
+  useEffect(() => {
+    console.log("alumini profiles data");
+    console.log(alumniProfiles);
+  }, [alumniProfiles]);
+
+  useEffect(() => {
+    if (alumniRequests.length > 0) {
+      alumniRequests.forEach(async (request) => {
+        await getAlumniProfileData(request.user_id);
+      });
+    }
+  }, [alumniRequests]);
+
   return (
     <>
       <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
@@ -221,65 +253,55 @@ const Orgnaization = () => {
                     <h4 className="mb-2 alumni_heading">Members</h4>
                   </TabPanel>
                   <TabPanel value="4">
-                    <h4 className="mb-2 alumni_heading">Requests</h4>
-                    {alumniProfile.length > 0
-                      ? alumniProfile.map((alumni, index) => (
-                          <div
-                            className="d-flex justify-content-between mb-3"
-                            key={alumni.id}
-                          >
-                            <div
-                              className="d-flex"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                handleWatchAlumniProfile(
-                                  alumniUserName[index].username,
-                                  alumniUserName[index].id
-                                );
-                              }}
-                            >
-                              <div className="org-display-image">
-                                {alumni && alumni.profile_picture ? (
-                                  <img
-                                    src={`./upload/${alumni.profile_picture}`}
-                                    alt="orgimage"
-                                    width="50px"
-                                  />
-                                ) : (
-                                  <img
-                                    src={require("../../assets/image/educationImages.png")}
-                                    width="60px"
-                                    alt="default-profile"
-                                  />
-                                )}
-                              </div>
-                              <div className="ms-2">
-                                <p className="m-0 alumni_heading">
-                                  {alumniUserName[index] &&
-                                    alumniUserName[index].username}
-                                </p>
-                                <p className="mb-0 alumni_small_title">
-                                  {alumni.address}
-                                </p>
-                              </div>
+                    <h4 className="mb-3 alumni_heading">
+                      A person you have asked to join your organization as a
+                      member.
+                    </h4>
+                    {alumniProfiles.map((alumni, index) => {
+                      return (
+                        <div className="d-flex justify-content-between mb-3">
+                          <div className="d-flex" style={{ cursor: "pointer" }}>
+                            <div className="org-display-image">
+                              {alumniProfiles.profile_picture ? (
+                                <img
+                                  src={`./upload/${alumniProfiles.profile_picture}`}
+                                  alt="orgimage"
+                                  width="50px"
+                                />
+                              ) : (
+                                <img
+                                  src={require("../../assets/image/educationImages.png")}
+                                  width="60px"
+                                  alt="default-profile"
+                                />
+                              )}
                             </div>
-                            <div>
-                              <span
-                                style={{ cursor: "pointer" }}
-                                className="education_opr_icon text-success"
-                              >
-                                <i className="fa-solid fa-check"></i>
-                              </span>
-                              <span
-                                style={{ cursor: "pointer" }}
-                                className="education_opr_icon text-danger"
-                              >
-                                <i className="fa-solid fa-xmark"></i>
-                              </span>
+                            <div className="ms-2">
+                              <p className="m-0 alumni_heading">user Name</p>
+                              <p className="mb-0 alumni_small_title">
+                                {alumni[0].address
+                                  ? alumni[0].address
+                                  : "address"}
+                              </p>
                             </div>
                           </div>
-                        ))
-                      : ""}
+                          <div>
+                            <span
+                              style={{ cursor: "pointer" }}
+                              className="education_opr_icon text-success"
+                            >
+                              <i className="fa-solid fa-check"></i>
+                            </span>
+                            <span
+                              style={{ cursor: "pointer" }}
+                              className="education_opr_icon text-danger"
+                            >
+                              <i className="fa-solid fa-xmark"></i>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </TabPanel>
                 </TabContext>
               </Box>

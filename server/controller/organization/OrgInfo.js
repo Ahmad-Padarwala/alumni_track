@@ -57,7 +57,7 @@ const addOrgDescription = async (req, res) => {
 //get org data with userId
 const getOrganizationWithId = async (req, res) => {
   const id = req.params.id;
-  const sql = `SELECT * FROM organization_info WHERE user_id=?`;
+  const sql = `SELECT * FROM organization_info WHERE user_id=? AND status=1`;
   const data = [id];
   connection.query(sql, data, (error, result) => {
     if (error) {

@@ -38,7 +38,6 @@ const addSignUpData = (req, res) => {
       console.error("Error adding record:", err);
       res.status(500).json({ error: "Error adding record" });
     } else {
-      console.log("Records added: " + result.affectedRows);
       res.sendStatus(200);
     }
   });

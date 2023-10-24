@@ -58,6 +58,7 @@ const Navbar = () => {
   //log out member
   const handleLogOut = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("organization");
     navigate("/");
   };
   return (
@@ -67,7 +68,7 @@ const Navbar = () => {
         className="header fixed-top d-flex align-items-center"
       >
         <div className="d-flex align-items-center justify-content-between">
-          <NavLink to="" className="logo d-flex align-items-center">
+          <NavLink to="/" className="logo d-flex align-items-center">
             <span className="d-none d-lg-block">Alumni</span>
           </NavLink>
         </div>

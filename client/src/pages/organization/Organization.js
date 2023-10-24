@@ -15,7 +15,7 @@ const Orgnaization = () => {
   const [alumniRequests, setAlumniRequests] = useState([]);
   const navigate = useNavigate();
   const [alumniProfiles, setAlumniProfiles] = useState([]);
-  // const [alumniUserName, setAlumniUserName] = useState([]);
+  const [alumniUserName, setAlumniUserName] = useState([]);
   const [value, setValue] = useState("1");
   const isAuth = localStorage.getItem("organization");
 
@@ -46,7 +46,6 @@ const Orgnaization = () => {
 
   // get req alumni
   const getAlumniReq = (org_id) => {
-    console.log("getAlumniReq");
     axios
       .get(`${PORT}getrequestedalumni/${org_id}`)
       .then((res) => {
@@ -59,7 +58,6 @@ const Orgnaization = () => {
 
   // get alumni profile data
   const getAlumniProfileData = async (userId) => {
-    console.log("getAlumniProfileData");
     await axios
       .get(`${PORT}getalumniprofilewithid/${userId}`)
       .then((res) => {
@@ -71,37 +69,31 @@ const Orgnaization = () => {
   };
 
   // get alumni master data
-  // const getalumniMasterData = async (id) => {
-  //   try {
-  //     const response = await axios.get(`${PORT}getalumniMasterWithId/${id}`);
-  //     if (response.status === 200) {
-  //       setAlumniUserName(response.data);
-  //       return response.data;
-  //     } else {
-  //       console.log("Failed to fetch alumni master data");
-  //       return null;
-  //     }
-  //   } catch (err) {
-  //     console.log(err, "error in getting alumni master data");
-  //     return null;
-  //   }
-  // };
+  const getalumniMasterData = async (id) => {
+    await axios
+      .get(`${PORT}getalumniMasterWithId/${id}`)
+      .then((res) => {
+        setAlumniUserName((prevProfiles) => [...prevProfiles, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   //mui tabs
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   //watch alumni profile
-  // const handleWatchAlumniProfile = (username, userid) => {
-  //   navigate(`/view-profile/${username}`, {
-  //     state: userid,
-  //   });
-  // };
+  const handleWatchAlumniProfile = (userid) => {
+    navigate(`/view-profile/${userid}`, {
+      state: { id: userid, myId: isAuth },
+    });
+    window.scrollTo({ top: "0", behavior: "smooth" });
+  };
 
   useEffect(() => {
-    console.log("1");
     if (!isAuth) {
       navigate("/user-profile");
     } else {
@@ -121,17 +113,20 @@ const Orgnaization = () => {
   }, [getOrgData]);
 
   useEffect(() => {
-    console.log("alumini profiles data");
-    console.log(alumniProfiles);
-  }, [alumniProfiles]);
-
-  useEffect(() => {
     if (alumniRequests.length > 0) {
       alumniRequests.forEach(async (request) => {
         await getAlumniProfileData(request.user_id);
       });
     }
   }, [alumniRequests]);
+
+  useEffect(() => {
+    if (alumniProfiles.length > 0) {
+      alumniProfiles.forEach(async (alumni) => {
+        await getalumniMasterData(alumni[0].user_id);
+      });
+    }
+  }, [alumniProfiles]);
 
   return (
     <>
@@ -260,11 +255,17 @@ const Orgnaization = () => {
                     {alumniProfiles.map((alumni, index) => {
                       return (
                         <div className="d-flex justify-content-between mb-3">
-                          <div className="d-flex" style={{ cursor: "pointer" }}>
+                          <div
+                            className="d-flex"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleWatchAlumniProfile(alumni[0].user_id);
+                            }}
+                          >
                             <div className="org-display-image">
-                              {alumniProfiles.profile_picture ? (
+                              {alumni[0].profile_picture ? (
                                 <img
-                                  src={`./upload/${alumniProfiles.profile_picture}`}
+                                  src={`./upload/${alumni[0].profile_picture}`}
                                   alt="orgimage"
                                   width="50px"
                                 />
@@ -277,7 +278,7 @@ const Orgnaization = () => {
                               )}
                             </div>
                             <div className="ms-2">
-                              <p className="m-0 alumni_heading">user Name</p>
+                              <p className="m-0 alumni_heading">Unknown</p>
                               <p className="mb-0 alumni_small_title">
                                 {alumni[0].address
                                   ? alumni[0].address

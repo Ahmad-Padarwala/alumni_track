@@ -34,6 +34,14 @@
   top: 0;
   right: 0;
 }
+.acc_delete_drop {
+  padding: 6px 10px !important;
+  min-width: auto;
+  cursor: pointer;
+}
+.acc_delete_drop span:hover {
+  text-decoration: underline;
+}
 
 /* tabPanel Scroll bar */
 .MuiTabPanel-root {

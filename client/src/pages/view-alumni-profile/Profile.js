@@ -12,7 +12,9 @@ const Profile = () => {
   const [getAlumniProfile, setGetAlumniProfile] = useState([]);
   const [getAlumniMaster, setGetAlumniMaster] = useState([]);
   const location = useLocation();
-  const isAuth = location.state;
+  const userId = location.state.id;
+  const myId = location.state.myId;
+  console.log(myId);
 
   //get alumni profile with id
   const getAlumniProfileData = async (userId) => {
@@ -52,9 +54,10 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getAlumniProfileData(isAuth);
-    getalumniMasterData(isAuth);
-  }, [isAuth]);
+    getAlumniProfileData(userId);
+    getalumniMasterData(userId);
+    localStorage.setItem("organization", myId);
+  }, [userId]);
 
   return (
     <>
@@ -141,7 +144,7 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              <OrgName userId={isAuth} />
+              <OrgName userId={userId} />
             </div>
             <div className="col-lg-8 col-12">
               <div
@@ -154,9 +157,9 @@ const Profile = () => {
                   })`,
                 }}
               ></div>
-              <Education id={isAuth} />
-              <Skill id={isAuth} />
-              <WorkDetail id={isAuth} />
+              <Education id={userId} />
+              <Skill id={userId} />
+              <WorkDetail id={userId} />
             </div>
           </div>
         </div>

@@ -144,11 +144,27 @@ const EditOrganization = (req, res) => {
   });
 };
 
+//delet org account
+const deleteOrgAccount = async (req, res) => {
+  const org_id = req.params.id;
+  const sql = `UPDATE organization_info SET status=0 WHERE id=?`;
+  connection.query(sql, org_id, (error, result) => {
+    if (error) {
+      console.log(
+        "Error add desc Data from organization_info Table in server.js" + error
+      );
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
 module.exports = {
   addOrgInfo,
   getOrganizationWithId,
   getOrganizationsData,
   addOrgDescription,
   EditOrganization,
+  deleteOrgAccount,
   getOrganizationEdit,
 };

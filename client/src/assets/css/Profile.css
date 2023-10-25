@@ -112,7 +112,7 @@
 
 /* FOR SKILL LEVELE CSS SECTION */
 .main_skill_progress {
-  text-align: center;
+  text-align: -webkit-center;
   margin-right: 12px;
 }
 @keyframes progress {

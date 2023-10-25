@@ -159,12 +159,35 @@ const deleteOrgAccount = async (req, res) => {
   });
 };
 
+//get alumni req profile and username
+const getAlumniProfileMaster = async (req, res) => {
+  const id = req.params.id;
+  const sql = `
+    SELECT *
+    FROM alumni_profile AS ap
+    JOIN alumni_master AS am ON ap.user_id = am.id
+    WHERE ap.user_id = ?
+  `;
+  connection.query(sql, [id], (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from getAlumniProfileMaster Table with id in server.js" +
+          error
+      );
+      res.status(500).json({ error: "Internal Server Error" });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
 module.exports = {
   addOrgInfo,
   getOrganizationWithId,
   getOrganizationsData,
   addOrgDescription,
   EditOrganization,
+  getAlumniProfileMaster,
   deleteOrgAccount,
   getOrganizationEdit,
 };

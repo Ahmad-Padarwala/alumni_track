@@ -35,4 +35,16 @@ const getRequestedAlumni = async (req, res) => {
   });
 };
 
-module.exports = { sendReqAlumni,getRequestedAlumni };
+//delete alumni request
+const deleteAlumniRequest = async (req, res) => {
+  const id = req.params.id;
+  let sql = `DELETE FROM alumni_associate WHERE user_id=${id}`;
+  connection.query(sql, id, (error) => {
+    if (error) {
+      console.log("Error Delete alumni_associate Data in server.js" + error);
+    }
+    res.sendStatus(200);
+  });
+};
+
+module.exports = { sendReqAlumni, getRequestedAlumni, deleteAlumniRequest };

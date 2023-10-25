@@ -7,7 +7,13 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import { Button } from "@mui/material";
 import TabPanel from "@mui/lab/TabPanel";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Orgnaization = () => {
   const [userId, setUserId] = useState("");
@@ -15,13 +21,22 @@ const Orgnaization = () => {
   const [alumniRequests, setAlumniRequests] = useState([]);
   const navigate = useNavigate();
   const [alumniProfiles, setAlumniProfiles] = useState([]);
-  const [alumniUserName, setAlumniUserName] = useState([]);
   const [value, setValue] = useState("1");
   const isAuth = localStorage.getItem("organization");
 
+  //delete alumni req
+  const [open, setOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const handleClickOpen = (education) => {
+    setOpen(true);
+    setSelectedCategory(education);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   //get org data with id
   const getOrgDataWithId = (userId) => {
-    console.log("getOrgDataWithId");
     axios
       .get(`${PORT}getOrganizationWithId/${userId}`)
       .then((response) => {
@@ -59,7 +74,7 @@ const Orgnaization = () => {
   // get alumni profile data
   const getAlumniProfileData = async (userId) => {
     await axios
-      .get(`${PORT}getalumniprofilewithid/${userId}`)
+      .get(`${PORT}getAlumniProfileMaster/${userId}`)
       .then((res) => {
         setAlumniProfiles((prevProfiles) => [...prevProfiles, res.data]);
       })
@@ -68,16 +83,16 @@ const Orgnaization = () => {
       });
   };
 
-  // get alumni master data
-  const getalumniMasterData = async (id) => {
-    await axios
-      .get(`${PORT}getalumniMasterWithId/${id}`)
-      .then((res) => {
-        setAlumniUserName((prevProfiles) => [...prevProfiles, res.data]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  //delete alumni request
+  const deleteAlumniRequest = async (id) => {
+    try {
+      await axios.delete(`${PORT}deleteAlumniRequest/${id}`);
+      setOpen(false);
+      toast.success("Request deleted successfully!");
+      getAlumniReq(userId);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   //mui tabs
@@ -88,7 +103,7 @@ const Orgnaization = () => {
   //watch alumni profile
   const handleWatchAlumniProfile = (userid) => {
     navigate(`/view-profile/${userid}`, {
-      state: { id: userid, myId: isAuth },
+      state: { id: userid, alumniId: isAuth },
     });
     window.scrollTo({ top: "0", behavior: "smooth" });
   };
@@ -120,16 +135,20 @@ const Orgnaization = () => {
     }
   }, [alumniRequests]);
 
-  useEffect(() => {
-    if (alumniProfiles.length > 0) {
-      alumniProfiles.forEach(async (alumni) => {
-        await getalumniMasterData(alumni[0].user_id);
-      });
-    }
-  }, [alumniProfiles]);
-
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
         <div className="row">
           <div className="col-lg-4 col-12 px-2">
@@ -278,7 +297,12 @@ const Orgnaization = () => {
                               )}
                             </div>
                             <div className="ms-2">
-                              <p className="m-0 alumni_heading">Unknown</p>
+                              <p className="m-0 alumni_heading">
+                                {" "}
+                                {alumni[0].username
+                                  ? alumni[0].username
+                                  : "Unknown"}
+                              </p>
                               <p className="mb-0 alumni_small_title">
                                 {alumni[0].address
                                   ? alumni[0].address
@@ -296,6 +320,9 @@ const Orgnaization = () => {
                             <span
                               style={{ cursor: "pointer" }}
                               className="education_opr_icon text-danger"
+                              onClick={() => {
+                                handleClickOpen(alumni[0].user_id);
+                              }}
                             >
                               <i className="fa-solid fa-xmark"></i>
                             </span>
@@ -310,6 +337,27 @@ const Orgnaization = () => {
           </div>
         </div>
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Do you want to delete this request?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+            onClick={() => {
+              deleteAlumniRequest(selectedCategory);
+            }}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

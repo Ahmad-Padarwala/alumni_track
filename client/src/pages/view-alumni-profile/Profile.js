@@ -13,8 +13,8 @@ const Profile = () => {
   const [getAlumniMaster, setGetAlumniMaster] = useState([]);
   const location = useLocation();
   const userId = location.state.id;
-  const myId = location.state.myId;
-  console.log(myId);
+  const alumniId = location.state.alumniId;
+  console.log(alumniId);
 
   //get alumni profile with id
   const getAlumniProfileData = async (userId) => {
@@ -56,7 +56,7 @@ const Profile = () => {
   useEffect(() => {
     getAlumniProfileData(userId);
     getalumniMasterData(userId);
-    localStorage.setItem("organization", myId);
+    localStorage.setItem("organization", alumniId);
   }, [userId]);
 
   return (

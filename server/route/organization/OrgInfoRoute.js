@@ -30,6 +30,7 @@ router.route("/getOrganizationforedit/:id").get(OrgInfo.getOrganizationEdit);
 router.route("/getorganizations").get(OrgInfo.getOrganizationsData);
 router.route("/addorgdescription/:id").put(OrgInfo.addOrgDescription);
 router.route("/deleteOrgAccount/:id").put(OrgInfo.deleteOrgAccount);
+router.route("/getAlumniProfileMaster/:id").get(OrgInfo.getAlumniProfileMaster);
 router.route("/editorganization/:id").put(
   upload.fields([
     { name: "org_logo", maxCount: 1 },

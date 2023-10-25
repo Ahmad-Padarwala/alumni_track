@@ -23,13 +23,17 @@ const Orgnaization = () => {
   const [alumniProfiles, setAlumniProfiles] = useState([]);
   const [value, setValue] = useState("1");
   const isAuth = localStorage.getItem("organization");
+  const [acceptedRequest, setAcceptedRequest] = useState([]);
+  const [acceptedAlumniProfile, setAcceptedAlumniProfile] = useState([]);
 
-  //delete alumni req
+  //delete and accept alumni req
+  const [selectedAction, setSelectedAction] = useState(null);
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const handleClickOpen = (education) => {
+  const handleClickOpen = (action, education) => {
     setOpen(true);
     setSelectedCategory(education);
+    setSelectedAction(action);
   };
   const handleClose = () => {
     setOpen(false);
@@ -62,7 +66,7 @@ const Orgnaization = () => {
   // get req alumni
   const getAlumniReq = (org_id) => {
     axios
-      .get(`${PORT}getrequestedalumni/${org_id}`)
+      .get(`${PORT}getrequestedalumni/${org_id}/0`) // 0 is status
       .then((res) => {
         setAlumniRequests(res.data);
       })
@@ -91,9 +95,51 @@ const Orgnaization = () => {
       toast.success("Request deleted successfully!");
       setAlumniProfiles([]);
       getAlumniReq(getOrgData.id);
+      setAcceptedAlumniProfile([]);
+      getAcceptedRequest(getOrgData.id);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  //accept alumni request
+  const acceptAlumniRequest = async (id) => {
+    try {
+      await axios.put(`${PORT}acceptAlumniRequest/${id}`);
+      setOpen(false);
+      toast.success("Request accepted!");
+      setAlumniProfiles([]);
+      getAlumniReq(getOrgData.id);
+      setAcceptedAlumniProfile([]);
+      getAcceptedRequest(getOrgData.id);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //get accepted alumni requst
+  const getAcceptedRequest = async (org_id) => {
+    axios
+      .get(`${PORT}getrequestedalumni/${org_id}/1`) // 1 is status
+      .then((res) => {
+        setAcceptedRequest(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //accepted alumni profile
+  const getAcceptedAlumniProfile = async (userId) => {
+    await axios
+      .get(`${PORT}getAlumniProfileMaster/${userId}`)
+      .then((res) => {
+        setAcceptedAlumniProfile((prevProfiles) => [...prevProfiles, res.data]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //mui tabs
@@ -125,6 +171,7 @@ const Orgnaization = () => {
   useEffect(() => {
     if (getOrgData.id) {
       getAlumniReq(getOrgData.id);
+      getAcceptedRequest(getOrgData.id);
     }
   }, [getOrgData]);
 
@@ -140,11 +187,21 @@ const Orgnaization = () => {
     }
   }, [alumniRequests]);
 
+  useEffect(() => {
+    if (acceptedRequest.length > 0) {
+      acceptedRequest.forEach(async (request) => {
+        await getAcceptedAlumniProfile(request.user_id);
+      });
+    } else if (acceptedRequest.length == 0) {
+      setAcceptedAlumniProfile([]);
+    }
+  }, [acceptedRequest]);
+
   return (
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -270,6 +327,59 @@ const Orgnaization = () => {
                   </TabPanel>
                   <TabPanel value="3">
                     <h4 className="mb-2 alumni_heading">Members</h4>
+                    {acceptedAlumniProfile.map((alumni) => {
+                      return (
+                        <div className="d-flex justify-content-between mb-3">
+                          <div
+                            className="d-flex"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => {
+                              handleWatchAlumniProfile(alumni[0].user_id);
+                            }}
+                          >
+                            <div className="org-display-image">
+                              {alumni[0].profile_picture ? (
+                                <img
+                                  src={`./upload/${alumni[0].profile_picture}`}
+                                  alt="orgimage"
+                                  width="50px"
+                                />
+                              ) : (
+                                <img
+                                  src={require("../../assets/image/educationImages.png")}
+                                  width="60px"
+                                  alt="default-profile"
+                                />
+                              )}
+                            </div>
+                            <div className="ms-2">
+                              <p className="m-0 alumni_heading">
+                                {" "}
+                                {alumni[0].username
+                                  ? alumni[0].username
+                                  : "Unknown"}
+                              </p>
+                              <p className="mb-0 alumni_small_title">
+                                {alumni[0].address
+                                  ? alumni[0].address
+                                  : "address"}
+                              </p>
+                            </div>
+                          </div>
+                          <div>
+                            <span
+                              style={{ cursor: "pointer" }}
+                              className="education_opr_icon text-danger"
+                              onClick={() => {
+                                handleClickOpen("delete", alumni[0].user_id);
+                              }}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </TabPanel>
                   <TabPanel value="4">
                     <h4 className="mb-3 alumni_heading">
@@ -319,6 +429,9 @@ const Orgnaization = () => {
                             <span
                               style={{ cursor: "pointer" }}
                               className="education_opr_icon text-success"
+                              onClick={() => {
+                                handleClickOpen("accept", alumni[0].user_id);
+                              }}
                             >
                               <i className="fa-solid fa-check"></i>
                             </span>
@@ -326,7 +439,7 @@ const Orgnaization = () => {
                               style={{ cursor: "pointer" }}
                               className="education_opr_icon text-danger"
                               onClick={() => {
-                                handleClickOpen(alumni[0].user_id);
+                                handleClickOpen("delete", alumni[0].user_id);
                               }}
                             >
                               <i className="fa-solid fa-xmark"></i>
@@ -349,17 +462,23 @@ const Orgnaization = () => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Do you want to delete this request?"}
+          {selectedAction === "accept"
+            ? "Do you want to accept this request?"
+            : "Do you want to delete this request?"}
         </DialogTitle>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button
             onClick={() => {
-              deleteAlumniRequest(selectedCategory);
+              if (selectedAction === "accept") {
+                acceptAlumniRequest(selectedCategory);
+              } else if (selectedAction === "delete") {
+                deleteAlumniRequest(selectedCategory);
+              }
             }}
             autoFocus
           >
-            Delete
+            {selectedAction === "accept" ? "Accept" : "Delete"}
           </Button>
         </DialogActions>
       </Dialog>

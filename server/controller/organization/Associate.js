@@ -22,8 +22,9 @@ const sendReqAlumni = async (req, res) => {
 //get requested alumni
 const getRequestedAlumni = async (req, res) => {
   const org_id = req.params.id;
-  const sql = `SELECT * FROM alumni_associate WHERE org_id=? AND status=0`;
-  const data = [org_id];
+  const status = req.params.status;
+  const sql = `SELECT * FROM alumni_associate WHERE org_id=? AND status=?`;
+  const data = [org_id, status];
   connection.query(sql, data, (error, result) => {
     if (error) {
       console.log(
@@ -47,4 +48,39 @@ const deleteAlumniRequest = async (req, res) => {
   });
 };
 
-module.exports = { sendReqAlumni, getRequestedAlumni, deleteAlumniRequest };
+//accept alumni request
+const acceptAlumniRequest = async (req, res) => {
+  const id = req.params.id;
+  const acceptDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+  let sql = `UPDATE alumni_associate SET status = 1, join_date=? WHERE user_id = ${id}`;
+  connection.query(sql, [acceptDate], (error) => {
+    if (error) {
+      console.log("Error Delete alumni_associate Data in server.js" + error);
+    }
+    res.sendStatus(200);
+  });
+};
+
+//get joined organization with user id
+const getJoinedOrgWithId = async (req, res) => {
+  const org_id = req.params.id;
+  const sql = `SELECT * FROM alumni_associate WHERE user_id=? AND status=1`;
+  const data = [org_id];
+  connection.query(sql, data, (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from alumni_associate Table in server.js" + error
+      );
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
+module.exports = {
+  sendReqAlumni,
+  getRequestedAlumni,
+  deleteAlumniRequest,
+  acceptAlumniRequest,
+  getJoinedOrgWithId,
+};

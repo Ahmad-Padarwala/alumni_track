@@ -13,6 +13,7 @@ import TextField from "@mui/material/TextField";
 const OrgName = (props) => {
   const [getUserOrg, setGetUserOrg] = useState([]);
   const [deleteCode, setDeleteCode] = useState("");
+  const [joinedOrgAss, setJoinedOrgAss] = useState([]);
   const navigate = useNavigate();
   const isAuth = props.userId;
 
@@ -27,6 +28,7 @@ const OrgName = (props) => {
     setOpen(false);
   };
 
+  //get user org data
   const getOrganizationData = (userId) => {
     axios
       .get(`${PORT}getOrganizationWithId/${userId}`)
@@ -65,16 +67,30 @@ const OrgName = (props) => {
     }
   };
 
+  //get joined org associate
+  const getJoinedOrgAss = async (user_id) => {
+    axios
+      .get(`${PORT}getJoinedOrgWithId/${user_id}`) // 1 is status
+      .then((res) => {
+        setJoinedOrgAss(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     if (isAuth) {
       getOrganizationData(isAuth);
+      getJoinedOrgAss(isAuth);
     }
   }, [isAuth]);
   return (
     <>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

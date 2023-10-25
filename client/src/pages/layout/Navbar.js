@@ -118,9 +118,11 @@ const Navbar = () => {
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                 <li className="dropdown-header">
                   <h6>
-                    {getAlumniMaster && getAlumniMaster.username
-                      ? getAlumniMaster.username
-                      : ""}
+                    <NavLink to="/user-profile">
+                      {getAlumniMaster && getAlumniMaster.username
+                        ? getAlumniMaster.username
+                        : ""}
+                    </NavLink>
                   </h6>
                 </li>
                 <li>
@@ -153,7 +155,7 @@ const Navbar = () => {
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleLogOut} autoFocus>
-            Delete
+            Log Out
           </Button>
         </DialogActions>
       </Dialog>

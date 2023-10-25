@@ -222,7 +222,7 @@ const Profile = () => {
     axios
       .post(`${PORT}sendrequestforalumni/${userId}/${selectedOrg}`)
       .then((res) => {
-        toast.success("Request Succesfully Sent !");
+        toast.success("Request Succesfully Sent!");
       })
       .catch((err) => {
         toast.warning("Request Failed !");
@@ -796,7 +796,12 @@ const Profile = () => {
                 </select>
               </div>
               <div className="mt-3 float-end">
-                <button className="alumni_req_btn" onClick={sendAlumniReq}>
+                <button
+                  className="alumni_req_btn"
+                  onClick={sendAlumniReq}
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
                   Send Request
                 </button>
               </div>

@@ -22,7 +22,7 @@ const sendReqAlumni = async (req, res) => {
 //get requested alumni
 const getRequestedAlumni = async (req, res) => {
   const org_id = req.params.id;
-  const sql = `SELECT * FROM alumni_associate WHERE org_id=?`;
+  const sql = `SELECT * FROM alumni_associate WHERE org_id=? AND status=0`;
   const data = [org_id];
   connection.query(sql, data, (error, result) => {
     if (error) {

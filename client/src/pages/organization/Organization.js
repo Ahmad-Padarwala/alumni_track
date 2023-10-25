@@ -89,7 +89,8 @@ const Orgnaization = () => {
       await axios.delete(`${PORT}deleteAlumniRequest/${id}`);
       setOpen(false);
       toast.success("Request deleted successfully!");
-      getAlumniReq(userId);
+      setAlumniProfiles([]);
+      getAlumniReq(getOrgData.id);
     } catch (err) {
       console.log(err);
     }
@@ -131,6 +132,10 @@ const Orgnaization = () => {
     if (alumniRequests.length > 0) {
       alumniRequests.forEach(async (request) => {
         await getAlumniProfileData(request.user_id);
+      });
+    } else if (alumniRequests.length == 0) {
+      alumniRequests.forEach(async (request) => {
+        await setAlumniProfiles([]);
       });
     }
   }, [alumniRequests]);

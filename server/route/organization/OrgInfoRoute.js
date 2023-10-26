@@ -26,6 +26,7 @@ router.route("/addorganization-info/:id").post(
   OrgInfo.addOrgInfo
 );
 router.route("/getOrganizationWithId/:id").get(OrgInfo.getOrganizationWithId);
+router.route("/getJoinedOrgInfoWithId/:id").get(OrgInfo.getJoinedOrgInfoWithId);
 router.route("/getOrganizationforedit/:id").get(OrgInfo.getOrganizationEdit);
 router.route("/getorganizations").get(OrgInfo.getOrganizationsData);
 router.route("/addorgdescription/:id").put(OrgInfo.addOrgDescription);

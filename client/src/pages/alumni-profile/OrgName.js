@@ -14,6 +14,7 @@ const OrgName = (props) => {
   const [getUserOrg, setGetUserOrg] = useState([]);
   const [deleteCode, setDeleteCode] = useState("");
   const [joinedOrgAss, setJoinedOrgAss] = useState([]);
+  const [joinedOrgInfo, setJoinedOrgInfo] = useState([]);
   const navigate = useNavigate();
   const isAuth = props.userId;
 
@@ -73,7 +74,18 @@ const OrgName = (props) => {
       .get(`${PORT}getJoinedOrgWithId/${user_id}`) // 1 is status
       .then((res) => {
         setJoinedOrgAss(res.data);
-        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getJoinedOrgInfo = async (org_id) => {
+    console.log(org_id);
+    axios
+      .get(`${PORT}getJoinedOrgInfoWithId/${org_id}`)
+      .then((res) => {
+        setJoinedOrgInfo((prevProfiles) => [...prevProfiles, res.data]);
       })
       .catch((err) => {
         console.log(err);
@@ -86,6 +98,14 @@ const OrgName = (props) => {
       getJoinedOrgAss(isAuth);
     }
   }, [isAuth]);
+  useEffect(() => {
+    if (joinedOrgAss.length > 0) {
+      joinedOrgAss.forEach(async (request) => {
+        await getJoinedOrgInfo(request.org_id);
+      });
+    }
+  }, [joinedOrgAss]);
+
   return (
     <>
       <ToastContainer
@@ -160,6 +180,41 @@ const OrgName = (props) => {
       </div>
       <div className="pofile_left_side_sections p-3 mt-3">
         <p className="alumni_heading fw-semibold">Joined oraganization</p>
+        <div className="MuiTabPanel-root">
+          {joinedOrgInfo.map((organization) => {
+            return (
+              <div
+                key={organization.id}
+                className="d-flex mb-3"
+                style={{ cursor: "pointer" }}
+              >
+                <div className="org-display-image">
+                  {organization && organization[0].org_logo ? (
+                    <img
+                      src={`./upload/${organization[0].org_logo}`}
+                      alt="orgimage"
+                      width="50px"
+                    />
+                  ) : (
+                    <img
+                      src={require("../../assets/image/educationImages.png")}
+                      width="60px"
+                      alt="default-profile"
+                    />
+                  )}
+                </div>
+                <div className="ms-2">
+                  <p className="fs-6 fw-semibold mb-0">
+                    {organization[0].org_name}
+                  </p>
+                  <p className="mb-0 alumni_small_title">
+                    {organization[0].address}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
       <Dialog
         open={open}

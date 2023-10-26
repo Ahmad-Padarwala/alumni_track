@@ -181,9 +181,27 @@ const getAlumniProfileMaster = async (req, res) => {
   });
 };
 
+//get joined org data with id
+const getJoinedOrgInfoWithId = async (req, res) => {
+  const id = req.params.id;
+  const sql = `SELECT * FROM organization_info WHERE id=? AND status=1`;
+  const data = [id];
+  connection.query(sql, data, (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from organization_info Table with id in server.js" +
+          error
+      );
+    } else {
+      res.status(200).json(result);
+    }
+  });
+};
+
 module.exports = {
   addOrgInfo,
   getOrganizationWithId,
+  getJoinedOrgInfoWithId,
   getOrganizationsData,
   addOrgDescription,
   EditOrganization,

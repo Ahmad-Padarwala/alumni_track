@@ -44,12 +44,22 @@ const OrgName = (props) => {
         console.log(err);
       });
   };
-
   //view org account
-  const viewYourOrgAcc = () => {
-    navigate("/organization");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const viewYourOrgAcc = (id) => {
+    navigate(`/view-organization/${id}`, {
+      state: { id: id },
+    });
+    window.scrollTo({ top: "0", behavior: "smooth" });
   };
+
+  //watch org account
+  const viewOrgProfile = (id) => {
+    navigate(`/view-organization/${id}`, {
+      state: { id: id },
+    });
+    window.scrollTo({ top: "0", behavior: "smooth" });
+  };
+
   useEffect(() => {
     if (isAuth) {
       getOrganizationData(isAuth);
@@ -73,7 +83,9 @@ const OrgName = (props) => {
             <div
               className="d-flex mb-3"
               style={{ cursor: "pointer" }}
-              onClick={viewYourOrgAcc}
+              onClick={() => {
+                viewYourOrgAcc(organization.id);
+              }}
               key={organization.id}
             >
               <div className="org-display-image">
@@ -110,6 +122,9 @@ const OrgName = (props) => {
                 key={organization.id}
                 className="d-flex mb-3"
                 style={{ cursor: "pointer" }}
+                onClick={() => {
+                  viewOrgProfile(organization[0].id);
+                }}
               >
                 <div className="org-display-image">
                   {organization && organization[0].org_logo ? (

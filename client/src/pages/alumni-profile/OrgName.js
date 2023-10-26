@@ -80,8 +80,8 @@ const OrgName = (props) => {
       });
   };
 
+  //get joined org info
   const getJoinedOrgInfo = async (org_id) => {
-    console.log(org_id);
     axios
       .get(`${PORT}getJoinedOrgInfoWithId/${org_id}`)
       .then((res) => {
@@ -90,6 +90,13 @@ const OrgName = (props) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+  //watch org account
+  const viewOrgProfile = (id) => {
+    navigate(`/view-organization/${id}`, {
+      state: { id: id },
+    });
+    window.scrollTo({ top: "0", behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -187,6 +194,9 @@ const OrgName = (props) => {
                 key={organization.id}
                 className="d-flex mb-3"
                 style={{ cursor: "pointer" }}
+                onClick={() => {
+                  viewOrgProfile(organization[0].id);
+                }}
               >
                 <div className="org-display-image">
                   {organization && organization[0].org_logo ? (

@@ -3,7 +3,7 @@
 }
 
 a {
-  color: #4154f1;
+  color: 6855;
   text-decoration: none;
 }
 
@@ -38,7 +38,7 @@ a:hover {
   font-size: 24px;
   margin-bottom: 0;
   font-weight: 600;
-  color: #012970;
+  color: #6855e0;
 }
 
 /*--------------------------------------------------------------
@@ -343,7 +343,7 @@ a:hover {
 .logo span {
   font-size: 26px;
   font-weight: 700;
-  color: #012970;
+  color: 6855;
 }
 
 .header {

@@ -91,7 +91,7 @@ const EditOrganization = () => {
       <div className="container" style={{ padding: "80px 0px 40px 0px" }}>
         <div className="row">
           <h3>Edit Your Organization Info</h3>
-          <div className="p-3 pofile_left_side_sections">
+          <div className="p-4 pofile_left_side_sections">
             <form>
               <div className="mb-3">
                 <label className="mb-1">Name</label>

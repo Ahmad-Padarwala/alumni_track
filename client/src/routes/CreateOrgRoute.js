@@ -4,6 +4,7 @@ import CreateOrganization from "../pages/create-organization";
 import Orgnaization from "../pages/organization";
 import AddOrganization from "../pages/add-organization";
 import EditOrganization from "../pages/edit-organization";
+import ViewOrgnaization from "../pages/view-organization";
 
 const CreateOrgRoute = () => {
   return (
@@ -37,6 +38,14 @@ const CreateOrgRoute = () => {
         element={
           <>
             <EditOrganization />
+          </>
+        }
+      />
+      <Route
+        path="/view-organization/:id"
+        element={
+          <>
+            <ViewOrgnaization />
           </>
         }
       />

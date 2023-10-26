@@ -132,7 +132,7 @@
 
 [role="progressbarr"] {
   --percentage: var(--value);
-  --primary: #3f4194;
+  --primary: #6855e0;
   --secondary: #adf;
   --size: 60px;
   animation: progress 2s 0.5s forwards;

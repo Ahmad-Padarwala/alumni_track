@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 14, 2023 at 02:39 PM
+-- Generation Time: Oct 26, 2023 at 02:53 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -41,8 +41,8 @@ CREATE TABLE `alumni_associate` (
 --
 
 INSERT INTO `alumni_associate` (`id`, `user_id`, `org_id`, `request_date`, `join_date`, `status`) VALUES
-(1, 31, 46, '2023-10-14', '0000-00-00', 0),
-(2, 29, 46, '2023-10-14', '0000-00-00', 0);
+(85, 29, 47, '2023-10-26', '2023-10-26', 1),
+(86, 35, 55, '2023-10-26', '2023-10-26', 1);
 
 -- --------------------------------------------------------
 
@@ -65,7 +65,7 @@ CREATE TABLE `alumni_education` (
 --
 
 INSERT INTO `alumni_education` (`id`, `user_id`, `field_study`, `institute_name`, `study_startDate`, `study_endDate`, `result`) VALUES
-(15, 29, 'BCA', 'Gokul Global University', '2021-08-05', '2024-08-05', '87.9%');
+(15, 29, 'BCA', 'Gokul Global University', '2021-07-31', '2024-07-31', '87.9%');
 
 -- --------------------------------------------------------
 
@@ -87,7 +87,7 @@ CREATE TABLE `alumni_master` (
 
 INSERT INTO `alumni_master` (`id`, `email`, `password`, `username`, `status`) VALUES
 (29, 'ahmadpadarwala@gmail.com', 'Ahmad@123', 'Ahmad Padarwala', 1),
-(31, 'amilpatel@gmail.com', 'AmilPatel', 'Amil Patel', 1);
+(35, 'patelamil@gmail.com', 'PatelAmil', 'Amil Patel', 1);
 
 -- --------------------------------------------------------
 
@@ -125,8 +125,8 @@ CREATE TABLE `alumni_profile` (
 --
 
 INSERT INTO `alumni_profile` (`id`, `user_id`, `profile_picture`, `cover_background`, `phone_number`, `address`, `dob`, `gender`) VALUES
-(35, 29, 'profile_picture-1697182843494.platform3.webp', 'cover_background-1697182843493.calculate-bg.webp', 7383294925, 'Majadar, Vadgam, Bk - 385210', '2005-06-07', 'male'),
-(36, 31, 'profile_picture-1697280679600.card4.webp', 'cover_background-1697280679595.aboutImg.jpg', 7383294925, 'Majadar, Vadgam, Bk - 385210', '2003-02-12', 'male');
+(35, 29, 'profile_picture-1698317389170.platform1.png', 'cover_background-1697182843493.calculate-bg.webp', 7383294925, 'Majadar, Vadgam, Bk - 385210', '2005-06-04', 'male'),
+(37, 35, 'profile_picture-1697624499756.card2.jpg', 'cover_background-1697624499752.offlinelearning.jpg', 9974898018, 'Majadra`', '2003-06-27', 'male');
 
 -- --------------------------------------------------------
 
@@ -146,7 +146,16 @@ CREATE TABLE `alumni_skill` (
 --
 
 INSERT INTO `alumni_skill` (`id`, `user_id`, `skill_name`, `skill_level`) VALUES
-(11, 29, 'HTML', 80);
+(11, 29, 'HTML', 10),
+(20, 29, 'CSS', 20),
+(21, 29, 'JavaScript', 30),
+(23, 29, 'php', 40),
+(24, 29, 'react', 50),
+(25, 29, 'express', 60),
+(26, 29, 'sql', 70),
+(32, 29, 'NodeJs', 80),
+(41, 29, 'MERN', 90),
+(42, 29, 'NEXT JS', 100);
 
 -- --------------------------------------------------------
 
@@ -165,6 +174,14 @@ CREATE TABLE `alumni_work_detail` (
   `role` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `alumni_work_detail`
+--
+
+INSERT INTO `alumni_work_detail` (`id`, `user_id`, `job_title`, `compeny_name`, `compeny_location`, `job_startDate`, `job_endDate`, `role`) VALUES
+(18, 29, ' MERN DEVELOPER', 'VALUDAS TEACH PARK', 'Chhapi, Orchid Complex, BK - 385210', '2021-06-10', '2028-06-27', ''),
+(19, 29, 'MERN DEVELOPER', 'VALUDAS TEACH PARK', 'CHHAPI VADGAM BANASJKANTHA - 385210', '2020-06-17', '2022-11-23', '');
+
 -- --------------------------------------------------------
 
 --
@@ -177,7 +194,7 @@ CREATE TABLE `organization_info` (
   `org_name` varchar(500) NOT NULL,
   `org_logo` varchar(500) NOT NULL,
   `org_bg` varchar(500) NOT NULL,
-  `org_shortdesc` varchar(1000) NOT NULL,
+  `org_shortdesc` longtext NOT NULL,
   `org_longdesc` longtext NOT NULL,
   `address` varchar(500) NOT NULL,
   `website` varchar(200) NOT NULL,
@@ -189,7 +206,23 @@ CREATE TABLE `organization_info` (
 --
 
 INSERT INTO `organization_info` (`id`, `user_id`, `org_name`, `org_logo`, `org_bg`, `org_shortdesc`, `org_longdesc`, `address`, `website`, `status`) VALUES
-(46, 29, 'Valudas', 'org_logo-1697268823650.platform4.png', 'org_bg-1697268823651.calculate-bg.webp', '<p>At Valuda&#39;s Tech Park, Our prime focus is in the field of IT outsourcing services. We have an experienced, innovative, and dynamic team of experts with a focus to provide web development and mobile application services for individuals, small- and medium-sized businesses, and corporate clients.</p>\r\n', '<p>At Valuda&#39;s Tech Park, Our prime focus is in the field of IT outsourcing services. We have an experienced, innovative, and dynamic team of experts with a focus to provide web development and mobile application services for individuals, small- and medium-sized businesses, and corporate clients. Our other strengths include Website Development, Application Development (Android &amp; IOS) and Digital Marketing also provide customized solutions as per Customer Need with a 100% Satisfaction Guarantee and can help enrich your presence globally. Our main goal is making a foster long-lasting relationships with clients. where doing good and ethical business is our topmost priority. We take our commitment to our clients very seriously, which is why we&rsquo;ve developed this Code of Ethics outlining the level of service you can expect while doing business with us and ethical business is our bottom line. We can fix your Opencart and WordPress issues as below and surely will make you happy with our work : - Coding Error - Extension Error - Database Error - SSL Errors - Theme Installation and Customize - Extension Installation, Customization - Shipping Method Integration/Customization - Payment Method Integration - Speed Improvement We also provide SEO Services for your website in order to improve your website traffic and we can rank your website on Google SERP. On-Page SEO Off-Page SEO Link Building Technical SEO PPC Social Media Marketing etc. We are high-class professional designers, expert developers, and flawless QA Testers in Themes and Template Designing CMS like WordPress, eCommerce, PHP, Codeigniter, Laravel, Opencart Customize, and Development... * Service Guarantee * #24*7 hours live support. #Free of cost technical support for a lifetime. #Satisfaction guarantee otherwise we will refund. #No charges for deployment. Overall, Valuda&#39;s Tech Park appears to be a reliable and experienced company that offers a wide range of IT outsourcing services Thank you for your visit...</p>\r\n\r\n<h2><strong>Website</strong></h2>\r\n\r\n<p><a href=\"http://www.valudas.com/\" target=\"_blank\">http://www.valudas.com</a></p>\r\n\r\n<h2><strong>Phone</strong></h2>\r\n\r\n<p><a href=\"tel:9104190049\" target=\"_blank\">9104190049 Phone number is 9104190049</a></p>\r\n\r\n<p>Industry<br />\r\nInformation Technology &amp; Services<br />\r\nCompany size<br />\r\n2-10 employees<br />\r\n7 on LinkedIn&nbsp;Includes members with current employer listed as Valudas Tech Park, including part-time roles.<br />\r\nHeadquarters<br />\r\nChhapi, GUJARAT<br />\r\nFounded<br />\r\n2021</p>\r\n\r\n<h2><strong>Specialties</strong></h2>\r\n\r\n<p>Website Development, Digital Marketing, Wordpress, Opencart, OSCommerce, WooCommerce, SEO, SEM, SMO, SMM, Technical SEO, Link Building, Coding Error, Extension Error, Database Error, SSL Errors, Theme Installation and Customize, Shipping Method Integration/Customization, Payment Method Integration, Speed Improvement, Laravel, Codeigniter, Laravel, Opencart Customize, and Development, PHP, and onlinemarketing</p>\r\n', 'Orchid complex, Chhapi, Gujarat, BK - 385210', 'www.valudas.com', 1);
+(47, 29, 'Valudas', 'org_logo-1698316411168.book-education-logo-vector-22575068-removebg-preview.png', 'org_bg-1697609943652.e-lerning.jpg', 'At Valuda&#39;s Tech Park, Our prime focus is in the field of IT outsourcing services. We have an experienced, innovative, and dynamic team of experts with a focus to provide web development and mobile application services for individuals, small- and medium-sized businesses, and corporate clients. Our other strengths include Website Development, Application Development (Android &amp; IOS) and Digital Marketing also provide customized solutions as per Customer Need with a 100% Satisfaction Guarantee and can help enrich your presence globally. Our main goal is making a foster long-lasting relationships with clients. where doing good and ethical business is our topmost priority. We take our commitment to our clients very seriously, which is why we&rsquo;ve developed this Code of Ethics outlining the level of service you can expect while doing business with us and ethical business is our bottom line.\r\n<p><br />\r\nWe can fix your Opencart and WordPress issues as below and surely will make you happy with our work :</p>\r\n- Coding Error - Extension Error<br />\r\n- Database Error<br />\r\n- SSL Errors<br />\r\n- Theme Installation and Customize<br />\r\n- Extension Installation, Customization<br />\r\n- Shipping Method Integration/Customization<br />\r\n- Payment Method Integration<br />\r\n- Speed Improvement<br />\r\n<br />\r\nWe also provide SEO Services for your website in order to improve your website traffic and we can rank your website on Google SERP.<br />\r\n<br />\r\nOn-Page SEO<br />\r\nOff-Page SEO<br />\r\nLink Building Technical SEO<br />\r\nPPC<br />\r\nSocial Media Marketing etc.<br />\r\n<br />\r\nWe are high-class professional designers, expert developers, and flawless QA Testers in Themes and Template Designing CMS like WordPress, eCommerce, PHP, Codeigniter, Laravel, Opencart Customize, and Development...<br />\r\n<br />\r\n* Service Guarantee *<br />\r\n#24*7 hours live support.<br />\r\n#Free of cost technical support for a lifetime.<br />\r\n#Satisfaction guarantee otherwise we will refund.<br />\r\n#No charges for deployment.<br />\r\nOverall, Valuda&#39;s Tech Park appears to be a reliable and experienced company that offers a wide range of IT outsourcing services<br />\r\nThank you for your visit...', 'At Valuda&#39;s Tech Park, Our prime focus is in the field of IT outsourcing services. We have an experienced, innovative, and dynamic team of experts with a focus to provide web development and mobile application services for individuals, small- and medium-sized businesses, and corporate clients. Our other strengths include Website Development, Application Development (Android &amp; IOS) and Digital Marketing also provide customized solutions as per Customer Need with a 100% Satisfaction Guarantee and can help enrich your presence globally. Our main goal is making a foster long-lasting relationships with clients. where doing good and ethical business is our topmost priority. We take our commitment to our clients very seriously, which is why we&rsquo;ve developed this Code of Ethics outlining the level of service you can expect while doing business with us and ethical business is our bottom line.\r\n<p><br />\r\nWe can fix your Opencart and WordPress issues as below and surely will make you happy with our work :</p>\r\n<br />\r\n- Coding Error - Extension Error<br />\r\n- Database Error<br />\r\n- SSL Errors<br />\r\n- Theme Installation and Customize<br />\r\n- Extension Installation, Customization<br />\r\n- Shipping Method Integration/Customization<br />\r\n- Payment Method Integration<br />\r\n- Speed Improvement<br />\r\n<br />\r\nWe also provide SEO Services for your website in order to improve your website traffic and we can rank your website on Google SERP.<br />\r\n<br />\r\nOn-Page SEO<br />\r\nOff-Page SEO<br />\r\nLink Building Technical SEO<br />\r\nPPC<br />\r\nSocial Media Marketing etc.<br />\r\n<br />\r\nWe are high-class professional designers, expert developers, and flawless QA Testers in Themes and Template Designing CMS like WordPress, eCommerce, PHP, Codeigniter, Laravel, Opencart Customize, and Development...<br />\r\n<br />\r\n* Service Guarantee *<br />\r\n#24*7 hours live support.<br />\r\n#Free of cost technical support for a lifetime.<br />\r\n#Satisfaction guarantee otherwise we will refund.<br />\r\n#No charges for deployment.<br />\r\nOverall, Valuda&#39;s Tech Park appears to be a reliable and experienced company that offers a wide range of IT outsourcing services<br />\r\nThank you for your visit...<br />\r\n<br />\r\n<cite><big><strong>Website</strong></big></cite><br />\r\n<a href=\"https://valudas.com/\" onclick=\"window.open(this.href, \'websitemodule\', \'resizable=yes,status=yes,location=yes,toolbar=yes,menubar=yes,fullscreen=yes,scrollbars=yes,dependent=yes,width=50%,left=20%,height=30%,top=20%\'); return false;\">http://www.valudas.com</a><br />\r\n<br />\r\n<big><cite><strong><var>Phone</var></strong></cite></big><br />\r\n<a href=\"tel:9104190049\" onclick=\"window.open(this.href, \'\', \'resizable=no,status=no,location=no,toolbar=no,menubar=no,fullscreen=no,scrollbars=no,dependent=no\'); return false;\">9104190049</a><br />\r\n<br />\r\n<big><strong>Industry</strong></big><br />\r\nInformation Technology &amp; Services<br />\r\n<br />\r\n<big><strong>Company size</strong></big><br />\r\n2-10 employees<br />\r\n7 on LinkedIn<br />\r\n<br />\r\n<big><strong>Headquarters</strong></big><br />\r\nChhapi, GUJARAT<br />\r\n<br />\r\n<big><strong>Founded</strong></big><br />\r\n<cite><small><em>2021</em></small></cite><br />\r\n<br />\r\n<big><strong>Specialties</strong></big><br />\r\nWebsite Development, Digital Marketing, Wordpress, Opencart, OSCommerce, WooCommerce, SEO, SEM, SMO, SMM, Technical SEO, Link Building, Coding Error, Extension Error, Database Error, SSL Errors, Theme Installation and Customize, Shipping Method Integration/Customization, Payment Method Integration, Speed Improvement, Laravel, Codeigniter, Laravel, Opencart Customize, and Development, PHP, and onlinemarketing\r\n<p>&nbsp;</p>\r\n', 'Orchid Complex, Chhapi, Banaskantha Gujarat - 385210', 'valudas.com', 1),
+(55, 35, 'majadar', 'org_logo-1698299542901.e-lerning.jpg', 'org_bg-1698299542905.calculate-bg.webp', 'dcds', 'sdcdsd', 'jsbdcysdcds', 'majadar.com', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `org_post`
+--
+
+CREATE TABLE `org_post` (
+  `id` int(11) NOT NULL,
+  `org_id` int(10) NOT NULL,
+  `post_title` varchar(500) NOT NULL,
+  `post_image` varchar(500) NOT NULL,
+  `post_video` varchar(1000) NOT NULL,
+  `post_send` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -209,6 +242,20 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `uname`, `password`) VALUES
 (1, 'admin', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_post`
+--
+
+CREATE TABLE `user_post` (
+  `id` int(11) NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `post_title` varchar(500) NOT NULL,
+  `post_image` varchar(500) NOT NULL,
+  `post_video` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
@@ -271,10 +318,24 @@ ALTER TABLE `organization_info`
   ADD KEY `organization_info_ibfk_1` (`user_id`);
 
 --
+-- Indexes for table `org_post`
+--
+ALTER TABLE `org_post`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `org_id` (`org_id`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `user_post`
+--
+ALTER TABLE `user_post`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -284,7 +345,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `alumni_associate`
 --
 ALTER TABLE `alumni_associate`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `alumni_education`
@@ -296,7 +357,7 @@ ALTER TABLE `alumni_education`
 -- AUTO_INCREMENT for table `alumni_master`
 --
 ALTER TABLE `alumni_master`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `alumni_member`
@@ -308,31 +369,43 @@ ALTER TABLE `alumni_member`
 -- AUTO_INCREMENT for table `alumni_profile`
 --
 ALTER TABLE `alumni_profile`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `alumni_skill`
 --
 ALTER TABLE `alumni_skill`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT for table `alumni_work_detail`
 --
 ALTER TABLE `alumni_work_detail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `organization_info`
 --
 ALTER TABLE `organization_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT for table `org_post`
+--
+ALTER TABLE `org_post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_post`
+--
+ALTER TABLE `user_post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -379,6 +452,18 @@ ALTER TABLE `alumni_work_detail`
 --
 ALTER TABLE `organization_info`
   ADD CONSTRAINT `organization_info_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `alumni_master` (`id`);
+
+--
+-- Constraints for table `org_post`
+--
+ALTER TABLE `org_post`
+  ADD CONSTRAINT `org_post_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organization_info` (`id`);
+
+--
+-- Constraints for table `user_post`
+--
+ALTER TABLE `user_post`
+  ADD CONSTRAINT `user_post_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `alumni_master` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

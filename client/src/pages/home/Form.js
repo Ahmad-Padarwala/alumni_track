@@ -168,7 +168,7 @@ const Form = () => {
             <div className="col-lg-6 home_form_right">
               <NavLink to="/">
                 <img
-                  src={require("../../assets/image/logo.png")}
+                  src={require("../../assets/image/Logo.png")}
                   alt=""
                   width="100px"
                 />

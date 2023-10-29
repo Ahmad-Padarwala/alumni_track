@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2023 at 02:53 PM
+-- Generation Time: Oct 29, 2023 at 12:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -221,7 +221,8 @@ CREATE TABLE `org_post` (
   `post_title` varchar(500) NOT NULL,
   `post_image` varchar(500) NOT NULL,
   `post_video` varchar(1000) NOT NULL,
-  `post_send` varchar(100) NOT NULL
+  `post_send` varchar(100) NOT NULL,
+  `post_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -254,8 +255,17 @@ CREATE TABLE `user_post` (
   `user_id` int(10) NOT NULL,
   `post_title` varchar(500) NOT NULL,
   `post_image` varchar(500) NOT NULL,
-  `post_video` varchar(100) NOT NULL
+  `post_video` varchar(100) NOT NULL,
+  `post_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_post`
+--
+
+INSERT INTO `user_post` (`id`, `user_id`, `post_title`, `post_image`, `post_video`, `post_date`) VALUES
+(20, 29, 'kcmkcks', '', '', '2023-10-29'),
+(21, 29, 'scnjs', 'post_image-1698579025394.calculate-bg.webp', '', '2023-10-29');
 
 --
 -- Indexes for dumped tables
@@ -405,7 +415,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_post`
 --
 ALTER TABLE `user_post`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Constraints for dumped tables

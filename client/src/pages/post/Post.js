@@ -350,13 +350,13 @@ const Post = () => {
               </div>
             </div>
             <div className="col-lg-6 col-12">
-              <div className="pofile_left_side_sections p-3">
+              <div className="pofile_left_side_sections">
                 <div
                   className="add_post_section"
                   data-bs-toggle="modal"
                   data-bs-target="#addPostModal"
                 >
-                  <p className="fw-bold">What are you Publish?</p>
+                  <p className="alumni_heading">What are you Publish?</p>
                   <div className="d-flex">
                     <div className="me-2 post_two_icons">
                       <i className="fa-solid fa-photo-film"></i>
@@ -364,9 +364,9 @@ const Post = () => {
                     <div className="me-2 post_two_icons">
                       <i className="fa-solid fa-video"></i>
                     </div>
-                    <div className="post_btn_main">
-                      <button className="post_btn">Post Now</button>
-                    </div>
+                    {/* <div className="post_btn_main"> */}
+                    <button className="btn post_btn">Post Now</button>
+                    {/* </div> */}
                   </div>
                 </div>
               </div>

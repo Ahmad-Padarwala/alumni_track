@@ -235,17 +235,15 @@ input::-webkit-inner-spin-button {
 }
 
 .post_btn {
-  padding: 2px 10px;
-  border-radius: 5px;
-  background-color: rgb(155, 162, 240);
+  background-color: #0d6efd;
+  color: white;
   position: absolute;
   right: 30px;
   top: 65px;
 }
-
-/* .post_btn_main{
-float: right;
-} */
+.post_btn:hover {
+  background-color: #5898f8;
+}
 .three_dotes {
   position: absolute;
   right: 20px;

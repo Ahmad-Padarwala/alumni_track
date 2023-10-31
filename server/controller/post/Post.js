@@ -95,7 +95,7 @@ const deletePostData = (req, res) => {
     }
     res.sendStatus(200);
   });
-}
+};
 
 //get alumni profile data
 const getAllAlumniProfile = (req, res) => {
@@ -109,11 +109,11 @@ const getAllAlumniProfile = (req, res) => {
       res.status(200).json(result);
     }
   });
-}
+};
 
 const getUserPostDataWithId = (req, res) => {
   const id = req.params.id;
-  const sql = `SELECT * FROM user_post WHERE user_id=?`;
+  const sql = `SELECT * FROM user_post WHERE user_id=? ORDER BY id DESC`;
   const data = [id];
   connection.query(sql, data, (error, result) => {
     if (error) {
@@ -124,7 +124,7 @@ const getUserPostDataWithId = (req, res) => {
       res.status(200).json(result);
     }
   });
-}
+};
 
 module.exports = {
   addPostData,

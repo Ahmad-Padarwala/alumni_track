@@ -54,7 +54,7 @@ const Form = () => {
     );
     if (user) {
       localStorage.setItem("user", user.id);
-      navigate("/user-profile");
+      navigate("/post");
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else {
       toast.warning("please correct information");
@@ -143,7 +143,7 @@ const Form = () => {
     if (!isAuth) {
       navigate("/");
     } else {
-      navigate("/user-profile");
+      navigate("/post");
     }
     getdata();
   }, []);

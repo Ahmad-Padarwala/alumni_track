@@ -136,6 +136,7 @@ const Orgnaization = () => {
       .get(`${PORT}getAlumniProfileMaster/${userId}`)
       .then((res) => {
         setAcceptedAlumniProfile((prevProfiles) => [...prevProfiles, res.data]);
+        console.log(acceptedAlumniProfile)
       })
       .catch((err) => {
         console.log(err);

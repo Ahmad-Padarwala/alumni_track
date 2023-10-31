@@ -1,4 +1,7 @@
 /* home page form */
+body{
+  background-color: #f6f6fb;
+}
 .home_form_main {
   background: linear-gradient(45deg, rgb(67, 69, 140), rgb(49, 49, 184));
   padding: 50px 0px;

@@ -44,10 +44,7 @@
 }
 
 /* tabPanel Scroll bar */
-.MuiTabPanel-root {
-  max-height: 400px;
-  overflow-y: scroll;
-}
+
 
 .MuiTabPanel-root::-webkit-scrollbar {
   width: 7px;

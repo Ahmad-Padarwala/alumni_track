@@ -355,7 +355,9 @@ const Profile = () => {
                     </div>
                     <div className="ms-2">
                       <NavLink
-                        to={`mailto:${getAlumniMaster.email}`}
+                        to={`mailto:${
+                          getAlumniMaster && getAlumniMaster.email
+                        }`}
                         className="mb-0 text-primary alumni_small_title"
                       >
                         {getAlumniMaster && getAlumniMaster.email

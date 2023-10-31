@@ -23,6 +23,8 @@ router
   .post(upload.fields([{ name: "post_image", maxCount: 1 }]), Post.addPostData);
 router.route("/getPostData").get(Post.getPostData);
 router.route("/getpostdatawithid/:id").get(Post.getPostDataWithId);
+router.route("/getUserPostDataWithId/:id").get(Post.getUserPostDataWithId);
+router.route("/deletePostData/:id").delete(Post.deletePostData);
 router
   .route("/editUserPostData/:id")
   .put(

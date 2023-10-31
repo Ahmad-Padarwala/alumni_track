@@ -84,9 +84,54 @@ const editUserPostData = async (req, res) => {
   });
 };
 
+//delete post data section start
+
+const deletePostData = (req, res) => {
+  let id = req.params.id;
+  let sql = `DELETE FROM user_post WHERE id=${id}`;
+  connection.query(sql, (error) => {
+    if (error) {
+      console.log("Error Delte Data in server.js" + error);
+    }
+    res.sendStatus(200);
+  });
+}
+
+//get alumni profile data
+const getAllAlumniProfile = (req, res) => {
+  const sql = `SELECT * FROM alumni_profile `;
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from user_post Table in server.js" + error
+      );
+    } else {
+      res.status(200).json(result);
+    }
+  });
+}
+
+const getUserPostDataWithId = (req, res) => {
+  const id = req.params.id;
+  const sql = `SELECT * FROM user_post WHERE user_id=?`;
+  const data = [id];
+  connection.query(sql, data, (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from user_post Table in server.js" + error
+      );
+    } else {
+      res.status(200).json(result);
+    }
+  });
+}
+
 module.exports = {
   addPostData,
   getPostData,
   getPostDataWithId,
   editUserPostData,
+  deletePostData,
+  getAllAlumniProfile,
+  getUserPostDataWithId,
 };

@@ -6,6 +6,8 @@ router
   .route("/alumni-master")
   .get(Master.getAlumniMaster)
   .post(Master.addSignUpData);
+router.route("/getPendingAlumniMaster").get(Master.getPendingAlumniMaster);
+router.route("/acceptUserReq/:id").put(Master.acceptUserReq);
 router
   .route("/getalumniMasterWithId/:id")
   .get(Master.getAlumniMasterDataWithId);

@@ -136,7 +136,7 @@ const Orgnaization = () => {
       .get(`${PORT}getAlumniProfileMaster/${userId}`)
       .then((res) => {
         setAcceptedAlumniProfile((prevProfiles) => [...prevProfiles, res.data]);
-        console.log(acceptedAlumniProfile)
+        console.log(acceptedAlumniProfile);
       })
       .catch((err) => {
         console.log(err);
@@ -263,7 +263,58 @@ const Orgnaization = () => {
                 )}
               </div>
             </div>
-            <div className="pofile_left_side_sections mt-3">dcjdsnjc</div>
+            <div className="pofile_left_side_sections mt-3">
+              <h4 className="mb-2 alumni_heading">Members</h4>
+              {acceptedAlumniProfile.map((alumni) => {
+                return (
+                  <div className="d-flex justify-content-between mb-3">
+                    <div
+                      className="d-flex"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        handleWatchAlumniProfile(alumni[0].user_id);
+                      }}
+                    >
+                      <div className="org-display-image">
+                        {alumni[0].profile_picture ? (
+                          <img
+                            src={`./upload/${alumni[0].profile_picture}`}
+                            alt="orgimage"
+                            width="50px"
+                          />
+                        ) : (
+                          <img
+                            src={require("../../assets/image/educationImages.png")}
+                            width="60px"
+                            alt="default-profile"
+                          />
+                        )}
+                      </div>
+                      <div className="ms-2">
+                        <p className="m-0 alumni_heading">
+                          {" "}
+                          {alumni[0].username ? alumni[0].username : "Unknown"}
+                        </p>
+                        <p className="mb-0 alumni_small_title">
+                          {alumni[0].address ? alumni[0].address : "address"}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <span
+                        style={{ cursor: "pointer" }}
+                        className="education_opr_icon text-danger"
+                        onClick={() => {
+                          handleClickOpen("delete", alumni[0].user_id);
+                        }}
+                      >
+                        <i className="fa-solid fa-trash"></i>
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div className="col-lg-8 col-12">
@@ -287,7 +338,7 @@ const Orgnaization = () => {
                     >
                       <Tab label="Home" value="1" />
                       <Tab label="About" value="2" />
-                      <Tab label="Members" value="3" />
+                      {/* <Tab label="Members" value="3" /> */}
                       <Tab label="Requests" value="4" />
                     </TabList>
                   </Box>
@@ -325,62 +376,6 @@ const Orgnaization = () => {
                           "<p>Data not available</p>",
                       }}
                     ></p>
-                  </TabPanel>
-                  <TabPanel value="3">
-                    <h4 className="mb-2 alumni_heading">Members</h4>
-                    {acceptedAlumniProfile.map((alumni) => {
-                      return (
-                        <div className="d-flex justify-content-between mb-3">
-                          <div
-                            className="d-flex"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              handleWatchAlumniProfile(alumni[0].user_id);
-                            }}
-                          >
-                            <div className="org-display-image">
-                              {alumni[0].profile_picture ? (
-                                <img
-                                  src={`./upload/${alumni[0].profile_picture}`}
-                                  alt="orgimage"
-                                  width="50px"
-                                />
-                              ) : (
-                                <img
-                                  src={require("../../assets/image/educationImages.png")}
-                                  width="60px"
-                                  alt="default-profile"
-                                />
-                              )}
-                            </div>
-                            <div className="ms-2">
-                              <p className="m-0 alumni_heading">
-                                {" "}
-                                {alumni[0].username
-                                  ? alumni[0].username
-                                  : "Unknown"}
-                              </p>
-                              <p className="mb-0 alumni_small_title">
-                                {alumni[0].address
-                                  ? alumni[0].address
-                                  : "address"}
-                              </p>
-                            </div>
-                          </div>
-                          <div>
-                            <span
-                              style={{ cursor: "pointer" }}
-                              className="education_opr_icon text-danger"
-                              onClick={() => {
-                                handleClickOpen("delete", alumni[0].user_id);
-                              }}
-                            >
-                              <i className="fa-solid fa-trash"></i>
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
                   </TabPanel>
                   <TabPanel value="4">
                     <h4 className="mb-3 alumni_heading">

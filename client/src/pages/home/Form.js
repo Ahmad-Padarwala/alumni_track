@@ -53,9 +53,14 @@ const Form = () => {
         user.password === addLoginData.password
     );
     if (user) {
-      localStorage.setItem("user", user.id);
-      navigate("/post");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      console.log("object");
+      if (user.status === 0) {
+        toast.error("Now you are disabled, please stay with us.");
+      } else {
+        localStorage.setItem("user", user.id);
+        navigate("/post");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     } else {
       toast.warning("please correct information");
     }
@@ -120,6 +125,7 @@ const Form = () => {
       .post(`${PORT}alumni-master`, addSignUpData)
       .then(() => {
         toast.success("Your Account is Created!");
+        toast.success("Now you are not able to use plaese stay with us!");
         setFormType("login");
       })
       .catch(() => {

@@ -12,6 +12,7 @@ const WorkDetailRoute = require("./route/alumni/WorkDetailRoute");
 const OrgInfo = require("./route/organization/OrgInfoRoute");
 const Associate = require("./route/organization/AssociateRoute");
 const Post = require("./route/post/Post");
+const FollowPost = require("./route/post/Follow");
 
 app.use(express.json());
 app.use(cors());
@@ -26,6 +27,7 @@ app.use("/", WorkDetailRoute);
 app.use("/", OrgInfo);
 app.use("/", Associate);
 app.use("/", Post);
+app.use("/", FollowPost);
 
 app.listen(1010, () => {
   console.log("SERVER CREATED IN 1010");

@@ -11,6 +11,18 @@ const getAlumniMaster = (req, res) => {
     return res.json(result);
   });
 };
+//get pending req
+const getPendingAlumniMaster = (req, res) => {
+  const sql = "SELECT * FROM alumni_master WHERE status=0";
+  connection.query(sql, (error, result) => {
+    if (error) {
+      console.log(
+        "Error Getting Data from alumi_master Table in server.js" + error
+      );
+    }
+    return res.json(result);
+  });
+};
 //GET alumni master with id
 const getAlumniMasterDataWithId = (req, res) => {
   const user_id = req.params.id;
@@ -31,7 +43,7 @@ const getAlumniMasterDataWithId = (req, res) => {
 const addSignUpData = (req, res) => {
   const { email, password, username } = req.body;
   const sql =
-    "INSERT INTO alumni_master (email,password,username,status) VALUES (?,?,?,1)";
+    "INSERT INTO alumni_master (email,password,username,status) VALUES (?,?,?,0)";
   const data = [email, password, username];
   connection.query(sql, data, (err, result) => {
     if (err) {
@@ -43,8 +55,26 @@ const addSignUpData = (req, res) => {
   });
 };
 
+//accept iser req
+const acceptUserReq = async (req, res) => {
+  const user_id = req.params.id;
+  console.log(user_id);
+  const sql = "UPDATE alumni_master SET status = 1 WHERE id = ?";
+  console.log(sql);
+  connection.query(sql, [user_id], (err, result) => {
+    if (err) {
+      console.error("Error adding record:", err);
+      res.status(500).json({ error: "Error adding record" });
+    } else {
+      res.sendStatus(200);
+    }
+  });
+};
+
 module.exports = {
   getAlumniMaster,
+  getPendingAlumniMaster,
   getAlumniMasterDataWithId,
   addSignUpData,
+  acceptUserReq,
 };

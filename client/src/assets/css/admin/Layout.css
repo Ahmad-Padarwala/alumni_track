@@ -645,7 +645,7 @@ a:hover {
   font-weight: 600;
   color: #4154f1;
   transition: 0.3;
-  background: #f6f9ff;
+  /* background: #f6f9ff; */
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -669,7 +669,10 @@ a:hover {
   color: #4154f1;
   background: #f6f9ff;
 }
-
+.sidebar-nav .nav-link.active {
+  color: #4154f1;
+  background: #f6f9ff;
+}
 .sidebar-nav .nav-link:hover i {
   color: #4154f1;
 }
@@ -952,4 +955,38 @@ a:hover {
   text-align: center;
   font-size: 13px;
   color: #012970;
+}
+/* form user css section */
+.user_form {
+  position: relative;
+}
+
+.user_form .fa-search {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #9ca3af;
+}
+
+.user_form span {
+  position: absolute;
+  right: 10px;
+  top: 4px;
+  padding: 2px;
+  border-left: 1px solid #d1d5db;
+}
+
+.left-pan {
+  padding-left: 7px;
+}
+
+.left-pan i {
+  padding-left: 10px;
+}
+
+.form-input {
+  height: 35px;
+  text-indent: 33px;
+  font-size: 14px;
+  /* border-radius: 10px; */
 }

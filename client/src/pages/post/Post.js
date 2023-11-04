@@ -17,7 +17,7 @@ import TabPanel from "@mui/lab/TabPanel";
 
 const Post = () => {
   const [getAlumniProfile, setGetAlumniProfile] = useState([]);
-  const [getProfileForPost, setGetProfileForPost] = useState([]);
+  // const [getProfileForPost, setGetProfileForPost] = useState([]);
   const [getAlumniMaster, setGetAlumniMaster] = useState([]);
   const [userId, setUserId] = useState();
   const [getPostData, setGetPostData] = useState([]);
@@ -125,32 +125,6 @@ const Post = () => {
       console.log(err, "error getting post data with userid");
     }
   };
-  //get post user name
-  const getProfileForPostData = async (userId) => {
-    await axios
-      .get(`${PORT}getAlumniProfileMaster/${userId}`)
-      .then((res) => {
-        setGetProfileForPost((prevProfiles) => [...prevProfiles, res.data[0]]);
-        // console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  useEffect(() => {
-    if (getPostData.length > 0) {
-      getPostData.forEach(async (post) => {
-        await getProfileForPostData(post.user_id);
-      });
-    } else if (getPostData.length == 0) {
-      getPostData.forEach(async () => {
-        await setGetProfileForPost([]);
-      });
-    }
-  }, [getPostData]);
-  useEffect(() => {
-    console.log(getProfileForPost);
-  }, [getProfileForPost]);
 
   //get post data with userid
   const getAlumniPostData = async (id) => {
@@ -242,12 +216,25 @@ const Post = () => {
     axios
       .delete(`${PORT}deletePostData/${id}`)
       .then(() => {
-        getAllPostData();
         setOpen(false);
         toast.success("your post Delete Successfully !");
+        getAllPostData();
       })
       .catch((err) => {
         console.log(err, "error in deleting post data");
+      });
+  };
+
+  //for user follow
+  const addUserFollowData = (id) => {
+    axios
+      .post(`${PORT}addUserFollowPost/${id}/${isAuth}`)
+      .then(() => {
+        toast.success("Follow successfully");
+        document.getElementById("follow-btn").innerHTML = "Following";
+      })
+      .catch((error) => {
+        console.log("Error adding follow in Post.js:", error);
       });
   };
 
@@ -291,6 +278,15 @@ const Post = () => {
       setUserIdWithisAuth(isAuth);
     }
   }, [isAuth]);
+
+  //passing data for user view profile
+
+  const handleViewUserProfile = (userid) => {
+    navigate(`/view-profile/:username`, {
+      state: { id: userid },
+    });
+    window.scrollTo({ top: "0", behavior: "smooth" });
+  };
 
   return (
     <>
@@ -364,9 +360,7 @@ const Post = () => {
                     <div className="me-2 post_two_icons">
                       <i className="fa-solid fa-video"></i>
                     </div>
-                    {/* <div className="post_btn_main"> */}
                     <button className="btn post_btn">Post Now</button>
-                    {/* </div> */}
                   </div>
                 </div>
               </div>
@@ -384,163 +378,188 @@ const Post = () => {
                           label="Your Posts"
                           value="2"
                           onClick={() => {
-                            getAlumniPostData(getAlumniProfile.user_id);
+                            if (getAlumniProfile && getAlumniProfile.user_id) {
+                              getAlumniPostData(getAlumniProfile.user_id);
+                            } else {
+                              // Handle the case where user_id is not available
+                              console.error(
+                                "getAlumniProfile.user_id is undefined"
+                              );
+                            }
                           }}
                         />
                       </TabList>
                     </Box>
                     <TabPanel value="1" className="p-0">
                       {getPostData.length > 0 ? (
-                        getPostData.map((post, index) => (
-                          <div
-                            className="pofile_left_side_sections mt-3 p-0"
-                            key={post.id}
-                          >
-                            <div className="d-flex p-2">
-                              <div className="post_right_profile_image2">
+                        getPostData.map((userPost, index) => {
+                          return (
+                            <div
+                              className="pofile_left_side_sections mt-2 p-0"
+                              key={userPost.id}
+                            >
+                              <div className="d-flex justify-content-between p-2">
+                                <div
+                                  className="d-flex"
+                                  onClick={() => {
+                                    handleViewUserProfile(userPost.user_id);
+                                  }}
+                                >
+                                  <div className="post_right_profile_image2">
+                                    <img
+                                      src={`/upload/${
+                                        (getAlumniProfile &&
+                                          getAlumniProfile.profile_picture) ||
+                                        "profileImage.png"
+                                      }`}
+                                      width="100%"
+                                      alt="profile"
+                                    />
+                                  </div>
+                                  <div className="ms-2">
+                                    <NavLink to="/user-profile">
+                                      <p className="alumni_heading mb-0 text-black">
+                                        {getAlumniProfile &&
+                                        getAlumniProfile.username
+                                          ? getAlumniProfile.username
+                                          : ""}
+                                      </p>
+                                    </NavLink>
+                                    <p className="alumni_small_title">
+                                      {userPost && userPost.post_date
+                                        ? formatDateForInput(userPost.post_date)
+                                        : ""}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <button
+                                    className="btn btn-primary"
+                                    onClick={() => {
+                                      addUserFollowData(userPost.user_id);
+                                    }}
+                                    id="follow-btn"
+                                  >
+                                    Follow
+                                  </button>
+                                </div>
+                              </div>
+                              <p className="ms-2 mb-0">
+                                {userPost && userPost.post_title}
+                              </p>
+                              <div className="post_image mt-0 p-0">
                                 <img
                                   src={`/upload/${
-                                    (getProfileForPost[index] &&
-                                      getProfileForPost[index]
-                                        .profile_picture) ||
-                                    "profileImage.png"
+                                    userPost && userPost.post_image
                                   }`}
                                   width="100%"
                                   alt="profile"
                                 />
                               </div>
-                              <div className="ms-2">
-                                <p className="alumni_heading mb-0 text-black">
-                                  {getProfileForPost[index] &&
-                                  getProfileForPost[index].username
-                                    ? getProfileForPost[index].username
-                                    : "Unknown"}
-                                </p>
-                                <p className="alumni_small_title">
-                                  {post && post.post_date
-                                    ? formatDateForInput(post.post_date)
-                                    : ""}
-                                </p>
-                              </div>
-                              <div
-                                className="three_dotes"
-                                onClick={() => toggleDropdown(index)}
-                              >
-                                <i className="fas fa-ellipsis"></i>
-                                {isDropdownVisible[index] && (
-                                  <div className="dropdown-content">
-                                    <p
-                                      className="alumni_small_title mb-1"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#editPostModal"
-                                      onClick={() => {
-                                        getPostDataforEdit(post.id);
-                                      }}
-                                    >
-                                      Edit Post
-                                    </p>
-                                    <p
-                                      className="alumni_small_title m-0"
-                                      onClick={() => handleClickOpen(post)}
-                                    >
-                                      Delete Post
-                                    </p>
-                                  </div>
-                                )}
+                              <div className="d-flex px-3 my-2 justify-content-between">
+                                <div style={{ cursor: "pointer" }}>
+                                  <i className="fa-regular fa-thumbs-up"></i>
+                                  <span className="ms-2">Like</span>
+                                </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i className="fa-regular fa-thumbs-down"></i>
+                                  <span className="ms-2">Dislike</span>
+                                </div>
+                                <div style={{ cursor: "pointer" }}>
+                                  <i className="fa-regular fa-flag"></i>
+                                  <span className="ms-2">Report</span>
+                                </div>
                               </div>
                             </div>
-                            <p className="mb-0 ms-2">
-                              {post && post.post_title}
-                            </p>
-                            <div className="post_image mt-0 p-0">
-                              <img
-                                src={`/upload/${post && post.post_image}`}
-                                width="100%"
-                                alt="profile"
-                              />
-                            </div>
-                          </div>
-                        ))
+                          );
+                        })
                       ) : (
-                        <p>No posts available</p>
+                        <p>No posts available.</p>
                       )}
                     </TabPanel>
+
                     <TabPanel value="2" className="p-0">
-                      {getUserPostData.map((userPost, index) => {
-                        return (
-                          <div
-                            className="pofile_left_side_sections mt-2 p-0"
-                            key={userPost.id}
-                          >
-                            <div className="d-flex p-2">
-                              <div className="post_right_profile_image2">
+                      {getUserPostData.length > 0 ? (
+                        getUserPostData.map((userPost, index) => {
+                          return (
+                            <div
+                              className="pofile_left_side_sections mt-2 p-0"
+                              key={userPost.id}
+                            >
+                              <div className="d-flex p-2">
+                                <div className="post_right_profile_image2">
+                                  <img
+                                    src={`/upload/${
+                                      (getAlumniProfile &&
+                                        getAlumniProfile.profile_picture) ||
+                                      "profileImage.png"
+                                    }`}
+                                    width="100%"
+                                    alt="profile"
+                                  />
+                                </div>
+                                <div className="ms-2">
+                                  <NavLink to="/user-profile">
+                                    <p className="alumni_heading mb-0 text-black">
+                                      {getAlumniProfile &&
+                                      getAlumniProfile.username
+                                        ? getAlumniProfile.username
+                                        : ""}
+                                    </p>
+                                  </NavLink>
+                                  <p className="alumni_small_title">
+                                    {userPost && userPost.post_date
+                                      ? formatDateForInput(userPost.post_date)
+                                      : ""}
+                                  </p>
+                                </div>
+                                <div
+                                  className="three_dotes"
+                                  onClick={() => toggleDropdown(index)}
+                                >
+                                  <i className="fas fa-ellipsis"></i>
+                                  {isDropdownVisible[index] && (
+                                    <div className="dropdown-content">
+                                      <p
+                                        className="alumni_small_title mb-1"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editPostModal"
+                                        onClick={() => {
+                                          getPostDataforEdit(userPost.id);
+                                        }}
+                                      >
+                                        Edit Post
+                                      </p>
+                                      <p
+                                        className="alumni_small_title m-0"
+                                        onClick={() =>
+                                          handleClickOpen(userPost)
+                                        }
+                                      >
+                                        Delete Post
+                                      </p>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <p className="ms-2 mb-0">
+                                {userPost && userPost.post_title}
+                              </p>
+                              <div className="post_image mt-0 p-0">
                                 <img
                                   src={`/upload/${
-                                    (getAlumniProfile &&
-                                      getAlumniProfile.profile_picture) ||
-                                    "profileImage.png"
+                                    userPost && userPost.post_image
                                   }`}
                                   width="100%"
                                   alt="profile"
                                 />
                               </div>
-                              <div className="ms-2">
-                                <NavLink to="/user-profile">
-                                  <p className="alumni_heading mb-0 text-black">
-                                    {getAlumniProfile &&
-                                    getAlumniProfile.username
-                                      ? getAlumniProfile.username
-                                      : ""}
-                                  </p>
-                                </NavLink>
-                                <p className="alumni_small_title">
-                                  {userPost && userPost.post_date
-                                    ? formatDateForInput(userPost.post_date)
-                                    : ""}
-                                </p>
-                              </div>
-                              <div
-                                className="three_dotes"
-                                onClick={() => toggleDropdown(index)}
-                              >
-                                <i className="fas fa-ellipsis"></i>
-                                {isDropdownVisible[index] && (
-                                  <div className="dropdown-content">
-                                    <p
-                                      className="alumni_small_title mb-1"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#editPostModal"
-                                      onClick={() => {
-                                        getPostDataforEdit(userPost.id);
-                                      }}
-                                    >
-                                      Edit Post
-                                    </p>
-                                    <p
-                                      className="alumni_small_title m-0"
-                                      onClick={() => handleClickOpen(userPost)}
-                                    >
-                                      Delete Post
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
                             </div>
-                            <p className="ms-2 mb-0">
-                              {userPost && userPost.post_title}
-                            </p>
-                            <div className="post_image mt-0 p-0">
-                              <img
-                                src={`/upload/${
-                                  userPost && userPost.post_image
-                                }`}
-                                width="100%"
-                                alt="profile"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })
+                      ) : (
+                        <p>No posts available.</p>
+                      )}
                     </TabPanel>
                   </TabContext>
                 </Box>
@@ -555,7 +574,7 @@ const Post = () => {
         </div>
       </div>
 
-      {/* Add post model */}
+      {/* Add post modal */}
       <div
         className="modal fade"
         id="addPostModal"
@@ -566,7 +585,7 @@ const Post = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title alumni_heading" id="addpostModalLabel">
+              <h1 className="modal-title alumni_heading" id="addPostModalLabel">
                 Your Post Section
               </h1>
               <button
@@ -598,13 +617,12 @@ const Post = () => {
                     onChange={handleInputChange}
                   />
                 </div>
-
                 <div className="mb-3">
                   <label
                     htmlFor="alumniPostImage"
                     className="form-label fw-semibold"
                   >
-                    Post Name:-
+                    Post Image:-
                   </label>
                   <input
                     type="file"
@@ -618,7 +636,7 @@ const Post = () => {
                   {addPost.post_image ? (
                     <img
                       src={URL.createObjectURL(addPost.post_image)}
-                      alt="institute"
+                      alt="image"
                       width="80px"
                     />
                   ) : (
@@ -649,7 +667,7 @@ const Post = () => {
         </div>
       </div>
 
-      {/* edit data modal section start */}
+      {/* Edit data modal section start */}
       <div
         className="modal fade"
         id="editPostModal"
@@ -660,7 +678,10 @@ const Post = () => {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title alumni_heading" id="addpostModalLabel">
+              <h1
+                className="modal-title alumni_heading"
+                id="editPostModalLabel"
+              >
                 Your Edit Post Section
               </h1>
               <button
@@ -694,7 +715,7 @@ const Post = () => {
                     htmlFor="alumniPostImage"
                     className="form-label fw-semibold"
                   >
-                    Post Name:-
+                    Post Image:-
                   </label>
                   <input
                     type="file"
@@ -748,6 +769,7 @@ const Post = () => {
           </div>
         </div>
       </div>
+
       <Dialog
         open={open}
         onClose={handleClose}

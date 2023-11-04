@@ -23,19 +23,19 @@ const Sidebar = () => {
           <li className="nav-heading">Pages</li>
 
           <li className="nav-item">
-            <NavLink className="nav-link collapsed" to="/admin">
+            <NavLink className="nav-link collapsed" to="/user-request">
               <i>
                 <SchoolRoundedIcon />
               </i>
-              <span>Schools/Colleges</span>
+              <span>Users Request</span>
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link collapsed" to="/admin">
+            <NavLink className="nav-link collapsed" to="/active-user">
               <i>
                 <ApartmentIcon />
               </i>
-              <span>Companies</span>
+              <span>Active Users</span>
             </NavLink>
           </li>
           <li className="nav-item">

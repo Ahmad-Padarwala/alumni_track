@@ -34,11 +34,11 @@ const addPostData = async (req, res) => {
 
 //get all post data
 const getPostData = (req, res) => {
-  const sql = `SELECT * FROM user_post ORDER BY id DESC`;
+  const sql = `SELECT am.username,ap.profile_picture,up.* from user_post as up join alumni_master as am on am.id=up.user_id JOIN alumni_profile AS ap on ap.user_id=up.user_id ORDER BY up.id DESC;`;
   connection.query(sql, (error, result) => {
     if (error) {
       console.log(
-        "Error Getting Data from user_post Table in server.js" + error
+        "Error Getting Data from three tables Table in server.js" + error
       );
     } else {
       res.status(200).json(result);

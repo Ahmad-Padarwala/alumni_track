@@ -206,6 +206,7 @@ const Profile = () => {
     getAlumniProfileData(isAuth);
     getalumniMasterData(isAuth);
     getOrganizationData();
+    getUserFollowLenghtData(isAuth);
   }, [isAuth, navigate, addAlumniProfile]);
 
   const handleNaviagtOrg = () => {
@@ -228,6 +229,19 @@ const Profile = () => {
         toast.warning("Request Failed !");
       });
   };
+//following get lenth
+  const [getFollowLenght, setGetFollowLenght] = useState([]);
+  const getUserFollowLenghtData = (userId) => {
+    console.log(userId)
+    axios
+      .get(`${PORT}getUserFollowLenght/${userId}`) // 1 is status
+      .then((res) => {
+        setGetFollowLenght(res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <>
@@ -308,6 +322,7 @@ const Profile = () => {
                       ? formatDate(getAlumniProfile.dob)
                       : ""}
                   </p>
+                  <p className="alumni_small_title">Followers:- {getFollowLenght}</p>
                   <div className="my-3">
                     <button
                       className="alumni_req_btn fw-semibold"
